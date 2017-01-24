@@ -68,7 +68,6 @@ After importing =github.com/chaseadamsio/goorgeous=, you can call =Org= with a =
 - = (verbatim)
 - / (italic)
 - + (strike-through)
-- _ (underline)
 - ~ (code)
 - Regular Links [[https://github.com/chaseadamsio/gorgeous][chaseadamsio/gorgeous]]
  

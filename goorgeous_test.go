@@ -1,68 +1,192 @@
 package goorgeous
 
-import "testing"
+import (
+	"bytes"
+	"flag"
+	"io/ioutil"
+	"testing"
 
-func TestOrgHeaders(t *testing.T) {
+	"github.com/russross/blackfriday"
+)
+
+var update = flag.Bool("update", false, "update golden files")
+
+func TestIsTable(t *testing.T) {
 	testCases := []struct {
 		in       string
-		expected map[string]interface{}
+		expected bool
 	}{
-		{"#+TITLE: my org mode content\n#+author: Chase Adams\n#+DESCRIPTION: This is my description!",
-			map[string]interface{}{
-				"Title":       "my org mode content",
-				"Author":      "Chase Adams",
-				"Description": "This is my description!",
-			}},
-		{"#+TITLE: my org mode content\n#+author: Chase Adams\n#+DESCRIPTION: This is my description!\n* This shouldn't get captured!",
-			map[string]interface{}{
-				"Title":       "my org mode content",
-				"Author":      "Chase Adams",
-				"Description": "This is my description!",
-			}},
+		{"|some table", true},
+		{"| some table", true},
+		{" | not a table", false},
+		{"not a table", false},
+		{"*not a table", false},
+		{"-not a table", false},
+		{"+not a table", false},
 	}
 
 	for _, tc := range testCases {
-		out, err := OrgHeaders([]byte(tc.in))
-		if err != nil {
-			t.Fatalf("OrgHeaders() failed: %s", err)
-		}
-		for k, v := range tc.expected {
-			if out[k] != v {
-				t.Errorf("OrgHeaders() = %v\n wants: %v\n", out[k], tc.expected[k])
-			}
+		isTable := isTable([]byte(tc.in))
+		if isTable != tc.expected {
+			t.Errorf("isTable(%s) = %T\nwants: %T", tc.in, isTable, tc.expected)
 		}
 	}
 }
 
-func TestOrgCommon(t *testing.T) {
+func TestSkipChar(t *testing.T) {
 	testCases := []struct {
 		in       string
-		expected string
+		start    int
+		char     byte
+		expected int
 	}{
-		{"* A Headline Level 1!\n** A Headline Level 2!\n", "<h1 id=\"a-headline-level-1\">A Headline Level 1!</h1>\n\n<h2 id=\"a-headline-level-2\">A Headline Level 2!</h2>\n"},
-		{"** A Headline Level 2!\n", "<h2 id=\"a-headline-level-2\">A Headline Level 2!</h2>\n"},
-		{"**Not A Headline Level 2!\n", "<p>**Not A Headline Level 2!</p>\n"},
-		{" - my definition list :: this is a definition\n", "<dl>\n<dt>my definition list</dt>\n\n<dd>this is a definition</dd>\n</dl>\n"},
-		{"# this is a comment\n", "<!-- this is a comment -->\n"},
-		{"this is a paragraph\n", "<p>this is a paragraph</p>\n"},
-		{"      this is a paragraph      \n", "<p>this is a paragraph</p>\n"},
-		{"contains =verbatim= code.\n", "<p>contains <code>verbatim</code> code.</p>\n"},
-		{"contains = not a verbatim = code because spaces.\n", "<p>contains = not a verbatim = code because spaces.</p>\n"},
-		{"contains just an = sign.\n", "<p>contains just an = sign.</p>\n"},
-		{"this is a paragraph with an /emphasis/.\n", "<p>this is a paragraph with an <em>emphasis</em>.</p>\n"},
-		{"this is a paragraph with an /emphasis/\n", "<p>this is a paragraph with an <em>emphasis</em></p>\n"},
-		{"/begins with/ an /emphasis/\n", "<p><em>begins with</em> an <em>emphasis</em></p>\n"},
-		{"/begins with/ an /emphasis/ and ends with a *bold*!\n", "<p><em>begins with</em> an <em>emphasis</em> and ends with a <strong>bold</strong>!</p>\n"},
-		{"/begins with/ an /emphasis and contains a *bold*/!\n", "<p><em>begins with</em> an <em>emphasis and contains a <strong>bold</strong></em>!</p>\n"},
-		{"/begins with/ a *bold that contains an /emphasis/*!\n", "<p><em>begins with</em> a <strong>bold that contains an <em>emphasis</em></strong>!</p>\n"},
-		{"This +is a strikethrough+.\n", "<p>This <del>is a strikethrough</del>.</p>\n"},
-		{"#+BEGIN_SRC sh\n echo 'hello!'\necho 'world!'\n#+END_SRC sh\n", "<pre><code>echo 'hello!'</code></pre>"},
+		{"   check for spaces", 0, ' ', 3},
+		{" -  check for spaces", 0, ' ', 1},
+		{"check     for spaces", 1, ' ', 1},
+		{"check     for spaces", 5, ' ', 10},
+		{"check-----for spaces", 5, '-', 10},
 	}
 
 	for _, tc := range testCases {
-		out := OrgCommon([]byte(tc.in))
-		if string(out) != tc.expected {
-			t.Errorf("OrgCommon(%s) = %s\nwants %s", tc.in, out, tc.expected)
+		skipped := skipChar([]byte(tc.in), tc.start, tc.char)
+		if skipped != tc.expected {
+			t.Errorf("skipChar(%s, %d, %q) = %d\nwants: %d", tc.in, tc.start, tc.char, skipped, tc.expected)
 		}
+	}
+}
+
+func TestIsSpace(t *testing.T) {
+	testCases := []struct {
+		char     byte
+		expected bool
+	}{
+
+		{' ', true},
+		{'+', false},
+	}
+
+	for _, tc := range testCases {
+		isSpace := isSpace(tc.char)
+		if isSpace != tc.expected {
+			t.Errorf("isSpace(%q) = %T/nwants: %T", tc.char, isSpace, tc.expected)
+		}
+	}
+}
+
+func TestIsEmpty(t *testing.T) {
+	testCases := []struct {
+		in       string
+		expected bool
+	}{
+		{"\n", true},
+		{"\t", true},
+		{"\t\n\t", true},
+		{"\tfoo\n\t", false},
+	}
+
+	for _, tc := range testCases {
+		isEmpty := isEmpty([]byte(tc.in))
+		if isEmpty != tc.expected {
+			t.Errorf("isEmpty(%s) = %T\nwants: %T", tc.in, isEmpty, tc.expected)
+		}
+	}
+}
+
+func TestCharMatch(t *testing.T) {
+	testCases := []struct {
+		a        byte
+		b        byte
+		expected bool
+	}{
+		{' ', ' ', true},
+		{'+', '+', true},
+		{'#', '#', true},
+		{'-', '-', true},
+		{'+', '-', false},
+		{' ', '-', false},
+	}
+
+	for _, tc := range testCases {
+		matches := charMatches(tc.a, tc.b)
+		if matches != tc.expected {
+			t.Errorf("charMatches(%q, %q) = %T\nwants: %T", tc.a, tc.b, matches, tc.expected)
+		}
+	}
+}
+
+func TestIsHeader(t *testing.T) {
+	testCases := []struct {
+		in       string
+		expected bool
+	}{
+		{"#+TITLE", true},
+		{"#+ TITLE", false},
+		{"# TITLE", false},
+		{"TITLE", false},
+	}
+
+	for _, tc := range testCases {
+		isHeader := isHeader([]byte(tc.in))
+		if isHeader != tc.expected {
+			t.Errorf("isHeader(%s) = %T\nwants: %T", tc.in, isHeader, tc.expected)
+		}
+	}
+}
+
+func TestIsComment(t *testing.T) {
+	testCases := []struct {
+		in       string
+		expected bool
+	}{
+		{"# this is a comment", true},
+		{"#-this is not a comment", false},
+		{"#+TITLE", false},
+		{"This is not a comment", false},
+	}
+
+	for _, tc := range testCases {
+		isComment := isComment([]byte(tc.in))
+		if isComment != tc.expected {
+			t.Errorf("isComment(%s) = %T\nwants: %T", tc.in, isComment, tc.expected)
+		}
+	}
+}
+
+func TestGenerateComment(t *testing.T) {
+	p := NewParser(blackfriday.HtmlRenderer(blackfriday.HTML_USE_XHTML, "", ""))
+	var out bytes.Buffer
+	text := "This is a comment and we expect it to look a certain way."
+	orgComment := []byte("# " + text)
+	expected := "<!-- " + text + " -->\n"
+	p.generateComment(&out, orgComment)
+	if out.String() != expected {
+		t.Errorf("generateComment(%s) = %s\nwants: %s", text, out.String(), expected)
+	}
+}
+
+func TestOrgCommonFromFile(t *testing.T) {
+	source := "./testdata/test.org"
+	golden := "./testdata/test.html.golden"
+	contents, err := ioutil.ReadFile(source)
+	if err != nil {
+		t.Fatalf("failed to read %s file: %s", source, err)
+	}
+
+	out := OrgCommon(contents)
+
+	if *update {
+		if err := ioutil.WriteFile(golden, out, 0644); err != nil {
+			t.Errorf("failed to write %s file: %s", golden, err)
+		}
+		return
+	}
+
+	gld, err := ioutil.ReadFile(golden)
+	if err != nil {
+		t.Fatalf("failed to read %s file: %s", golden, err)
+	}
+
+	if !bytes.Equal(out, gld) {
+		t.Errorf("OrgCommon() from %s = %s\nwants: %s", source, out, gld)
 	}
 }

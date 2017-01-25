@@ -1,10 +1,14 @@
 #+TITLE: chaseadamsio/goorgeous
 
-/goorgeous: A Go Org to HTML Parser./
+/goorgeous is a Go Org to HTML Parser./
 
+*Pronounced: Go? Org? Yes!*
+
+#+BEGIN_QUOTE
 "Org mode is for keeping notes, maintaining TODO lists, planning projects, and authoring documents with a fast and effective plain-text system."
 
 - [[orgmode.org]]
+#+END_QUOTE
 
 The purpose of this package is to come as close as possible as parsing an =*.org= document into HTML, the same way one might publish [[http://orgmode.org/worg/org-tutorials/org-publish-html-tutorial.html][with org-publish-html from Emacs]]. 
 

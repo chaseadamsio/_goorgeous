@@ -1,6 +1,6 @@
 #+TITLE: chaseadamsio/goorgeous
 
-[[file:gopher_small.gif]] /goorgeous is a Go Org to HTML Parser./
+[[file:gopher-small.gif]] /goorgeous is a Go Org to HTML Parser./
 
 *Pronounced: Go? Org? Yes!*
 
@@ -50,39 +50,13 @@ After importing =github.com/chaseadamsio/goorgeous=, you can call =Org= with a =
   <h1>Some Headline</h1>/n
 #+END_SRC
 
-* Implemented Org Syntax
-
-** Headlines
-- =KEYWORD=
-- =PRIORITY=
-- =TITLE=
-- =TAGS=
-
-** Greater Elements
-*** Greater Blocks
-*** TODO Property Drawers
-** Elements
-*** Blocks
-**** =SRC=
-**** =EXAMPLE=
-** Objects
-**** Text Markup
-***** Markers
-- * (bold)
-- = (verbatim)
-- / (italic)
-- + (strike-through)
-- ~ (code)
-- Regular Links [[https://github.com/chaseadamsio/gorgeous][chaseadamsio/gorgeous]]
- 
 * To Be Implemented
 ** TODO Footnotes
-** TODO Tables 
-
+** TODO Drawers
 
 * Out of Scope
 
-- _ (underline)
+- _ (underline) [there's no tag for underline in html]
 
 * Why? 
 

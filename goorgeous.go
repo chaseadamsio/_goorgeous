@@ -24,7 +24,7 @@ func NewParser(renderer blackfriday.Renderer) *parser {
 	p.inlineCallback['/'] = generateEmphasis
 	p.inlineCallback['*'] = generateBold
 	p.inlineCallback['+'] = generateStrikethrough
-	p.inlineCallback['['] = generateLink
+	p.inlineCallback['['] = generateLinkOrImg
 
 	return p
 }

@@ -90,11 +90,12 @@ func generateStrikethrough(p *parser, out *bytes.Buffer, data []byte, offset int
 
 var reLink = regexp.MustCompile(`\[\[(.+?)\]\[?(.*?)\]?\]`)
 
-func generateLink(p *parser, out *bytes.Buffer, data []byte, offset int) int {
+func generateLinkOrImg(p *parser, out *bytes.Buffer, data []byte, offset int) int {
 	data = data[offset+1:]
 	start := 1
 	i := start
 	var hyperlink []byte
+	isImage := false
 	closedLink := false
 	hasContent := false
 
@@ -102,16 +103,30 @@ func generateLink(p *parser, out *bytes.Buffer, data []byte, offset int) int {
 		return 0
 	}
 
+	if bytes.Equal(data[1:6], []byte("file:")) {
+		isImage = true
+	}
+
 	for i < len(data) {
 		if data[i] == ']' && closedLink == false {
-			hyperlink = data[start:i]
+			if isImage {
+				hyperlink = data[start+5 : i]
+			} else {
+				hyperlink = data[start:i]
+			}
 			closedLink = true
 		} else if data[i] == '[' {
 			start = i + 1
 			hasContent = true
+		} else if data[i] == ']' && closedLink == true && hasContent == true && isImage == true {
+			p.r.Image(out, hyperlink, data[start:i], data[start:i])
+			return i + 3
 		} else if data[i] == ']' && closedLink == true && hasContent == true {
 			p.r.Link(out, hyperlink, data[start:i], data[start:i])
 			return i + 3
+		} else if data[i] == ']' && closedLink == true && hasContent == false && isImage == true {
+			p.r.Image(out, hyperlink, hyperlink, hyperlink)
+			return i + 2
 		} else if data[i] == ']' && closedLink == true && hasContent == false {
 			p.r.Link(out, hyperlink, hyperlink, hyperlink)
 			return i + 2

@@ -8,6 +8,10 @@ It doesn't matter if you want to use /an emphasis/, *bold*, =verbatim=, ~code~ o
 
 If you're curious what else it supports, you're in luck, you can find it all [[https://github.com/chaseadamsio/goorgeous][here (did I mention plain links work?)]]!
 
+[[file:../gopher.gif][a uni-gopher]]
+
+[[file:../gopher.gif]]
+
 * Headline 1
 ** Headline 2
 *** Headline 3

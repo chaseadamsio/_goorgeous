@@ -1,6 +1,6 @@
 #+TITLE: chaseadamsio/goorgeous
 
-[[file:gopher-small.gif]] /goorgeous is a Go Org to HTML Parser./
+[[file:gopher_small.gif]] /goorgeous is a Go Org to HTML Parser./
 
 *Pronounced: Go? Org? Yes!*
 

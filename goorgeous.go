@@ -15,6 +15,7 @@ type parser struct {
 	inlineCallback [256]inlineParser
 }
 
+// NewParser returns a new parser with the inlineCallbacks required for org content
 func NewParser(renderer blackfriday.Renderer) *parser {
 	p := new(parser)
 	p.r = renderer

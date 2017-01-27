@@ -97,3 +97,7 @@ If you're curious what else it supports, you're in luck, you can find it all [[h
 #+BEGIN_CENTER
 This is a centered block.
 #+END_CENTER
+
+-----
+
+^ that's support for horizontal rules!

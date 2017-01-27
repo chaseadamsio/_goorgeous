@@ -126,7 +126,7 @@ func TestIsHeader(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		isHeader := isHeader([]byte(tc.in))
+		isHeader := isKeyword([]byte(tc.in))
 		if isHeader != tc.expected {
 			t.Errorf("isHeader(%s) = %T\nwants: %T", tc.in, isHeader, tc.expected)
 		}

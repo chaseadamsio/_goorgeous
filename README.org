@@ -2,7 +2,7 @@
 
 /goorgeous is a Go Org to HTML Parser./
 
-[[file:gopher-small.gif]] 
+[[file:gopher_small.gif]] 
 
 *Pronounced: Go? Org? Yes!*
 

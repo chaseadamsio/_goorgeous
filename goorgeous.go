@@ -72,7 +72,6 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 			}
 			if inTable == true {
 				p.generateTable(&output, tmpBlock.Bytes())
-
 				inTable = false
 				listType = ""
 				tmpBlock.Reset()

@@ -44,7 +44,7 @@ func TestSkipChar(t *testing.T) {
 		{" -  check for spaces", 0, ' ', 1},
 		{"check     for spaces", 1, ' ', 1},
 		{"check     for spaces", 5, ' ', 10},
-		{"check-----for spaces", 5, '-', 10},
+		{"check-----for dashes", 5, '-', 10},
 	}
 
 	for _, tc := range testCases {

@@ -1,10 +1,16 @@
 #+TITLE: chaseadamsio/goorgeous
 
-/goorgeous: A Go Org to HTML Parser./
+/goorgeous is a Go Org to HTML Parser./
 
+[[file:gopher_small.gif]] 
+
+*Pronounced: Go? Org? Yes!*
+
+#+BEGIN_QUOTE
 "Org mode is for keeping notes, maintaining TODO lists, planning projects, and authoring documents with a fast and effective plain-text system."
 
 - [[orgmode.org]]
+#+END_QUOTE
 
 The purpose of this package is to come as close as possible as parsing an =*.org= document into HTML, the same way one might publish [[http://orgmode.org/worg/org-tutorials/org-publish-html-tutorial.html][with org-publish-html from Emacs]]. 
 
@@ -46,41 +52,6 @@ After importing =github.com/chaseadamsio/goorgeous=, you can call =Org= with a =
   <h1>Some Headline</h1>/n
 #+END_SRC
 
-* Implemented Org Syntax
-
-** Headlines
-- =KEYWORD=
-- =PRIORITY=
-- =TITLE=
-- =TAGS=
-
-** Greater Elements
-*** Greater Blocks
-*** TODO Property Drawers
-** Elements
-*** Blocks
-**** =SRC=
-**** =EXAMPLE=
-** Objects
-**** Text Markup
-***** Markers
-- * (bold)
-- = (verbatim)
-- / (italic)
-- + (strike-through)
-- _ (underline)
-- ~ (code)
-- Regular Links [[https://github.com/chaseadamsio/gorgeous][chaseadamsio/gorgeous]]
- 
-* To Be Implemented
-** TODO Footnotes
-** TODO Tables 
-
-
-* Out of Scope
-
-- _ (underline)
-
 * Why? 
 
 First off, I've become an unapologetic user of Emacs & ever since finding =org-mode= I use it for anything having to do with writing content, organizing my life and keeping documentation of my days/weeks/months.
@@ -88,3 +59,5 @@ First off, I've become an unapologetic user of Emacs & ever since finding =org-m
 Although I like Emacs & =emacs-lisp=, I publish all of my html sites with [[https://gohugo.io][Hugo Static Site Generator]] and wanted to be able to write my content in =org-mode= in Emacs rather than markdown.
 
 Hugo's implementation of templating and speed are unmatched, so the only way I knew for sure I could continue to use Hugo and write in =org-mode= seamlessly was to write a golang parser for org content and submit a PR for Hugo to use it.
+* Acknowledgements
+I leaned heavily on russross' [[https://github.com/russross/blackfriday][blackfriday markdown renderer]] as both an example of how to write a parser (with some updates to leverage the go we know today) and reusing the blackfriday HTML Renderer so I didn't have to write my own!

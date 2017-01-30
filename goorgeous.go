@@ -116,7 +116,7 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 			}
 			tmpBlock.Write(data)
 			tmpBlock.WriteByte('\n')
-		case isKeyword(data):
+		case IsKeyword(data):
 			continue
 		case isComment(data):
 			p.generateComment(&output, data)
@@ -354,8 +354,8 @@ func isBlock(data []byte) bool {
 
 // Elements
 // ~~ Keywords
-func isKeyword(data []byte) bool {
-	return charMatches(data[0], '#') && charMatches(data[1], '+') && !charMatches(data[2], ' ')
+func IsKeyword(data []byte) bool {
+	return len(data) > 2 && charMatches(data[0], '#') && charMatches(data[1], '+') && !charMatches(data[2], ' ')
 }
 
 // ~~ Comments

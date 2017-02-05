@@ -86,6 +86,8 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 					switch marker {
 					case "SRC":
 						p.r.BlockCode(&output, tmpBlock.Bytes(), syntax)
+					case "EXAMPLE":
+						p.r.BlockCode(&output, tmpBlock.Bytes(), syntax)
 					case "QUOTE":
 						var tmpBuf bytes.Buffer
 						p.inline(&tmpBuf, tmpBlock.Bytes())
@@ -104,8 +106,19 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 
 			}
 			if marker != "" {
-				tmpBlock.Write(data)
-				tmpBlock.WriteByte('\n')
+				if marker != "SRC" && marker != "EXAMPLE" {
+					var tmpBuf bytes.Buffer
+					tmpBlock.WriteString("<p>\n")
+					p.inline(&tmpBuf, data)
+					tmpBlock.Write(tmpBuf.Bytes())
+					tmpBlock.WriteString("</p>\n")
+					tmpBlock.WriteByte('\n')
+				} else {
+					tmpBlock.Write(data)
+					tmpBlock.WriteByte('\n')
+
+				}
+
 			} else {
 				marker = string(matches[2])
 				syntax = string(matches[3])
@@ -220,12 +233,12 @@ func (p *parser) generateHeadline(out *bytes.Buffer, data []byte) {
 			out.WriteByte(' ')
 		}
 
-		out.Write(headline)
+		p.inline(out, headline)
 
 		if tagsFound > 0 {
 			for _, tag := range tags {
 				out.WriteByte(' ')
-				out.WriteString("<span class=\"tags\">" + tag + "</span>")
+				out.WriteString("<span class=\"tags " + tag + "\">" + tag + "</span>")
 				out.WriteByte(' ')
 			}
 		}
@@ -252,7 +265,7 @@ func findTags(data []byte, start int) ([]string, int) {
 			tags = append(tags, string(data[tagMarker+1:tIdx]))
 			tagMarker = tIdx
 		}
-		if data[tIdx] == ':' && tagOpener == 0 {
+		if data[tIdx] == ':' && tagOpener == 0 && data[tIdx-1] == ' ' {
 			tagMarker = tIdx
 			tagOpener = tIdx
 		}
@@ -447,6 +460,10 @@ func generator(p *parser, out *bytes.Buffer, data []byte, offset int, char byte,
 
 	for i < len(data) {
 		if charMatches(data[i], c) {
+			if (len(data) > i+1) && data[i+1] != ' ' {
+				i++
+				continue
+			}
 			if c == '/' {
 				if len(data) > i+1 && charMatches(data[i+1], '/') {
 					return 0

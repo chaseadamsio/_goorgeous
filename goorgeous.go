@@ -443,6 +443,14 @@ func (p *parser) inline(out *bytes.Buffer, data []byte) {
 	}
 }
 
+func isAcceptablePostClosingChar(char byte) bool {
+	return charMatches(char, ' ') || isTerminatingChar(char)
+}
+
+func isTerminatingChar(char byte) bool {
+	return charMatches(char, '.') || charMatches(char, ',') || charMatches(char, '?') || charMatches(char, '!') || charMatches(char, ')') || charMatches(char, '}') || charMatches(char, ']')
+}
+
 func generator(p *parser, out *bytes.Buffer, data []byte, offset int, char byte, doInline bool, renderer func(*bytes.Buffer, []byte)) int {
 	data = data[offset:]
 	c := byte(char)
@@ -460,9 +468,8 @@ func generator(p *parser, out *bytes.Buffer, data []byte, offset int, char byte,
 
 	for i < len(data) {
 		if charMatches(data[i], c) {
-			if (len(data) > i+1) && data[i+1] != ' ' {
-				i++
-				continue
+			if (len(data) > i+1) && !isAcceptablePostClosingChar(data[i+1]) {
+				return 0
 			}
 			if c == '/' {
 				if len(data) > i+1 && charMatches(data[i+1], '/') {
@@ -509,6 +516,12 @@ func generateLinkOrImg(p *parser, out *bytes.Buffer, data []byte, offset int) in
 		case charMatches(currChar, ']') && closedLink == false:
 			if isImage {
 				hyperlink = data[start+5 : i]
+			} else if bytes.Equal(data[i-4:i], []byte(".org")) {
+				orgStart := start
+				if bytes.Equal(data[orgStart:orgStart+2], []byte("./")) {
+					orgStart = orgStart + 1
+				}
+				hyperlink = data[orgStart : i-4]
 			} else {
 				hyperlink = data[start:i]
 			}
@@ -520,7 +533,9 @@ func generateLinkOrImg(p *parser, out *bytes.Buffer, data []byte, offset int) in
 			p.r.Image(out, hyperlink, data[start:i], data[start:i])
 			return i + 3
 		case charMatches(currChar, ']') && closedLink == true && hasContent == true:
-			p.r.Link(out, hyperlink, data[start:i], data[start:i])
+			var tmpBuf bytes.Buffer
+			p.inline(&tmpBuf, data[start:i])
+			p.r.Link(out, hyperlink, tmpBuf.Bytes(), tmpBuf.Bytes())
 			return i + 3
 		case charMatches(currChar, ']') && closedLink == true && hasContent == false && isImage == true:
 			p.r.Image(out, hyperlink, hyperlink, hyperlink)

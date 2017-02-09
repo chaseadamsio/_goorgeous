@@ -443,6 +443,19 @@ func (p *parser) inline(out *bytes.Buffer, data []byte) {
 	}
 }
 
+func isAcceptablePreOpeningChar(dataIn, data []byte, offset int) bool {
+	if len(dataIn) == len(data) {
+		return true
+	}
+
+	char := dataIn[offset-1]
+	return charMatches(char, ' ') || isPreChar(char)
+}
+
+func isPreChar(char byte) bool {
+	return charMatches(char, '>') || charMatches(char, '(') || charMatches(char, '{') || charMatches(char, '[')
+}
+
 func isAcceptablePostClosingChar(char byte) bool {
 	return charMatches(char, ' ') || isTerminatingChar(char)
 }
@@ -451,8 +464,8 @@ func isTerminatingChar(char byte) bool {
 	return charMatches(char, '.') || charMatches(char, ',') || charMatches(char, '?') || charMatches(char, '!') || charMatches(char, ')') || charMatches(char, '}') || charMatches(char, ']')
 }
 
-func generator(p *parser, out *bytes.Buffer, data []byte, offset int, char byte, doInline bool, renderer func(*bytes.Buffer, []byte)) int {
-	data = data[offset:]
+func generator(p *parser, out *bytes.Buffer, dataIn []byte, offset int, char byte, doInline bool, renderer func(*bytes.Buffer, []byte)) int {
+	data := dataIn[offset:]
 	c := byte(char)
 	start := 1
 	i := start
@@ -462,7 +475,7 @@ func generator(p *parser, out *bytes.Buffer, data []byte, offset int, char byte,
 
 	// Org mode spec says a non-whitespace character must immediately follow.
 	// if the current char is the marker, then there's no text between, not a candidate
-	if isSpace(data[i]) || charMatches(data[i], c) {
+	if isSpace(data[i]) || charMatches(data[i], c) || !isAcceptablePreOpeningChar(dataIn, data, offset) {
 		return 0
 	}
 

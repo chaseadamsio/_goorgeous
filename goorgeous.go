@@ -79,6 +79,14 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 			default:
 				continue
 			}
+		case isPropertyDrawer(data) || marker == "PROPERTIES":
+			if marker == "" {
+				marker = "PROPERTIES"
+			}
+			if bytes.Equal(data, []byte(":END:")) {
+				marker = ""
+			}
+			continue
 		case isBlock(data) || marker != "":
 			matches := reBlock.FindSubmatch(data)
 			if len(matches) > 0 {
@@ -108,11 +116,12 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 			if marker != "" {
 				if marker != "SRC" && marker != "EXAMPLE" {
 					var tmpBuf bytes.Buffer
-					tmpBlock.WriteString("<p>\n")
+					tmpBuf.Write([]byte("<p>\n"))
 					p.inline(&tmpBuf, data)
+					tmpBuf.WriteByte('\n')
+					tmpBuf.Write([]byte("</p>\n"))
 					tmpBlock.Write(tmpBuf.Bytes())
-					tmpBlock.WriteString("</p>\n")
-					tmpBlock.WriteByte('\n')
+
 				} else {
 					tmpBlock.Write(data)
 					tmpBlock.WriteByte('\n')
@@ -358,6 +367,12 @@ func (p *parser) generateTable(output *bytes.Buffer, data []byte) {
 	output.WriteString("</table>\n")
 }
 
+// ~~ Property Drawers
+
+func isPropertyDrawer(data []byte) bool {
+	return bytes.Equal(data, []byte(":PROPERTIES:"))
+}
+
 // ~~ Dynamic Blocks
 var reBlock = regexp.MustCompile(`^#\+(BEGIN|END)_(\w+)\s*([0-9A-Za-z_\-]*)?`)
 
@@ -424,7 +439,7 @@ func (p *parser) inline(out *bytes.Buffer, data []byte) {
 			end++
 		}
 
-		p.r.NormalText(out, data[i:end])
+		p.r.Entity(out, data[i:end])
 
 		if end >= len(data) {
 			break

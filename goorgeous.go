@@ -358,7 +358,6 @@ func (p *parser) generateTable(output *bytes.Buffer, data []byte) {
 				table.WriteString("</tbody>\n")
 				tbodySet = false
 			}
-
 		}
 	}
 

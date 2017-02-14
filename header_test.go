@@ -39,33 +39,72 @@ func TestExtractOrgHeaders(t *testing.T) {
 }
 
 func TestOrgHeaders(t *testing.T) {
-	testCases := []struct {
+	testCases := map[string]struct {
 		in       string
 		expected map[string]interface{}
 	}{
-		{"#+TITLE: my org mode content\n#+author: Chase Adams\n#+DESCRIPTION: This is my description!",
+		"no-content-headers": {"#TITLE:\n",
+			map[string]interface{}{},
+		},
+		"one-content-header": {"#TITLE: my org content\n#+author:",
+			map[string]interface{}{},
+		},
+		"basic-happy-path": {"#+TITLE: my org mode content\n#+author: Chase Adams\n#+DESCRIPTION: This is my description!",
 			map[string]interface{}{
 				"Title":       "my org mode content",
 				"Author":      "Chase Adams",
 				"Description": "This is my description!",
 			}},
-		{"#+TITLE: my org mode content\n#+author: Chase Adams\n#+DESCRIPTION: This is my description!\n* This shouldn't get captured!",
+		"basic-happy-path-new-content-after": {"#+TITLE: my org mode content\n#+author: Chase Adams\n#+DESCRIPTION: This is my description!\n* This shouldn't get captured!",
 			map[string]interface{}{
 				"Title":       "my org mode content",
 				"Author":      "Chase Adams",
 				"Description": "This is my description!",
+			}},
+		"basic-happy-path-with-tags": {"#+TITLE: my org mode tags content\n#+author: Chase Adams\n#+DESCRIPTION: This is my description!\n#+TAGS: org-content org-mode hugo\n",
+			map[string]interface{}{
+				"Title":       "my org mode tags content",
+				"Author":      "Chase Adams",
+				"Description": "This is my description!",
+				"Tags":        []string{"org-content", "org-mode", "hugo"},
+			}},
+		"basic-happy-path-with-categories": {"#+TITLE: my org mode tags content\n#+author: Chase Adams\n#+DESCRIPTION: This is my description!\n#+CATEGORIES: org-content org-mode hugo\n",
+			map[string]interface{}{
+				"Title":       "my org mode tags content",
+				"Author":      "Chase Adams",
+				"Description": "This is my description!",
+				"Categories":  []string{"org-content", "org-mode", "hugo"},
+			}},
+		"basic-happy-path-with-aliases": {"#+TITLE: my org mode tags content\n#+author: Chase Adams\n#+DESCRIPTION: This is my description!\n#+CATEGORIES: /org/content /org/mode /hugo\n",
+			map[string]interface{}{
+				"Title":       "my org mode tags content",
+				"Author":      "Chase Adams",
+				"Description": "This is my description!",
+				"Categories":  []string{"/org/content", "/org/mode", "/hugo"},
 			}},
 	}
 
-	for _, tc := range testCases {
+	for caseName, tc := range testCases {
 		out, err := OrgHeaders([]byte(tc.in))
 		if err != nil {
 			t.Fatalf("OrgHeaders() failed: %s", err)
 		}
 		for k, v := range tc.expected {
-			if out[k] != v {
-				t.Errorf("OrgHeaders() = %v\n wants: %v\n", out[k], tc.expected[k])
+			switch out[k].(type) {
+			case []string:
+				outSlice := out[k].([]string)
+				vSlice := v.([]string)
+				for idx, val := range outSlice {
+					if val != vSlice[idx] {
+						t.Errorf("%s OrgHeaders() %v = %v\n wants: %v\n", caseName, k, out[k], tc.expected[k])
+					}
+				}
+			case string:
+				if out[k] != v {
+					t.Errorf("%s OrgHeaders() %v = %v\n wants: %v\n", caseName, k, out[k], tc.expected[k])
+				}
 			}
 		}
+
 	}
 }

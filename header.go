@@ -45,7 +45,25 @@ func OrgHeaders(input []byte) (map[string]interface{}, error) {
 			return out, nil
 		}
 		matches := reHeader.FindSubmatch(data)
-		out[strings.Title(strings.ToLower(string(matches[1])))] = string(matches[2])
+
+		if len(matches) < 3 {
+			continue
+		}
+
+		key := strings.Title(strings.ToLower(string(matches[1])))
+		val := matches[2]
+		switch {
+		case key == "Tags" || key == "Categories":
+			bTags := bytes.Split(val, []byte(" "))
+			tags := make([]string, len(bTags))
+			for idx, tag := range bTags {
+				tags[idx] = string(tag)
+			}
+			out[key] = tags
+		default:
+			out[key] = string(val)
+		}
+
 	}
 	return out, nil
 

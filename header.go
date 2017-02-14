@@ -53,7 +53,7 @@ func OrgHeaders(input []byte) (map[string]interface{}, error) {
 		key := strings.Title(strings.ToLower(string(matches[1])))
 		val := matches[2]
 		switch {
-		case key == "Tags" || key == "Categories":
+		case key == "Tags" || key == "Categories" || key == "Aliases":
 			bTags := bytes.Split(val, []byte(" "))
 			tags := make([]string, len(bTags))
 			for idx, tag := range bTags {

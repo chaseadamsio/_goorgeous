@@ -75,7 +75,7 @@ func TestOrgHeaders(t *testing.T) {
 				"Description": "This is my description!",
 				"Categories":  []string{"org-content", "org-mode", "hugo"},
 			}},
-		"basic-happy-path-with-aliases": {"#+TITLE: my org mode tags content\n#+author: Chase Adams\n#+DESCRIPTION: This is my description!\n#+CATEGORIES: /org/content /org/mode /hugo\n",
+		"basic-happy-path-with-aliases": {"#+TITLE: my org mode tags content\n#+author: Chase Adams\n#+DESCRIPTION: This is my description!\n#+ALIASES: /org/content /org/mode /hugo\n",
 			map[string]interface{}{
 				"Title":       "my org mode tags content",
 				"Author":      "Chase Adams",

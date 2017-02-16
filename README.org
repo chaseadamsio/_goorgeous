@@ -1,5 +1,8 @@
 #+TITLE: chaseadamsio/goorgeous
 
+[[https://travis-ci.org/chaseadamsio/goorgeous.svg?branch=master]]
+[[https://coveralls.io/repos/github/chaseadamsio/goorgeous/badge.svg?branch=master]]
+
 /goorgeous is a Go Org to HTML Parser./
 
 [[file:gopher_small.gif]] 

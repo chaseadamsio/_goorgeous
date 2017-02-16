@@ -348,12 +348,14 @@ func (p *parser) generateTable(output *bytes.Buffer, data []byte) {
 				table.WriteString("<tbody>")
 				tbodySet = true
 			}
-			for _, cell := range bytes.Split(row[1:len(row)-1], []byte("|")) {
-				var cellBuff bytes.Buffer
-				p.inline(&cellBuff, bytes.Trim(cell, " \t"))
-				p.r.TableCell(&rowBuff, cellBuff.Bytes(), 0)
+			if !reTableHeaders.Match(row) {
+				for _, cell := range bytes.Split(row[1:len(row)-1], []byte("|")) {
+					var cellBuff bytes.Buffer
+					p.inline(&cellBuff, bytes.Trim(cell, " \t"))
+					p.r.TableCell(&rowBuff, cellBuff.Bytes(), 0)
+				}
+				p.r.TableRow(&table, rowBuff.Bytes())
 			}
-			p.r.TableRow(&table, rowBuff.Bytes())
 			if tbodySet && idx == len(rows)-1 {
 				table.WriteString("</tbody>\n")
 				tbodySet = false

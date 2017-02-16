@@ -330,6 +330,25 @@ func TestRenderingBlock(t *testing.T) {
 	testOrgCommon(testCases, t)
 }
 
+func TestRenderingTables(t *testing.T) {
+	testCases := map[string]testCase{
+		"no-table-heading-no-horizontal-splits": {
+			"|foo|bar|baz|\n| d | e | f |\n| g | h | i |\n",
+			"\n<table>\n<tbody>\n<tr>\n<td>foo</td>\n<td>bar</td>\n<td>baz</td>\n</tr>\n\n<tr>\n<td>d</td>\n<td>e</td>\n<td>f</td>\n</tr>\n\n<tr>\n<td>g</td>\n<td>h</td>\n<td>i</td>\n</tr>\n</tbody>\n</table>\n",
+		},
+		"table-heading": {
+			"|foo|bar|baz|\n|---+---+---|\n| d | e | f |\n| g | h | i |\n",
+			"\n<table>\n<thead>\n<tr>\n<th>foo</th>\n<th>bar</th>\n<th>baz</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>d</td>\n<td>e</td>\n<td>f</td>\n</tr>\n\n<tr>\n<td>g</td>\n<td>h</td>\n<td>i</td>\n</tr>\n</tbody>\n</table>\n",
+		},
+		"no-table-heading-horizontal-splits": {
+			"|---+---+---|\n| d | e | f |\n|---+---+---|\n| g | h | i |\n|---+---+---|\n",
+			"\n<table>\n<tbody>\n<tr>\n<td>d</td>\n<td>e</td>\n<td>f</td>\n</tr>\n\n<tr>\n<td>g</td>\n<td>h</td>\n<td>i</td>\n</tr>\n</tbody>\n</table>\n",
+		},
+	}
+
+	testOrgCommon(testCases, t)
+}
+
 func TestRenderingPropertiesDrawer(t *testing.T) {
 	testCases := map[string]testCase{
 		"basic": {

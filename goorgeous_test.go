@@ -325,6 +325,10 @@ func TestRenderingBlock(t *testing.T) {
 			"#+BEGIN_SRC sh\necho \"foo\"\n\necho \"bar\"\n\necho \"foo\"\n\necho \"bar\"\n#+END_SRC\n",
 			"<pre><code class=\"language-sh\">\necho &quot;foo&quot;\n\necho &quot;bar&quot;\n\necho &quot;foo&quot;\n\necho &quot;bar&quot;\n</code></pre>\n",
 		},
+		"SRC_MULTILINE_MANY_MULTI_NEWLINE_TEXT": {
+			"#+BEGIN_SRC text\n/Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo\nligula nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque\neu, sem. Nulla consequat massa quis enim./\n\n/In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam\ndictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus\nelementum semper nisi./\n#+END_SRC",
+			"<pre><code class=\"language-text\">\n/Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo\nligula nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque\neu, sem. Nulla consequat massa quis enim./\n\n/In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam\ndictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus\nelementum semper nisi./\n</code></pre>\n",
+		},
 		"EXAMPLE": {
 			"#+BEGIN_EXAMPLE sh\necho \"foo\"\n#+END_EXAMPLE\n",
 			"<pre><code class=\"language-sh\">\necho &quot;foo&quot;\n</code></pre>\n",

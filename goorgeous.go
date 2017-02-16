@@ -24,6 +24,7 @@ func NewParser(renderer blackfriday.Renderer) *parser {
 	p.inlineCallback['='] = generateVerbatim
 	p.inlineCallback['~'] = generateCode
 	p.inlineCallback['/'] = generateEmphasis
+	p.inlineCallback['_'] = generateUnderline
 	p.inlineCallback['*'] = generateBold
 	p.inlineCallback['+'] = generateStrikethrough
 	p.inlineCallback['['] = generateLinkOrImg
@@ -519,6 +520,38 @@ func generator(p *parser, out *bytes.Buffer, dataIn []byte, offset int, char byt
 	return 0
 }
 
+// ~~ Text Markup
+
+func generateVerbatim(p *parser, out *bytes.Buffer, data []byte, offset int) int {
+	return generator(p, out, data, offset, '=', false, p.r.CodeSpan)
+}
+
+func generateCode(p *parser, out *bytes.Buffer, data []byte, offset int) int {
+	return generator(p, out, data, offset, '~', false, p.r.CodeSpan)
+}
+
+func generateEmphasis(p *parser, out *bytes.Buffer, data []byte, offset int) int {
+	return generator(p, out, data, offset, '/', true, p.r.Emphasis)
+}
+
+func generateUnderline(p *parser, out *bytes.Buffer, data []byte, offset int) int {
+	underline := func(out *bytes.Buffer, text []byte) {
+		out.WriteString("<span style=\"text-decoration: underline;\">")
+		out.Write(text)
+		out.WriteString("</span>")
+	}
+
+	return generator(p, out, data, offset, '_', true, underline)
+}
+
+func generateBold(p *parser, out *bytes.Buffer, data []byte, offset int) int {
+	return generator(p, out, data, offset, '*', true, p.r.DoubleEmphasis)
+}
+
+func generateStrikethrough(p *parser, out *bytes.Buffer, data []byte, offset int) int {
+	return generator(p, out, data, offset, '+', true, p.r.StrikeThrough)
+}
+
 // ~~ Images and Links
 var reLinkOrImg = regexp.MustCompile(`\[\[(.+?)\]\[?(.*?)\]?\]`)
 
@@ -577,28 +610,6 @@ func generateLinkOrImg(p *parser, out *bytes.Buffer, data []byte, offset int) in
 	}
 
 	return 0
-}
-
-// ~~ Text Markup
-
-func generateVerbatim(p *parser, out *bytes.Buffer, data []byte, offset int) int {
-	return generator(p, out, data, offset, '=', false, p.r.CodeSpan)
-}
-
-func generateCode(p *parser, out *bytes.Buffer, data []byte, offset int) int {
-	return generator(p, out, data, offset, '~', false, p.r.CodeSpan)
-}
-
-func generateEmphasis(p *parser, out *bytes.Buffer, data []byte, offset int) int {
-	return generator(p, out, data, offset, '/', true, p.r.Emphasis)
-}
-
-func generateBold(p *parser, out *bytes.Buffer, data []byte, offset int) int {
-	return generator(p, out, data, offset, '*', true, p.r.DoubleEmphasis)
-}
-
-func generateStrikethrough(p *parser, out *bytes.Buffer, data []byte, offset int) int {
-	return generator(p, out, data, offset, '+', true, p.r.StrikeThrough)
 }
 
 // Helpers

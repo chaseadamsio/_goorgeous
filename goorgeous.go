@@ -77,6 +77,8 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 				inTable = false
 				listType = ""
 				tmpBlock.Reset()
+			case marker != "":
+				tmpBlock.WriteByte('\n')
 			default:
 				continue
 			}
@@ -93,10 +95,6 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 			if len(matches) > 0 {
 				if string(matches[1]) == "END" {
 					switch marker {
-					case "SRC":
-						p.r.BlockCode(&output, tmpBlock.Bytes(), syntax)
-					case "EXAMPLE":
-						p.r.BlockCode(&output, tmpBlock.Bytes(), syntax)
 					case "QUOTE":
 						var tmpBuf bytes.Buffer
 						p.inline(&tmpBuf, tmpBlock.Bytes())
@@ -107,6 +105,9 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 						p.inline(&tmpBuf, tmpBlock.Bytes())
 						output.Write(tmpBuf.Bytes())
 						output.WriteString("</center>\n")
+					default:
+						tmpBlock.WriteByte('\n')
+						p.r.BlockCode(&output, tmpBlock.Bytes(), syntax)
 					}
 					marker = ""
 					tmpBlock.Reset()
@@ -124,9 +125,8 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 					tmpBlock.Write(tmpBuf.Bytes())
 
 				} else {
-					tmpBlock.Write(data)
 					tmpBlock.WriteByte('\n')
-
+					tmpBlock.Write(data)
 				}
 
 			} else {

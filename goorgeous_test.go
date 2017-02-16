@@ -309,12 +309,37 @@ func TestRenderingLinksAndImages(t *testing.T) {
 func TestRenderingBlock(t *testing.T) {
 
 	testCases := map[string]testCase{
-		"SRC": {"#+BEGIN_SRC sh\n echo \"foo\"\n#+END_SRC\n",
-			"<pre><code class=\"language-sh\"> echo &quot;foo&quot;\n</code></pre>\n",
+		"SRC": {
+			"#+BEGIN_SRC sh\necho \"foo\"\n#+END_SRC\n",
+			"<pre><code class=\"language-sh\">\necho &quot;foo&quot;\n</code></pre>\n",
+		},
+		"SRC_MULTILINE": {
+			"#+BEGIN_SRC sh\necho \"foo\"\necho \"bar\"\n#+END_SRC\n",
+			"<pre><code class=\"language-sh\">\necho &quot;foo&quot;\necho &quot;bar&quot;\n</code></pre>\n",
+		},
+		"SRC_MULTILINE_MULTI_NEWLINE": {
+			"#+BEGIN_SRC sh\necho \"foo\"\n\necho \"bar\"\n#+END_SRC\n",
+			"<pre><code class=\"language-sh\">\necho &quot;foo&quot;\n\necho &quot;bar&quot;\n</code></pre>\n",
+		},
+		"SRC_MULTILINE_MANY_MULTI_NEWLINE": {
+			"#+BEGIN_SRC sh\necho \"foo\"\n\necho \"bar\"\n\necho \"foo\"\n\necho \"bar\"\n#+END_SRC\n",
+			"<pre><code class=\"language-sh\">\necho &quot;foo&quot;\n\necho &quot;bar&quot;\n\necho &quot;foo&quot;\n\necho &quot;bar&quot;\n</code></pre>\n",
 		},
 		"EXAMPLE": {
-			"#+BEGIN_EXAMPLE sh\n echo \"foo\"\n#+END_EXAMPLE\n",
-			"<pre><code class=\"language-sh\"> echo &quot;foo&quot;\n</code></pre>\n",
+			"#+BEGIN_EXAMPLE sh\necho \"foo\"\n#+END_EXAMPLE\n",
+			"<pre><code class=\"language-sh\">\necho &quot;foo&quot;\n</code></pre>\n",
+		},
+		"EXAMPLE_MULTILINE": {
+			"#+BEGIN_EXAMPLE sh\necho \"foo\"\necho \"bar\"\n#+END_EXAMPLE\n",
+			"<pre><code class=\"language-sh\">\necho &quot;foo&quot;\necho &quot;bar&quot;\n</code></pre>\n",
+		},
+		"EXAMPLE_MULTILINE_MULTI_NEWLINE": {
+			"#+BEGIN_EXAMPLE sh\necho \"foo\"\n\necho \"bar\"\n#+END_EXAMPLE\n",
+			"<pre><code class=\"language-sh\">\necho &quot;foo&quot;\n\necho &quot;bar&quot;\n</code></pre>\n",
+		},
+		"EXAMPLE_MULTILINE_MANY_MULTI_NEWLINE": {
+			"#+BEGIN_EXAMPLE sh\necho \"foo\"\n\necho \"bar\"\n\necho \"foo\"\n\necho \"bar\"\n#+END_EXAMPLE\n",
+			"<pre><code class=\"language-sh\">\necho &quot;foo&quot;\n\necho &quot;bar&quot;\n\necho &quot;foo&quot;\n\necho &quot;bar&quot;\n</code></pre>\n",
 		},
 		"QUOTE": {
 			"#+BEGIN_QUOTE\nthis is a quote.\n#+END_QUOTE\n",

@@ -385,6 +385,33 @@ func TestRenderingTables(t *testing.T) {
 	testOrgCommon(testCases, t)
 }
 
+func TestLists(t *testing.T) {
+	testCases := map[string]testCase{
+		"simple-definition": {
+			"- definition lists :: these are useful sometimes\n- item 2 :: M-RET again gives another item, and long lines wrap in a tidy way underneath the definition\n",
+			"<dl>\n<dt>definition lists</dt>\n<dd>these are useful sometimes</dd>\n<dt>item 2</dt>\n<dd>M-RET again gives another item, and long lines wrap in a tidy way underneath the definition</dd>\n</dl>\n",
+		},
+		"simple-ol": {
+			"1. this\n2. is\n3. an\n4. ordered\n5. list\n",
+			"<ol>\n<li>this</li>\n<li>is</li>\n<li>an</li>\n<li>ordered</li>\n<li>list</li>\n</ol>\n",
+		},
+		"ol-change-number": {
+			"1. this\n2. is\n3. [@10] changed to 10\n4. ordered\n5. list\n",
+			"<ol>\n<li>this</li>\n<li>is</li>\n<li value=\"10\">changed to 10</li>\n<li>ordered</li>\n<li>list</li>\n</ol>\n",
+		},
+		"simple-ul-plus-sign": {
+			"+ this\n+ is\n+ an\n+ unordered\n+ list\n",
+			"<ul>\n<li>this</li>\n<li>is</li>\n<li>an</li>\n<li>unordered</li>\n<li>list</li>\n</ul>\n",
+		},
+		"simple-ul-dash": {
+			"- this\n- is\n- an\n- unordered\n- list\n",
+			"<ul>\n<li>this</li>\n<li>is</li>\n<li>an</li>\n<li>unordered</li>\n<li>list</li>\n</ul>\n",
+		},
+	}
+
+	testOrgCommon(testCases, t)
+}
+
 func TestRenderingPropertiesDrawer(t *testing.T) {
 	testCases := map[string]testCase{
 		"basic": {

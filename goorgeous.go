@@ -146,7 +146,20 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 		case isHeadline(data):
 			p.generateHeadline(&output, data)
 		case isDefinitionList(data):
-			p.generateDefinitionList(&output, data)
+			if inList != true {
+				listType = "dl"
+				inList = true
+			}
+			var work bytes.Buffer
+			flags := blackfriday.LIST_TYPE_DEFINITION
+			matches := reDefinitionList.FindSubmatch(data)
+			flags |= blackfriday.LIST_TYPE_TERM
+			p.inline(&work, matches[1])
+			p.r.ListItem(&tmpBlock, work.Bytes(), flags)
+			work.Reset()
+			flags &= ^blackfriday.LIST_TYPE_TERM
+			p.inline(&work, matches[2])
+			p.r.ListItem(&tmpBlock, work.Bytes(), flags)
 		case isUnorderedList(data):
 			if inList != true {
 				listType = "ul"
@@ -154,7 +167,7 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 			}
 			matches := reUnorderedList.FindSubmatch(data)
 			var work bytes.Buffer
-			p.inline(&work, matches[1])
+			p.inline(&work, matches[2])
 			p.r.ListItem(&tmpBlock, work.Bytes(), 0)
 		case isOrderedList(data):
 			if inList != true {
@@ -163,8 +176,17 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 			}
 			matches := reOrderedList.FindSubmatch(data)
 			var work bytes.Buffer
-			p.inline(&work, matches[1])
-			p.r.ListItem(&tmpBlock, work.Bytes(), 0)
+			tmpBlock.WriteString("<li")
+			if len(matches[2]) > 0 {
+				tmpBlock.WriteString(" value=\"")
+				tmpBlock.Write(matches[2])
+				tmpBlock.WriteString("\"")
+				matches[3] = matches[3][1:]
+			}
+			p.inline(&work, matches[3])
+			tmpBlock.WriteString(">")
+			tmpBlock.Write(work.Bytes())
+			tmpBlock.WriteString("</li>\n")
 		case isHorizontalRule(data):
 			p.r.HRule(&output)
 		default:
@@ -291,30 +313,15 @@ func isDefinitionList(data []byte) bool {
 	return reDefinitionList.Match(data)
 }
 
-func (p *parser) generateDefinitionList(out *bytes.Buffer, data []byte) {
-	flags := blackfriday.LIST_TYPE_DEFINITION
-	flags |= blackfriday.LIST_ITEM_BEGINNING_OF_LIST
-	matches := reDefinitionList.FindSubmatch(data)
-	generate := func() bool {
-		flags |= blackfriday.LIST_TYPE_TERM
-		p.r.ListItem(out, matches[1], flags)
-		flags &= ^blackfriday.LIST_TYPE_TERM
-		p.r.ListItem(out, matches[2], flags)
-		flags &= ^blackfriday.LIST_ITEM_END_OF_LIST
-		return true
-	}
-	p.r.List(out, generate, flags)
-}
-
 // ~~ Ordered Lists
-var reOrderedList = regexp.MustCompile(`^\s*[0-9]+.\s+(.+)`)
+var reOrderedList = regexp.MustCompile(`^(\s*)\d+\.\s+\[?@?(\d*)\]?(.+)`)
 
 func isOrderedList(data []byte) bool {
 	return reOrderedList.Match(data)
 }
 
 // ~~ Unordered Lists
-var reUnorderedList = regexp.MustCompile(`^\s*-\s+(.+)`)
+var reUnorderedList = regexp.MustCompile(`^(\s*)[-\+]\s+(.+)`)
 
 func isUnorderedList(data []byte) bool {
 	return reUnorderedList.Match(data)
@@ -420,6 +427,7 @@ func (p *parser) generateParagraph(out *bytes.Buffer, data []byte) {
 
 func (p *parser) generateList(output *bytes.Buffer, data []byte, listType string) {
 	generateList := func() bool {
+		output.WriteByte('\n')
 		output.Write(data)
 		return true
 	}
@@ -428,6 +436,8 @@ func (p *parser) generateList(output *bytes.Buffer, data []byte, listType string
 		p.r.List(output, generateList, 0)
 	case "ol":
 		p.r.List(output, generateList, blackfriday.LIST_TYPE_ORDERED)
+	case "dl":
+		p.r.List(output, generateList, blackfriday.LIST_TYPE_DEFINITION)
 	}
 }
 

@@ -230,6 +230,18 @@ func TestRenderingInline(t *testing.T) {
 			"this string /has emphasis text/.\n",
 			"<p>this string <em>has emphasis text</em>.</p>\n",
 		},
+		"emphasis-with-slash-inside": {
+			"this string /has a slash/inside and emphasis text/.\n",
+			"<p>this string <em>has a slash/inside and emphasis text</em>.</p>\n",
+		},
+		"emphasis-with-slash-and-space-inside": {
+			"this string /has a slash/ inside and emphasis text/.\n",
+			"<p>this string <em>has a slash/inside and emphasis text</em>.</p>\n",
+		},
+		"emphasis-with-slash-inside-and-another-emphasis": {
+			"this string /has a slash/inside and emphasis text/ and another /set of emphasis/.\n",
+			"<p>this string <em>has a slash/inside and emphasis text</em> and another <em>set of emphasis</em>.</p>\n",
+		},
 		"emphasis-not": {
 			"this string does not /have emphasis text/p.\n",
 			"<p>this string does not /have emphasis text/p.</p>\n",
@@ -254,6 +266,10 @@ func TestRenderingInline(t *testing.T) {
 			"this string *has bold text*.\n",
 			"<p>this string <strong>has bold text</strong>.</p>\n",
 		},
+		"bold-with-asterisk-inside": {
+			"this string *has *asterisk and bold text*.\n",
+			"<p>this string <strong>has *asterisk and bold text</strong>.</p>\n",
+		},
 		"bold-not-no-spaces": {
 			"this string*doesn't have bold text*.\n",
 			"<p>this string*doesn't have bold text*.</p>\n",
@@ -270,14 +286,26 @@ func TestRenderingInline(t *testing.T) {
 			"this is =inline code=.\n",
 			"<p>this is <code>inline code</code>.</p>\n",
 		},
-		//"verbatim-with-equal-in-code": {
-		//"this is =inline=code=.\n",
-		//"<p>this is <code>inline=code</code>.</p>\n",
-		//},
-		//"verbatim-with-multiple-equals-in-code": {
-		//"this is ==inline code==.\n",
-		//"<p>this is <code>=inline code=</code>.</p>\n",
-		//},
+		"verbatim-with-equal-in-code": {
+			"this is =inline=code=.\n",
+			"<p>this is <code>inline=code</code>.</p>\n",
+		},
+		"verbatim-with-multiple-equals-in-code": {
+			"this is ==inline code==.\n",
+			"<p>this is <code>=inline code=</code>.</p>\n",
+		},
+		"code": {
+			"this has ~code~.\n",
+			"<p>this has <code>code</code>.</p>\n",
+		},
+		"code-not": {
+			"this has not~code~.\n",
+			"<p>this has not~code~.</p>\n",
+		},
+		"code-with-tilde": {
+			"this has ~~code~.\n",
+			"<p>this has <code>~code</code>.</p>\n",
+		},
 	}
 
 	testOrgCommon(testCases, t)

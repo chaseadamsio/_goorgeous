@@ -491,6 +491,21 @@ func isTerminatingChar(char byte) bool {
 	return charMatches(char, '.') || charMatches(char, ',') || charMatches(char, '?') || charMatches(char, '!') || charMatches(char, ')') || charMatches(char, '}') || charMatches(char, ']')
 }
 
+func findLastCharInInline(data []byte, char byte) int {
+	timesFound := 0
+	last := 0
+	for i := 0; i < len(data); i++ {
+		if timesFound == 1 {
+			break
+		}
+		if data[i] == char && (len(data) > i+1 && isAcceptablePostClosingChar(data[i+1])) {
+			last = i
+			timesFound += 1
+		}
+	}
+	return last
+}
+
 func generator(p *parser, out *bytes.Buffer, dataIn []byte, offset int, char byte, doInline bool, renderer func(*bytes.Buffer, []byte)) int {
 	data := dataIn[offset:]
 	c := byte(char)
@@ -500,38 +515,30 @@ func generator(p *parser, out *bytes.Buffer, dataIn []byte, offset int, char byt
 		return 0
 	}
 
+	lastCharInside := findLastCharInInline(data, c)
+
 	// Org mode spec says a non-whitespace character must immediately follow.
 	// if the current char is the marker, then there's no text between, not a candidate
-	if isSpace(data[i]) || charMatches(data[i], c) || !isAcceptablePreOpeningChar(dataIn, data, offset) {
+	if isSpace(data[i]) || lastCharInside == i || !isAcceptablePreOpeningChar(dataIn, data, offset) {
 		return 0
 	}
 
-	for i < len(data) {
-		if charMatches(data[i], c) {
-			if (len(data) > i+1) && !isAcceptablePostClosingChar(data[i+1]) {
-				return 0
-			}
-			if c == '/' {
-				if len(data) > i+1 && charMatches(data[i+1], '/') {
-					return 0
-				}
-			}
-			var work bytes.Buffer
-			if doInline {
-				p.inline(&work, data[start:i])
-				renderer(out, work.Bytes())
-			} else {
-				renderer(out, data[start:i])
-			}
-			return i + 1
+	if lastCharInside > 0 {
+		var work bytes.Buffer
+		if doInline {
+			p.inline(&work, data[start:lastCharInside])
+			renderer(out, work.Bytes())
+		} else {
+			renderer(out, data[start:lastCharInside])
 		}
-		i++
+		next := lastCharInside + 1
+		return next
 	}
+
 	return 0
 }
 
 // ~~ Text Markup
-
 func generateVerbatim(p *parser, out *bytes.Buffer, data []byte, offset int) int {
 	return generator(p, out, data, offset, '=', false, p.r.CodeSpan)
 }

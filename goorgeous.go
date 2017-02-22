@@ -498,9 +498,11 @@ func findLastCharInInline(data []byte, char byte) int {
 		if timesFound == 1 {
 			break
 		}
-		if data[i] == char && (len(data) > i+1 && isAcceptablePostClosingChar(data[i+1])) {
-			last = i
-			timesFound += 1
+		if data[i] == char {
+			if len(data) == i+1 || (len(data) > i+1 && isAcceptablePostClosingChar(data[i+1])) {
+				last = i
+				timesFound += 1
+			}
 		}
 	}
 	return last

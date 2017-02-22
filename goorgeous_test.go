@@ -294,6 +294,10 @@ func TestRenderingInline(t *testing.T) {
 			"this is ==inline code==.\n",
 			"<p>this is <code>=inline code=</code>.</p>\n",
 		},
+		"verbatim-no-surrounding-text": {
+			"==Verbatim==\n",
+			"<p><code>=Verbatim=</code></p>\n",
+		},
 		"code": {
 			"this has ~code~.\n",
 			"<p>this has <code>code</code>.</p>\n",
@@ -407,6 +411,10 @@ func TestRenderingTables(t *testing.T) {
 		"no-table-heading-horizontal-splits": {
 			"|---+---+---|\n| d | e | f |\n|---+---+---|\n| g | h | i |\n|---+---+---|\n",
 			"\n<table>\n<tbody>\n<tr>\n<td>d</td>\n<td>e</td>\n<td>f</td>\n</tr>\n\n<tr>\n<td>g</td>\n<td>h</td>\n<td>i</td>\n</tr>\n</tbody>\n</table>\n",
+		},
+		"table-with-inlined-elements": {
+			"| Format           | Org mode markup syntax |\n| *Bold*           | =*Bold*=               |\n| /Italics/        | =/Italics/=            |\n| _Underline_      | =_Underline_=          |\n| =Verbatim=       | ==Verbatim== |\n| +Strike-through+ | =+Strike-through+=     |\n",
+			"\n<table>\n<tbody>\n<tr>\n<td>Format</td>\n<td>Org mode markup syntax</td>\n</tr>\n\n<tr>\n<td><strong>Bold</strong></td>\n<td><code>*Bold*</code></td>\n</tr>\n\n<tr>\n<td><em>Italics</em></td>\n<td><code>/Italics/</code></td>\n</tr>\n\n<tr>\n<td><span style=\"text-decoration: underline;\">Underline</span></td>\n<td><code>_Underline_</code></td>\n</tr>\n\n<tr>\n<td><code>Verbatim</code></td>\n<td><code>=Verbatim=</code></td>\n</tr>\n\n<tr>\n<td><del>Strike-through</del></td>\n<td><code>+Strike-through+</code></td>\n</tr>\n</tbody>\n</table>\n",
 		},
 	}
 

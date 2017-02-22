@@ -236,7 +236,7 @@ func TestRenderingInline(t *testing.T) {
 		},
 		"emphasis-with-slash-and-space-inside": {
 			"this string /has a slash/ inside and emphasis text/.\n",
-			"<p>this string <em>has a slash/inside and emphasis text</em>.</p>\n",
+			"<p>this string <em>has a slash</em> inside and emphasis text/.</p>\n",
 		},
 		"emphasis-with-slash-inside-and-another-emphasis": {
 			"this string /has a slash/inside and emphasis text/ and another /set of emphasis/.\n",

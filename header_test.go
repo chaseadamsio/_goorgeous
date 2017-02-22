@@ -43,44 +43,44 @@ func TestOrgHeaders(t *testing.T) {
 		in       string
 		expected map[string]interface{}
 	}{
-		"no-content-headers": {"#TITLE:\n",
+		"no-content-headers": {"#title:\n",
 			map[string]interface{}{},
 		},
-		"one-content-header": {"#TITLE: my org content\n#+author:",
+		"one-content-header": {"#title: my org content\n#+author:",
 			map[string]interface{}{},
 		},
-		"basic-happy-path": {"#+TITLE: my org mode content\n#+author: Chase Adams\n#+DESCRIPTION: This is my description!",
+		"basic-happy-path": {"#+title: my org mode content\n#+author: Chase Adams\n#+description: This is my description!",
 			map[string]interface{}{
-				"Title":       "my org mode content",
-				"Author":      "Chase Adams",
-				"Description": "This is my description!",
+				"title":       "my org mode content",
+				"author":      "Chase Adams",
+				"description": "This is my description!",
 			}},
-		"basic-happy-path-new-content-after": {"#+TITLE: my org mode content\n#+author: Chase Adams\n#+DESCRIPTION: This is my description!\n* This shouldn't get captured!",
+		"basic-happy-path-new-content-after": {"#+title: my org mode content\n#+author: Chase Adams\n#+description: This is my description!\n* This shouldn't get captured!",
 			map[string]interface{}{
-				"Title":       "my org mode content",
-				"Author":      "Chase Adams",
-				"Description": "This is my description!",
+				"title":       "my org mode content",
+				"author":      "Chase Adams",
+				"description": "This is my description!",
 			}},
-		"basic-happy-path-with-tags": {"#+TITLE: my org mode tags content\n#+author: Chase Adams\n#+DESCRIPTION: This is my description!\n#+TAGS: org-content org-mode hugo\n",
+		"basic-happy-path-with-tags": {"#+title: my org mode tags content\n#+author: Chase Adams\n#+description: This is my description!\n#+tags: org-content org-mode hugo\n",
 			map[string]interface{}{
-				"Title":       "my org mode tags content",
-				"Author":      "Chase Adams",
-				"Description": "This is my description!",
-				"Tags":        []string{"org-content", "org-mode", "hugo"},
+				"title":       "my org mode tags content",
+				"author":      "Chase Adams",
+				"description": "This is my description!",
+				"tags":        []string{"org-content", "org-mode", "hugo"},
 			}},
-		"basic-happy-path-with-categories": {"#+TITLE: my org mode tags content\n#+author: Chase Adams\n#+DESCRIPTION: This is my description!\n#+CATEGORIES: org-content org-mode hugo\n",
+		"basic-happy-path-with-categories": {"#+title: my org mode tags content\n#+author: Chase Adams\n#+description: This is my description!\n#+categories: org-content org-mode hugo\n",
 			map[string]interface{}{
-				"Title":       "my org mode tags content",
-				"Author":      "Chase Adams",
-				"Description": "This is my description!",
-				"Categories":  []string{"org-content", "org-mode", "hugo"},
+				"title":       "my org mode tags content",
+				"author":      "Chase Adams",
+				"description": "This is my description!",
+				"categories":  []string{"org-content", "org-mode", "hugo"},
 			}},
-		"basic-happy-path-with-aliases": {"#+TITLE: my org mode tags content\n#+author: Chase Adams\n#+DESCRIPTION: This is my description!\n#+ALIASES: /org/content /org/mode /hugo\n",
+		"basic-happy-path-with-aliases": {"#+title: my org mode tags content\n#+author: Chase Adams\n#+description: This is my description!\n#+aliases: /org/content /org/mode /hugo\n",
 			map[string]interface{}{
-				"Title":       "my org mode tags content",
-				"Author":      "Chase Adams",
-				"Description": "This is my description!",
-				"Categories":  []string{"/org/content", "/org/mode", "/hugo"},
+				"title":       "my org mode tags content",
+				"author":      "Chase Adams",
+				"description": "This is my description!",
+				"aliases":     []string{"/org/content", "/org/mode", "/hugo"},
 			}},
 	}
 
@@ -103,6 +103,9 @@ func TestOrgHeaders(t *testing.T) {
 				if out[k] != v {
 					t.Errorf("%s OrgHeaders() %v = %v\n wants: %v\n", caseName, k, out[k], tc.expected[k])
 				}
+			case nil:
+				t.Errorf("%s OrgHeaders() %v is nil", caseName, k)
+			default:
 			}
 		}
 

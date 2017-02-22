@@ -27,16 +27,16 @@ The purpose of this package is to come as close as possible as parsing an =*.org
 
 ** Org Headers
 
-To retreive the headers from a =[]byte=, call =OrgHeaders= and it will return a =map[string]interface{}=. It normalizes all headers to =Title= case: 
+To retreive the headers from a =[]byte=, call =OrgHeaders= and it will return a =map[string]interface{}=: 
 
 #+BEGIN_SRC go
-  input := "#+TITLE: goorgeous\n* Some Headline\n"
+  input := "#+title: goorgeous\n* Some Headline\n"
   out := goorgeous.OrgHeaders(input) 
 #+END_SRC
 
 #+BEGIN_SRC go
   map[string]interface{}{ 
-          "Title": "goorgeous"
+          "title": "goorgeous"
   }
 #+END_SRC
 

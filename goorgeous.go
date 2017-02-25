@@ -3,6 +3,7 @@ package goorgeous
 import (
 	"bufio"
 	"bytes"
+	"fmt"
 	"regexp"
 
 	"github.com/russross/blackfriday"
@@ -56,7 +57,6 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 	// used to capture code blocks
 	marker := ""
 	syntax := ""
-	listType := ""
 	inList := false
 	inTable := false
 	var tmpBlock bytes.Buffer
@@ -65,17 +65,21 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 		data := scanner.Bytes()
 
 		switch {
+		case isListItem(data) || (inList && !isEmpty(data)):
+			if inList == false {
+				inList = true
+			}
+			tmpBlock.Write(data)
+			tmpBlock.WriteByte('\n')
 		case isEmpty(data):
 			switch {
 			case inList:
-				p.generateList(&output, tmpBlock.Bytes(), listType)
+				p.generateLists(&output, tmpBlock.Bytes())
 				inList = false
-				listType = ""
 				tmpBlock.Reset()
 			case inTable:
 				p.generateTable(&output, tmpBlock.Bytes())
 				inTable = false
-				listType = ""
 				tmpBlock.Reset()
 			case marker != "":
 				tmpBlock.WriteByte('\n')
@@ -145,48 +149,6 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 			p.generateComment(&output, data)
 		case isHeadline(data):
 			p.generateHeadline(&output, data)
-		case isDefinitionList(data):
-			if inList != true {
-				listType = "dl"
-				inList = true
-			}
-			var work bytes.Buffer
-			flags := blackfriday.LIST_TYPE_DEFINITION
-			matches := reDefinitionList.FindSubmatch(data)
-			flags |= blackfriday.LIST_TYPE_TERM
-			p.inline(&work, matches[1])
-			p.r.ListItem(&tmpBlock, work.Bytes(), flags)
-			work.Reset()
-			flags &= ^blackfriday.LIST_TYPE_TERM
-			p.inline(&work, matches[2])
-			p.r.ListItem(&tmpBlock, work.Bytes(), flags)
-		case isUnorderedList(data):
-			if inList != true {
-				listType = "ul"
-				inList = true
-			}
-			matches := reUnorderedList.FindSubmatch(data)
-			var work bytes.Buffer
-			p.inline(&work, matches[2])
-			p.r.ListItem(&tmpBlock, work.Bytes(), 0)
-		case isOrderedList(data):
-			if inList != true {
-				listType = "ol"
-				inList = true
-			}
-			matches := reOrderedList.FindSubmatch(data)
-			var work bytes.Buffer
-			tmpBlock.WriteString("<li")
-			if len(matches[2]) > 0 {
-				tmpBlock.WriteString(" value=\"")
-				tmpBlock.Write(matches[2])
-				tmpBlock.WriteString("\"")
-				matches[3] = matches[3][1:]
-			}
-			p.inline(&work, matches[3])
-			tmpBlock.WriteString(">")
-			tmpBlock.Write(work.Bytes())
-			tmpBlock.WriteString("</li>\n")
 		case isHorizontalRule(data):
 			p.r.HRule(&output)
 		default:
@@ -305,6 +267,12 @@ func findTags(data []byte, start int) ([]string, int) {
 	return tags, tagOpener
 }
 
+var reWhiteSpace = regexp.MustCompile(`^\s+.*`)
+
+func hasWhiteSpace(data []byte) bool {
+	return reWhiteSpace.Match(data)
+}
+
 // Greater Elements
 // ~~ Definition Lists
 var reDefinitionList = regexp.MustCompile(`^\s*-\s+(.+?)\s+::\s+(.*)`)
@@ -325,6 +293,95 @@ var reUnorderedList = regexp.MustCompile(`^(\s*)[-\+]\s+(.+)`)
 
 func isUnorderedList(data []byte) bool {
 	return reUnorderedList.Match(data)
+}
+
+func isListItem(data []byte) bool {
+	return isDefinitionList(data) || isOrderedList(data) || isUnorderedList(data)
+}
+
+func (p *parser) generateLists(output *bytes.Buffer, data []byte) {
+	var tmpBlock bytes.Buffer
+	listItemOpen := false
+	indentLevel := 0
+	line := 0
+	i := 0
+	outerListType := ""
+
+	for line < len(data) {
+		i++
+
+		for data[i-1] != '\n' {
+			i++
+		}
+
+		// check to see if the next line is an indentation
+		if i+2 < len(data) {
+			if ws := skipChar(data[i:], 0, ' '); ws != indentLevel {
+				if ws > indentLevel {
+					listItemOpen = true
+				}
+
+				indentLevel = ws
+			}
+		}
+
+		chunk := data[line:i]
+
+		switch {
+		case isDefinitionList(chunk):
+			if outerListType == "" {
+				outerListType = "dl"
+			}
+			var work bytes.Buffer
+			flags := blackfriday.LIST_TYPE_DEFINITION
+			matches := reDefinitionList.FindSubmatch(chunk)
+			flags |= blackfriday.LIST_TYPE_TERM
+			p.inline(&work, matches[1])
+			p.r.ListItem(&tmpBlock, work.Bytes(), flags)
+			work.Reset()
+			flags &= ^blackfriday.LIST_TYPE_TERM
+			p.inline(&work, matches[2])
+			p.r.ListItem(&tmpBlock, work.Bytes(), flags)
+		case isUnorderedList(chunk):
+			if outerListType == "" {
+				outerListType = "ul"
+			}
+
+			matches := reUnorderedList.FindSubmatch(chunk)
+			var work bytes.Buffer
+			p.inline(&work, matches[2])
+			if listItemOpen {
+				tmpBlock.WriteString("<li>")
+				tmpBlock.Write(chunk)
+			}
+			p.r.ListItem(&tmpBlock, work.Bytes(), 0)
+		case isOrderedList(chunk):
+			if outerListType == "" {
+				outerListType = "ol"
+			}
+			matches := reOrderedList.FindSubmatch(chunk)
+			var work bytes.Buffer
+			tmpBlock.WriteString("<li")
+			if len(matches[2]) > 0 {
+				tmpBlock.WriteString(" value=\"")
+				tmpBlock.Write(matches[2])
+				tmpBlock.WriteString("\"")
+				matches[3] = matches[3][1:]
+			}
+			p.inline(&work, matches[3])
+			tmpBlock.WriteString(">")
+			tmpBlock.Write(work.Bytes())
+			tmpBlock.WriteString("</li>\n")
+		default:
+			fmt.Println("just in the list, but not an item")
+		}
+
+		line = i
+		indentLevelChanged = false
+	}
+
+	p.generateList(output, tmpBlock.Bytes(), outerListType)
+
 }
 
 // ~~ Tables

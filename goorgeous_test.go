@@ -435,6 +435,10 @@ func TestLists(t *testing.T) {
 			"- this\n- is\n- an\n- unordered\n- list\n",
 			"<ul>\n<li>this</li>\n<li>is</li>\n<li>an</li>\n<li>unordered</li>\n<li>list</li>\n</ul>\n",
 		},
+		"complex-list": {
+			"** Lord of the Rings\nMy favorite scenes are (in this order)\n1. The attack of the Rohirrim\n2. Eowyn's fight with the witch king\n  + this was already my favorite scene in the book\n  + I really like Miranda Otto.\n3. Peter Jackson being shot by Legolas\n  - on DVD only\n  He makes a really funny face when it happens.\nBut in the end, no individual scenes matter but the film as a whole.\nImportant actors in this film are:\n- Elijah Wood :: He plays Frodo\n- Sean Astin :: He plays Sam, Frodo's friend.  I still remember\nhim very well from his role as Mikey Walsh in The Goonies.\n",
+			"<h2 id=\"lord-of-the-rings\">Lord of the Rings</h2>\n<p>My favorite scenes are (in this order)</p>\n<ol>\n<li>The attack of the Rohirrim</li><li>Eowyn's fight with the withch king\n<ul><li>this was already my favorite scene in the book</li>\n<li>I really like Miranda Otto.</li>\n</ul>\n</li>\n<li>Peter Jackson being shot by Legolas\n<ul>\n<li>on DVD only\n  He makes a really funny face when it happens.</li>\n</ul>\n</ol>\n<p>But in the end, no individual scenes matter but the film as a whole.</p>\n<p>Important actors in this film are:</p>\n",
+		},
 	}
 
 	testOrgCommon(testCases, t)

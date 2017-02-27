@@ -57,6 +57,7 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 	marker := ""
 	syntax := ""
 	listType := ""
+	inParagraph := false
 	inList := false
 	inTable := false
 	var tmpBlock bytes.Buffer
@@ -76,6 +77,10 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 				p.generateTable(&output, tmpBlock.Bytes())
 				inTable = false
 				listType = ""
+				tmpBlock.Reset()
+			case inParagraph:
+				p.generateParagraph(&output, tmpBlock.Bytes())
+				inParagraph = false
 				tmpBlock.Reset()
 			case marker != "":
 				tmpBlock.WriteByte('\n')
@@ -190,7 +195,8 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 		case isHorizontalRule(data):
 			p.r.HRule(&output)
 		default:
-			p.generateParagraph(&output, data)
+			inParagraph = true
+			tmpBlock.Write(data)
 		}
 	}
 

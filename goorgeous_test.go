@@ -459,6 +459,21 @@ func TestRenderingPropertiesDrawer(t *testing.T) {
 	testOrgCommon(testCases, t)
 }
 
+func TestRenderingParagraph(t *testing.T) {
+	testCases := map[string]testCase{
+		"multi-line-paragraph": {
+			"This\n should\n be\n one\n paragraph\n",
+			"<p>This should be one paragraph</p>\n",
+		},
+		"multiple-paragraphs": {
+			"This\n should\n be\n one\n paragraph\n\nAnd\n this\n another\n",
+			"<p>This should be one paragraph</p>\n\n<p>And this another</p>\n",
+		},
+	}
+
+	testOrgCommon(testCases, t)
+}
+
 func testOrgCommon(testCases map[string]testCase, t *testing.T) {
 	for caseName, tc := range testCases {
 

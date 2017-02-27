@@ -330,7 +330,7 @@ func TestRenderingLinksAndImages(t *testing.T) {
 			"<p>this has <img src=\"https://github.com/chaseadamsio/goorgeous/img.png\" alt=\"https://github.com/chaseadamsio/goorgeous/img.png\" title=\"https://github.com/chaseadamsio/goorgeous/img.png\" /> as an image.</p>\n",
 		},
 		"image-alt": {
-			"this has [[file:../gopher.gif][a uni-gopher]] as an image.",
+			"this has [[file:../gopher.gif][a uni-gopher]] as an image.\n",
 			"<p>this has <img src=\"../gopher.gif\" alt=\"a uni-gopher\" title=\"a uni-gopher\" /> as an image.</p>\n",
 		},
 	}
@@ -451,8 +451,23 @@ func TestLists(t *testing.T) {
 func TestRenderingPropertiesDrawer(t *testing.T) {
 	testCases := map[string]testCase{
 		"basic": {
-			"* Heading\n:PROPERTIES:\n:header-args: :tangle ~/.filename\n:END:\n next block.",
+			"* Heading\n:PROPERTIES:\n:header-args: :tangle ~/.filename\n:END:\n next block.\n",
 			"<h1 id=\"heading\">Heading</h1>\n\n<p>next block.</p>\n",
+		},
+	}
+
+	testOrgCommon(testCases, t)
+}
+
+func TestRenderingParagraph(t *testing.T) {
+	testCases := map[string]testCase{
+		"multi-line-paragraph": {
+			"This\n should\n be\n one\n paragraph\n",
+			"<p>This should be one paragraph</p>\n",
+		},
+		"multiple-paragraphs": {
+			"This\n should\n be\n one\n paragraph\n\nAnd\n this\n another\n",
+			"<p>This should be one paragraph</p>\n\n<p>And this another</p>\n",
 		},
 	}
 

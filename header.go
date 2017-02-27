@@ -68,3 +68,8 @@ func OrgHeaders(input []byte) (map[string]interface{}, error) {
 	return out, nil
 
 }
+
+// ~~ Keywords
+func IsKeyword(data []byte) bool {
+	return len(data) > 2 && charMatches(data[0], '#') && charMatches(data[1], '+') && !charMatches(data[2], ' ')
+}

@@ -48,6 +48,7 @@ func Org(input []byte, renderer blackfriday.Renderer) []byte {
 func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 	// in the case that we need to render something in isEmpty but there isn't a new line char
 	input = append(input, '\n')
+	input = append(input, '\n')
 	var output bytes.Buffer
 
 	p := NewParser(renderer)

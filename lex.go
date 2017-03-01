@@ -25,6 +25,7 @@ const (
 	itemPriority
 	itemTags
 	itemPropertyDrawer
+	itemProperty
 
 	itemKeyword
 	itemComment
@@ -37,9 +38,16 @@ const (
 	itemCode
 	itemUnderline
 
+	itemImgOrLinkOpen
+	itemImgOrLinkOpenSingle
+	itemImgPre
+	itemImgOrLinkClose
+	itemImgOrLinkCloseSingle
+
 	itemDefinitionList
 	itemOrderedList
 	itemUnorderedList
+	itemListItem
 
 	itemTable
 
@@ -50,15 +58,7 @@ const (
 
 const eof = -1
 
-const (
-	spaceChars = " \t\r\n"
-)
-
 type Pos int
-
-func (p Pos) Position() Pos {
-	return p
-}
 
 type item struct {
 	typ  itemType
@@ -83,20 +83,13 @@ type lexer struct {
 	line    int
 	items   chan item
 	// set when we find a open character so we know if we've found a closing character
-	emphasisOpen      bool
-	boldOpen          bool
-	strikethroughOpen bool
-	verbatimOpen      bool
-	codeOpen          bool
-	underlineOpen     bool
-	linkOrImgOpen     bool
+	isOpen map[string]bool
 }
 
 func (l *lexer) resetInlineOpeners() {
-	l.emphasisOpen = false
-	l.boldOpen = false
-	l.strikethroughOpen = false
-	l.codeOpen = false
+	for k := range l.isOpen {
+		l.isOpen[k] = false
+	}
 }
 
 func lex(name, input string) *lexer {
@@ -105,6 +98,14 @@ func lex(name, input string) *lexer {
 		input: input,
 		items: make(chan item),
 		line:  1,
+		isOpen: map[string]bool{
+			"emphasis":      false,
+			"bold":          false,
+			"strikethrough": false,
+			"verbatim":      false,
+			"code":          false,
+			"underline":     false,
+		},
 	}
 
 	go l.run()
@@ -162,8 +163,17 @@ func (l *lexer) next() rune {
 	return r
 }
 
-func (l *lexer) ignore() {
+func (l *lexer) skip() {
 	l.start = l.pos
+}
+
+func (l *lexer) skipSpace() {
+	if int(l.pos) < len(l.input) {
+		if l.input[l.pos] == ' ' {
+			l.start += 1
+			l.pos += 1
+		}
+	}
 }
 
 func (l *lexer) nextItem() item {
@@ -182,12 +192,17 @@ const (
 	delimH5 = "*****"
 	delimH6 = "******"
 
+	delimTags = ':'
+
 	delimEmphasis      = '/'
 	delimBold          = '*'
 	delimStrikethrough = '+'
 	delimVerbatim      = '='
 	delimCode          = '~'
 	delimUnderline     = '_'
+
+	delimPropertyBegin = ":PROPERTIES:"
+	delimPropertyEnd   = ":END:"
 )
 
 func lexText(l *lexer) stateFn {
@@ -195,10 +210,16 @@ func lexText(l *lexer) stateFn {
 		switch {
 		case l.isNewLine():
 			return lexNewLine
+		case l.isTableCandidate():
+			return lexTable
+		case l.isOrderedListCandidate():
+			return lexOrderedList
+		case l.isImgOrLinkCandidate():
+			return lexImgOrLink
 		case l.isBoldCandidate():
 			return lexBold
 		case l.isEmphasisCandidate():
-			return lexEmphasis
+			return lexEmphasis(l)
 		case l.isStrikethroughCandidate():
 			return lexStrikethrough
 		case l.isVerbatimCandidate():
@@ -221,6 +242,173 @@ func lexText(l *lexer) stateFn {
 	return nil
 }
 
+func (l *lexer) isTableCandidate() bool {
+	if l.input[l.pos] != '|' {
+		return false
+	}
+	if l.pos-1 >= 0 && l.input[l.pos-1] == ' ' {
+		return false
+	}
+	return true
+}
+
+func lexTable(l *lexer) stateFn {
+	for idx := int(l.pos); idx < len(l.input); idx++ {
+		if l.input[idx] == '|' {
+			l.pos = Pos(idx)
+			if l.pos > l.start {
+				l.emit(itemText)
+			}
+			l.next()
+			l.emit(itemTable)
+		}
+		if l.input[idx] == '\n' {
+			break
+		}
+	}
+	return lexText
+}
+
+// numeral followed by either a period or a right parenthesis2, such as ‘1.’ or ‘1)`
+func (l *lexer) isOrderedListCandidate() bool {
+	if !isDigit(l.input[l.pos]) {
+		return false
+	}
+	for idx := int(l.pos); idx > 0; idx-- {
+		if !(l.input[idx] == ' ' || l.input[idx] == '\n') {
+			return false
+		}
+	}
+
+	for idx := int(l.pos); idx < len(l.input); idx++ {
+		if isDigit(l.input[idx]) {
+			continue
+		}
+		if !(l.input[idx] == '.' || l.input[idx] == ')') {
+			return false
+		}
+		break
+	}
+	return true
+}
+
+func isDigit(char byte) bool {
+	return char <= '9' && char >= '0'
+}
+
+func lexOrderedList(l *lexer) stateFn {
+	for idx := int(l.pos); idx < len(l.input); idx++ {
+		if isDigit(l.input[idx]) {
+			continue
+		}
+		if !(l.input[idx] == '.' || l.input[idx] == ')') {
+			l.pos = Pos(idx)
+			l.emit(itemOrderedList)
+			break
+		}
+	}
+	return lexText
+}
+
+func (l *lexer) isImgOrLinkCandidate() bool {
+	if int(l.pos)+2 < len(l.input) {
+		if l.input[l.pos:l.pos+2] != "[[" {
+			return false
+		}
+
+		if testImgOrLink(int(l.pos+2), l.input) {
+			return true
+		}
+	}
+	return false
+}
+
+func testImgOrLink(start int, in string) bool {
+	foundFirstCloseTag := false
+	foundSecondOpenTag := false
+	for idx := start; idx < len(in); idx++ {
+		if in[idx] == ']' {
+			if in[idx+1] == ']' {
+				return true
+			}
+
+			if !foundFirstCloseTag {
+				foundFirstCloseTag = true
+				continue
+			}
+
+			if foundFirstCloseTag && foundSecondOpenTag {
+				return true
+			}
+			return false
+		}
+
+		if in[idx] == '[' && in[idx-1] != ']' {
+			return false
+		}
+
+		if in[idx] == '[' && in[idx-1] == ']' {
+			if !foundFirstCloseTag {
+				return false
+			}
+			foundSecondOpenTag = true
+			continue
+		}
+	}
+	return false
+}
+
+func lexImgOrLink(l *lexer) stateFn {
+	if l.pos > l.start {
+		l.emit(itemText)
+	}
+	l.pos += 2
+	l.emit(itemImgOrLinkOpen)
+	if int(l.pos)+5 < len(l.input) && l.input[l.pos:l.pos+5] == "file:" {
+		l.pos += 5
+		l.emit(itemImgPre)
+	}
+
+	for idx := int(l.pos); idx < len(l.input); {
+		if l.input[idx] == ']' {
+			if l.input[idx+1] == ']' {
+				l.pos = Pos(idx)
+				if l.pos > l.start {
+					l.emit(itemText)
+					l.pos += 2
+					l.emit(itemImgOrLinkClose)
+				} else {
+					l.pos += 2
+					l.emit(itemImgOrLinkClose)
+				}
+				idx += 2
+				continue
+			} else {
+				l.pos = Pos(idx)
+				if l.pos > l.start {
+					l.emit(itemText)
+					l.next()
+					l.emit(itemImgOrLinkCloseSingle)
+				} else {
+					l.next()
+					l.emit(itemImgOrLinkCloseSingle)
+				}
+
+			}
+		}
+
+		if l.input[idx] == '[' {
+			l.pos = Pos(idx)
+			l.next()
+			l.emit(itemImgOrLinkOpenSingle)
+		}
+
+		idx++
+	}
+
+	return lexText
+}
+
 func (l *lexer) isNewLine() bool {
 	return l.input[l.pos] == delimNewLine
 }
@@ -237,6 +425,216 @@ func lexNewLine(l *lexer) stateFn {
 
 func isOtherDelim(char byte) bool {
 	return char == delimBold || char == delimEmphasis || char == delimStrikethrough
+}
+
+func (l *lexer) isHeadlineCandidate() bool {
+	if l.input[l.pos] != '*' {
+		return false
+	}
+
+	// headlines don't start with a space & shouldn't has a previous character
+	// with a * if they've made it to this point
+	if l.pos-1 >= 0 && (l.input[l.pos-1] == ' ' || l.input[l.pos-1] == '*') {
+		return false
+	}
+
+	var i = 0
+	for i <= 6 && int(l.pos)+i < len(l.input) && l.input[int(l.pos)+i] == '*' {
+		i++
+	}
+
+	if int(l.pos)+i < len(l.input) {
+		return l.input[int(l.pos)+i] == ' '
+	}
+
+	return false
+}
+
+func lexHeadline(l *lexer) stateFn {
+	var i = 0
+	for i <= 6 && int(l.pos)+i < len(l.input) && l.input[int(l.pos)+i] == '*' {
+		i++
+	}
+	l.pos += Pos(i)
+	if l.peek() != ' ' {
+		return lexText
+	}
+	l.emit(itemHeadline)
+	l.skipSpace()
+	return lexInsideHeadline
+}
+
+func lexInsideHeadline(l *lexer) stateFn {
+	// is there a todo status?
+	if l.isStatus() {
+		lexStatus(l)
+	}
+	if l.isPriority() {
+		lexPriority(l)
+	}
+	if l.findTags() > int(l.pos) {
+		lexTags(l)
+	}
+	return lexText
+}
+
+func (l *lexer) isStatus() bool {
+	if int(l.pos)+4 < len(l.input) {
+		return l.input[l.pos:l.pos+4] == "TODO" || l.input[l.pos:l.pos+4] == "DONE"
+	}
+	return false
+}
+
+func lexStatus(l *lexer) {
+	l.pos += 4
+	l.emit(itemStatus)
+	l.skipSpace()
+}
+
+func (l *lexer) isPriority() bool {
+	if int(l.pos)+3 < len(l.input) {
+		return l.input[l.pos] == '[' && isPriorityLetter(l.input[l.pos+1]) && l.input[l.pos+2] == ']'
+	}
+	return false
+}
+
+func isPriorityLetter(char byte) bool {
+	return (charMatches(char, 'A') || charMatches(char, 'B') || charMatches(char, 'C'))
+}
+
+func lexPriority(l *lexer) {
+	l.pos += 3
+	l.emit(itemPriority)
+	l.skipSpace()
+}
+
+func (l *lexer) findTags() int {
+	idx := int(l.pos)
+	for idx < len(l.input) {
+		char := l.input[idx]
+
+		if char == '\n' {
+			idx = int(l.pos)
+			break
+		}
+		if char == delimTags {
+			if l.hasMatch(delimTags) {
+				return idx
+			}
+		}
+		idx++
+	}
+
+	if idx == len(l.input) {
+		idx = int(l.pos)
+	}
+
+	return idx
+}
+
+func lexTags(l *lexer) {
+	for int(l.pos) < len(l.input) {
+		if l.input[l.pos] == delimTags {
+			l.skipSpace()
+			l.emit(itemText)
+			l.next()
+			l.emit(itemTags)
+		} else {
+			l.next()
+		}
+	}
+	l.skipSpace()
+}
+
+func (l *lexer) isEmphasisCandidate() bool {
+	return l.checkDelimCandidate(delimEmphasis, "emphasis")
+}
+
+func lexEmphasis(l *lexer) stateFn {
+	return lexInsideInline(l, itemEmphasis)
+}
+
+func (l *lexer) isBoldCandidate() bool {
+	return l.checkDelimCandidate(delimBold, "bold")
+}
+
+func lexBold(l *lexer) stateFn {
+	return lexInsideInline(l, itemBold)
+}
+
+func (l *lexer) isStrikethroughCandidate() bool {
+	return l.checkDelimCandidate(delimStrikethrough, "strikethrough")
+}
+
+func lexStrikethrough(l *lexer) stateFn {
+	return lexInsideInline(l, itemStrikethrough)
+}
+
+func (l *lexer) isVerbatimCandidate() bool {
+	return l.checkDelimCandidate(delimVerbatim, "verbatim")
+}
+
+func lexVerbatim(l *lexer) stateFn {
+	return lexInsideInline(l, itemVerbatim)
+}
+
+func (l *lexer) isCodeCandidate() bool {
+	return l.checkDelimCandidate(delimCode, "code")
+}
+
+func lexCode(l *lexer) stateFn {
+	return lexInsideInline(l, itemCode)
+}
+
+func (l *lexer) isUnderlineCandidate() bool {
+	return l.checkDelimCandidate(delimUnderline, "underline")
+}
+
+func lexUnderline(l *lexer) stateFn {
+	return lexInsideInline(l, itemUnderline)
+}
+
+func (l *lexer) checkDelimCandidate(delim byte, t string) bool {
+	if l.input[l.pos] != delim {
+		return false
+	}
+
+	// bold is the only one that might have a collision with another character
+	// which is a headline
+	if t == "bold" {
+		if !l.isOpen[t] && int(l.pos)+1 < len(l.input) {
+			if l.input[l.pos+1] == ' ' || l.input[l.pos+1] == '*' {
+				return false
+			}
+		}
+
+	}
+
+	if !l.isOpen[t] && !l.hasMatch(delim) {
+		return false
+	}
+
+	if !l.isOpen[t] && l.isInlinePreChar() {
+		l.isOpen[t] = true
+		return true
+	}
+
+	if l.isOpen[t] && l.isInlineTerminatingChar() {
+		l.isOpen[t] = false
+		return true
+	}
+
+	return false
+
+}
+
+func lexInsideInline(l *lexer, it itemType) stateFn {
+	if l.pos > l.start {
+		l.emit(itemText)
+	}
+	l.next()
+	l.emit(it)
+	return lexText
 }
 
 func (l *lexer) isInlinePreChar() bool {
@@ -271,237 +669,4 @@ func (l *lexer) isInlineTerminatingChar() bool {
 		return charMatches(char, ' ') || charMatches(char, '.') || charMatches(char, ',') || charMatches(char, '?') || charMatches(char, '!') || charMatches(char, ')') || charMatches(char, '}') || charMatches(char, ']')
 	}
 	return true
-}
-
-func (l *lexer) isHeadlineCandidate() bool {
-
-	if l.input[l.pos] != '*' {
-		return false
-	}
-
-	// headlines don't start with a space & shouldn't has a previous character
-	// with a * if they've made it to this point
-	if l.pos-1 >= 0 && (l.input[l.pos-1] == ' ' || l.input[l.pos-1] == '*') {
-		return false
-	}
-
-	var i = 0
-	for i <= 6 && int(l.pos)+i < len(l.input) && l.input[int(l.pos)+i] == '*' {
-		i++
-	}
-
-	if int(l.pos)+i < len(l.input) {
-		return l.input[int(l.pos)+i] == ' '
-	}
-
-	return false
-}
-
-func lexHeadline(l *lexer) stateFn {
-	var i = 0
-	for i <= 6 && int(l.pos)+i < len(l.input) && l.input[int(l.pos)+i] == '*' {
-		i++
-	}
-	l.pos += Pos(i)
-	if l.peek() != ' ' {
-		return lexText
-	}
-	l.emit(itemHeadline)
-	return lexInsideHeadline
-}
-
-func lexInsideHeadline(l *lexer) stateFn {
-	return lexText
-}
-
-func (l *lexer) isEmphasisCandidate() bool {
-	if l.input[l.pos] != delimEmphasis {
-		return false
-	}
-
-	if !l.emphasisOpen && !l.hasMatch(delimEmphasis) {
-		return false
-	}
-
-	if !l.emphasisOpen && l.isInlinePreChar() {
-		l.emphasisOpen = true
-		return true
-	}
-
-	if l.emphasisOpen && l.isInlineTerminatingChar() {
-		l.emphasisOpen = false
-		return true
-	}
-
-	return false
-}
-
-func lexEmphasis(l *lexer) stateFn {
-	if l.pos > l.start {
-		l.emit(itemText)
-	}
-	l.next()
-	l.emit(itemEmphasis)
-	return lexText
-}
-
-func (l *lexer) isBoldCandidate() bool {
-	if l.input[l.pos] != delimBold {
-		return false
-	}
-
-	if !l.boldOpen && int(l.pos)+1 < len(l.input) {
-		if l.input[l.pos+1] == ' ' || l.input[l.pos+1] == '*' {
-			return false
-		}
-	}
-
-	if !l.boldOpen && !l.hasMatch(delimBold) {
-		return false
-	}
-
-	if !l.boldOpen && l.isInlinePreChar() {
-		l.boldOpen = true
-		return true
-	}
-
-	if l.boldOpen && l.isInlineTerminatingChar() {
-		l.boldOpen = false
-		return true
-	}
-
-	return false
-}
-
-func lexBold(l *lexer) stateFn {
-	if l.pos > l.start {
-		l.emit(itemText)
-	}
-	l.next()
-	l.emit(itemBold)
-	return lexText
-}
-
-func (l *lexer) isStrikethroughCandidate() bool {
-	if l.input[l.pos] != delimStrikethrough {
-		return false
-	}
-
-	if !l.strikethroughOpen && !l.hasMatch(delimStrikethrough) {
-		return false
-	}
-
-	if !l.strikethroughOpen && l.isInlinePreChar() {
-		l.strikethroughOpen = true
-		return true
-	}
-
-	if l.strikethroughOpen && l.isInlineTerminatingChar() {
-		l.strikethroughOpen = false
-		return true
-	}
-
-	return false
-}
-
-func lexStrikethrough(l *lexer) stateFn {
-	if l.pos > l.start {
-		l.emit(itemText)
-	}
-	l.next()
-	l.emit(itemStrikethrough)
-	return lexText
-}
-
-func (l *lexer) isVerbatimCandidate() bool {
-	if l.input[l.pos] != delimVerbatim {
-		return false
-	}
-
-	if !l.verbatimOpen && !l.hasMatch(delimVerbatim) {
-		return false
-	}
-
-	if !l.verbatimOpen && l.isInlinePreChar() {
-		l.verbatimOpen = true
-		return true
-	}
-
-	if l.verbatimOpen && l.isInlineTerminatingChar() {
-		l.verbatimOpen = false
-		return true
-	}
-
-	return false
-}
-
-func lexVerbatim(l *lexer) stateFn {
-	if l.pos > l.start {
-		l.emit(itemText)
-	}
-	l.next()
-	l.emit(itemVerbatim)
-	return lexText
-}
-
-func (l *lexer) isCodeCandidate() bool {
-	if l.input[l.pos] != delimCode {
-		return false
-	}
-
-	if !l.codeOpen && !l.hasMatch(delimCode) {
-		return false
-	}
-
-	if !l.codeOpen && l.isInlinePreChar() {
-		l.codeOpen = true
-		return true
-	}
-
-	if l.codeOpen && l.isInlineTerminatingChar() {
-		l.codeOpen = false
-		return true
-	}
-
-	return false
-}
-
-func lexCode(l *lexer) stateFn {
-	if l.pos > l.start {
-		l.emit(itemText)
-	}
-	l.next()
-	l.emit(itemCode)
-	return lexText
-}
-
-func (l *lexer) isUnderlineCandidate() bool {
-	if l.input[l.pos] != delimUnderline {
-		return false
-	}
-
-	if !l.underlineOpen && !l.hasMatch(delimUnderline) {
-		return false
-	}
-
-	if !l.underlineOpen && l.isInlinePreChar() {
-		l.underlineOpen = true
-		return true
-	}
-
-	if l.underlineOpen && l.isInlineTerminatingChar() {
-		l.underlineOpen = false
-		return true
-	}
-
-	return false
-}
-
-func lexUnderline(l *lexer) stateFn {
-	if l.pos > l.start {
-		l.emit(itemText)
-	}
-	l.next()
-	l.emit(itemUnderline)
-	return lexText
 }

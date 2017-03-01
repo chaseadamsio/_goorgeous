@@ -32,6 +32,19 @@ var (
 	tVerbatim      = mkItem(itemVerbatim, "=")
 	tCode          = mkItem(itemCode, "~")
 	tUnderline     = mkItem(itemUnderline, "_")
+
+	tStatusTODO = mkItem(itemStatus, "TODO")
+	tStatusDONE = mkItem(itemStatus, "DONE")
+	tPriorityA  = mkItem(itemPriority, "[A]")
+	tTag        = mkItem(itemTags, ":")
+
+	tTable = mkItem(itemTable, "|")
+
+	tImgOrLinkOpen        = mkItem(itemImgOrLinkOpen, "[[")
+	tImgOrLinkOpenSingle  = mkItem(itemImgOrLinkOpenSingle, "[")
+	tImgPre               = mkItem(itemImgPre, "file:")
+	tImgOrLinkClose       = mkItem(itemImgOrLinkClose, "]]")
+	tImgOrLinkCloseSingle = mkItem(itemImgOrLinkCloseSingle, "]")
 )
 
 var lexTests = []lexTest{
@@ -42,27 +55,34 @@ var lexTests = []lexTest{
 	{"text", "now is the time\n\n", []item{mkItem(itemText, "now is the time"), tNewLine, tNewLine, tEOF}},
 
 	// BASIC HEADLINES
-	{"h1", "* A h1 Headline", []item{tH1, mkItem(itemText, " A h1 Headline"), tEOF}},
+	{"h1", "* A h1 Headline", []item{tH1, mkItem(itemText, "A h1 Headline"), tEOF}},
 	{"not-h1", "not an * h1 Headline", []item{mkItem(itemText, "not an * h1 Headline"), tEOF}},
 	{"alt-not-h1", " * not an h1 Headline", []item{mkItem(itemText, " * not an h1 Headline"), tEOF}},
 	{"alt-not-h1-2", "*not an h1 Headline", []item{mkItem(itemText, "*not an h1 Headline"), tEOF}},
-	{"h2", "** A h2 Headline", []item{tH2, mkItem(itemText, " A h2 Headline"), tEOF}},
+	{"h1-with-status-todo", "* TODO a h1 headline", []item{tH1, tStatusTODO, mkItem(itemText, "a h1 headline"), tEOF}},
+	{"h1-with-status-done", "* DONE a h1 headline", []item{tH1, tStatusDONE, mkItem(itemText, "a h1 headline"), tEOF}},
+	{"h1-with-priority-a", "* [A] a h1 headline", []item{tH1, tPriorityA, mkItem(itemText, "a h1 headline"), tEOF}},
+	{"h1-not-priority", "* [Z] a h1 headline", []item{tH1, mkItem(itemText, "[Z] a h1 headline"), tEOF}},
+	{"h1-with-single-tag", "* A h1 Headline :singletag:", []item{tH1, mkItem(itemText, "A h1 Headline "), tTag, mkItem(itemText, "singletag"), tTag, tEOF}},
+	{"h1-with-status-todo-priority-a", "* TODO [A] a h1 headline", []item{tH1, tStatusTODO, tPriorityA, mkItem(itemText, "a h1 headline"), tEOF}},
+	{"h1-with-status-todo-not-priority", "* TODO [Z] a h1 headline", []item{tH1, tStatusTODO, mkItem(itemText, "[Z] a h1 headline"), tEOF}},
+	{"h2", "** A h2 Headline", []item{tH2, mkItem(itemText, "A h2 Headline"), tEOF}},
 	{"not-h2", "not an ** h2 Headline", []item{mkItem(itemText, "not an ** h2 Headline"), tEOF}},
 	{"alt-not-h2", " ** not an h2 Headline", []item{mkItem(itemText, " ** not an h2 Headline"), tEOF}},
 	{"alt-not-h2-2", "**not an h2 Headline", []item{mkItem(itemText, "**not an h2 Headline"), tEOF}},
-	{"h3", "*** A h3 Headline", []item{tH3, mkItem(itemText, " A h3 Headline"), tEOF}},
+	{"h3", "*** A h3 Headline", []item{tH3, mkItem(itemText, "A h3 Headline"), tEOF}},
 	{"not-h3", "not an *** h3 Headline", []item{mkItem(itemText, "not an *** h3 Headline"), tEOF}},
 	{"alt-not-h3", " *** not an h3 Headline", []item{mkItem(itemText, " *** not an h3 Headline"), tEOF}},
 	{"alt-not-h3-2", "***not an h3 Headline", []item{mkItem(itemText, "***not an h3 Headline"), tEOF}},
-	{"h4", "**** A h4 Headline", []item{tH4, mkItem(itemText, " A h4 Headline"), tEOF}},
+	{"h4", "**** A h4 Headline", []item{tH4, mkItem(itemText, "A h4 Headline"), tEOF}},
 	{"not-h4", "not an **** h4 Headline", []item{mkItem(itemText, "not an **** h4 Headline"), tEOF}},
 	{"alt-not-h4", " **** not an h4 Headline", []item{mkItem(itemText, " **** not an h4 Headline"), tEOF}},
 	{"alt-not-h4-2", "****not an h4 Headline", []item{mkItem(itemText, "****not an h4 Headline"), tEOF}},
-	{"h5", "***** A h5 Headline", []item{tH5, mkItem(itemText, " A h5 Headline"), tEOF}},
+	{"h5", "***** A h5 Headline", []item{tH5, mkItem(itemText, "A h5 Headline"), tEOF}},
 	{"not-h5", "not an ***** h5 Headline", []item{mkItem(itemText, "not an ***** h5 Headline"), tEOF}},
 	{"alt-not-h5", " ***** not an h5 Headline", []item{mkItem(itemText, " ***** not an h5 Headline"), tEOF}},
 	{"alt-not-h5-2", "*****not an h5 Headline", []item{mkItem(itemText, "*****not an h5 Headline"), tEOF}},
-	{"h6", "****** A h6 Headline", []item{tH6, mkItem(itemText, " A h6 Headline"), tEOF}},
+	{"h6", "****** A h6 Headline", []item{tH6, mkItem(itemText, "A h6 Headline"), tEOF}},
 	{"not-h6", "not an ****** h6 Headline", []item{mkItem(itemText, "not an ****** h6 Headline"), tEOF}},
 	{"alt-not-h6", " ****** not an h6 Headline", []item{mkItem(itemText, " ****** not an h6 Headline"), tEOF}},
 	{"alt-not-h6-2", "******not an h6 Headline", []item{mkItem(itemText, "******not an h6 Headline"), tEOF}},
@@ -71,19 +91,176 @@ var lexTests = []lexTest{
 	{"multi-headlines", "* A h1 Headline\n****** A h6 Headline",
 		[]item{
 			tH1,
-			mkItem(itemText, " A h1 Headline"),
+			mkItem(itemText, "A h1 Headline"),
 			tNewLine,
 			tH6,
-			mkItem(itemText, " A h6 Headline"),
+			mkItem(itemText, "A h6 Headline"),
 			tEOF}},
 	{"h1-with-text", "* A h1 Headline\nThis is a new line.\n",
 		[]item{
 			tH1,
-			mkItem(itemText, " A h1 Headline"),
+			mkItem(itemText, "A h1 Headline"),
 			tNewLine,
 			mkItem(itemText, "This is a new line."),
 			tNewLine,
 			tEOF}},
+
+	// tables
+	{"table-basic", "| Peter |  1234 |  17 |\n| Anna  |  4321 |  25 |",
+		[]item{
+			tTable, mkItem(itemText, " Peter "),
+			tTable, mkItem(itemText, "  1234 "),
+			tTable, mkItem(itemText, "  17 "),
+			tTable,
+			tNewLine,
+			tTable, mkItem(itemText, " Anna  "),
+			tTable, mkItem(itemText, "  4321 "),
+			tTable, mkItem(itemText, "  25 "),
+			tTable,
+			tEOF}},
+
+	{"table-header", "| Name  | Phone | Age |\n|-------+-------+-----|\n| Peter |  1234 |  17 |\n| Anna  |  4321 |  25 |",
+		[]item{
+			tTable, mkItem(itemText, " Name  "),
+			tTable, mkItem(itemText, " Phone "),
+			tTable, mkItem(itemText, " Age "),
+			tTable,
+			tNewLine,
+			tTable, mkItem(itemText, "-------+-------+-----"),
+			tTable,
+			tNewLine,
+			tTable, mkItem(itemText, " Peter "),
+			tTable, mkItem(itemText, "  1234 "),
+			tTable, mkItem(itemText, "  17 "),
+			tTable,
+			tNewLine,
+			tTable, mkItem(itemText, " Anna  "),
+			tTable, mkItem(itemText, "  4321 "),
+			tTable, mkItem(itemText, "  25 "),
+			tTable,
+			tEOF}},
+
+	{"table-header-horizontal-splits", "|---+---+---|\n| d | e | f |\n|---+---+---|\n| g | h | i |\n|---+---+---|",
+		[]item{
+			tTable, mkItem(itemText, "---+---+---"),
+			tTable,
+			tNewLine,
+			tTable, mkItem(itemText, " d "),
+			tTable, mkItem(itemText, " e "),
+			tTable, mkItem(itemText, " f "),
+			tTable,
+			tNewLine,
+			tTable, mkItem(itemText, "---+---+---"),
+			tTable,
+			tNewLine,
+			tTable, mkItem(itemText, " g "),
+			tTable, mkItem(itemText, " h "),
+			tTable, mkItem(itemText, " i "),
+			tTable,
+			tNewLine,
+			tTable, mkItem(itemText, "---+---+---"),
+			tTable,
+			tEOF}},
+
+	// list
+	{"ordered-list", "1. this\n2. is\n3. a list",
+		[]item{
+			mkItem(itemOrderedList, "1."),
+			mkItem(itemText, " this"),
+			tNewLine,
+			mkItem(itemOrderedList, "2."),
+			mkItem(itemText, " is"),
+			tNewLine,
+			mkItem(itemOrderedList, "3."),
+			mkItem(itemText, " a list"),
+			tNewLine,
+			tEOF,
+		},
+	},
+	{"not-ordered-list", "1. this\nfoo 2. is\n3. a list",
+		[]item{tEOF},
+	},
+
+	// links & images
+	{"link-basic", "this has [[https://github.com/chaseadamsio/goorgeous]] as a link.",
+		[]item{
+			mkItem(itemText, "this has "),
+			tImgOrLinkOpen,
+			mkItem(itemText, "https://github.com/chaseadamsio/goorgeous"),
+			tImgOrLinkClose,
+			mkItem(itemText, " as a link."),
+			tEOF,
+		},
+	},
+
+	{"link-with-alt", "this has [[https://github.com/chaseadamsio/goorgeous][goorgeous by chaseadamsio]] as a link.",
+		[]item{
+			mkItem(itemText, "this has "),
+			tImgOrLinkOpen,
+			mkItem(itemText, "https://github.com/chaseadamsio/goorgeous"),
+			tImgOrLinkCloseSingle,
+			tImgOrLinkOpenSingle,
+			mkItem(itemText, "goorgeous by chaseadamsio"),
+			tImgOrLinkClose,
+			mkItem(itemText, " as a link."),
+			tEOF,
+		},
+	},
+
+	{"not-link-with-alt", "this has [[https://github.com/chaseadamsio/goorgeous]foo[goorgeous by chaseadamsio]] as a link.",
+		[]item{
+			mkItem(itemText, "this has [[https://github.com/chaseadamsio/goorgeous]foo[goorgeous by chaseadamsio]] as a link."),
+			tEOF,
+		},
+	},
+
+	{"not-link", "this has [[https://github.com/chaseadamsio/goorgeous] as a link.",
+		[]item{
+			mkItem(itemText, "this has [[https://github.com/chaseadamsio/goorgeous] as a link."),
+			tEOF,
+		},
+	},
+
+	{"image", "this has [[file:https://github.com/chaseadamsio/goorgeous/img.png]] as an image.",
+		[]item{
+			mkItem(itemText, "this has "),
+			tImgOrLinkOpen,
+			tImgPre,
+			mkItem(itemText, "https://github.com/chaseadamsio/goorgeous/img.png"),
+			tImgOrLinkClose,
+			mkItem(itemText, " as an image."),
+			tEOF,
+		},
+	},
+
+	{"image-with-alt", "this has [[file:https://github.com/chaseadamsio/goorgeous/img.png][a uni-gopher in the wild]] as an image.",
+		[]item{
+			mkItem(itemText, "this has "),
+			tImgOrLinkOpen,
+			tImgPre,
+			mkItem(itemText, "https://github.com/chaseadamsio/goorgeous/img.png"),
+			tImgOrLinkCloseSingle,
+			tImgOrLinkOpenSingle,
+			mkItem(itemText, "a uni-gopher in the wild"),
+			tImgOrLinkClose,
+			mkItem(itemText, " as an image."),
+			tEOF,
+		},
+	},
+
+	{"not-image", "this has [[file:https://github.com/chaseadamsio/goorgeous/img.png] as an image.",
+		[]item{
+			mkItem(itemText, "this has [[file:https://github.com/chaseadamsio/goorgeous/img.png] as an image."),
+			tEOF,
+		},
+	},
+
+	{"not-image-with-alt", "this has [[file:https://github.com/chaseadamsio/goorgeous/img.png]foo[a uni-gopher in the wild]] as an image.",
+		[]item{
+			mkItem(itemText, "this has [[file:https://github.com/chaseadamsio/goorgeous/img.png]foo[a uni-gopher in the wild]] as an image."),
+			tEOF,
+		},
+	},
 
 	// emphasis
 	{"emphasis", "/now is the time/", []item{tEmphasis, mkItem(itemText, "now is the time"), tEmphasis, tEOF}},
@@ -195,7 +372,7 @@ var lexTests = []lexTest{
 	{"complex-h1-emphasis-h6", "* A h1 Headline\nsome /emphasis text/.\n****** A h6 Headline",
 		[]item{
 			tH1,
-			mkItem(itemText, " A h1 Headline"),
+			mkItem(itemText, "A h1 Headline"),
 			tNewLine,
 			mkItem(itemText, "some "),
 			tEmphasis,
@@ -204,12 +381,12 @@ var lexTests = []lexTest{
 			mkItem(itemText, "."),
 			tNewLine,
 			tH6,
-			mkItem(itemText, " A h6 Headline"),
+			mkItem(itemText, "A h6 Headline"),
 			tEOF}},
 	{"complex-h1-emphasis-h6", "* A h1 Headline\nsome /*emphasis* text/.\n****** A h6 Headline",
 		[]item{
 			tH1,
-			mkItem(itemText, " A h1 Headline"),
+			mkItem(itemText, "A h1 Headline"),
 			tNewLine,
 			mkItem(itemText, "some "),
 			tEmphasis,
@@ -221,7 +398,7 @@ var lexTests = []lexTest{
 			mkItem(itemText, "."),
 			tNewLine,
 			tH6,
-			mkItem(itemText, " A h6 Headline"),
+			mkItem(itemText, "A h6 Headline"),
 			tEOF}},
 }
 
@@ -232,12 +409,15 @@ func equal(i1, i2 []item, checkPos bool, t *testing.T) bool {
 
 	for k := range i1 {
 		if i1[k].typ != i2[k].typ {
+			t.Logf("types not equal: %s: %T, %s: %T", i1[k].val, i1[k].typ, i2[k].val, i2[k].typ)
 			return false
 		}
 		if i1[k].val != i2[k].val {
+			t.Logf("vals not equal: %s, %s", i1[k].val, i2[k].val)
 			return false
 		}
 		if checkPos && i1[k].pos != i2[k].pos {
+			t.Logf("pos not equal: %d, %d", i1[k].pos, i2[k].pos)
 			return false
 		}
 	}

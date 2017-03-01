@@ -1,71 +1,102 @@
 package goorgeous
 
-import (
-	"bytes"
-	"fmt"
+type Tree struct {
+	Name    string
+	Root    *ListNode
+	text    string
+	funcs   []map[string]interface{}
+	lex     *lexer
+	treeSet map[string]*Tree
+}
 
-	"github.com/russross/blackfriday"
+type Node interface {
+	Type() NodeType
+	String() string
+	Copy() Node
+	Position() Pos
+	tree() *Tree
+}
+
+type NodeType int
+
+func (t NodeType) Type() NodeType {
+	return t
+}
+
+const (
+	NodeText = iota
+	NodeNewLine
+	NodeH1
+	NodeH2
+	NodeH3
+	NodeH4
+	NodeH5
+	NodeH6
+	NodeStatus
+	NodePriority
+	NodeTags
+	NodePropertyDrawer
+	NodeProperty
+	NodeKeyword
+	NodeComment
+	NodeHorizontalRule
+	NodeEmphasis
+	NodeBold
+	NodeStrikethrough
+	NodeVerbatim
+	NodeCode
+	NodeUnderline
+	NodeDefinitionList
+	NodeOrderedList
+	NodeUnorderedList
+	NodeListItem
+	NodeTable
+	NodeTH
+	NodeTR
+	NodeTD
+	NODEHTML
 )
 
-type Parser struct {
-	r blackfriday.Renderer
+type ListNode struct {
+	NodeType
+	Pos
+	tr    *Tree
+	Nodes []Node
 }
 
-// NewParser returns a new parser with the inlineCallbacks required for org content
-func NewParser(renderer blackfriday.Renderer) *Parser {
-	return &Parser{r: renderer}
-}
-
-// OrgCommon is the easiest way to parse a byte slice of org content and makes assumptions
-// that the caller wants to use blackfriday's HTMLRenderer with XHTML
-func OrgCommon(input []byte) []byte {
-	renderer := blackfriday.HtmlRenderer(blackfriday.HTML_USE_XHTML, "", "")
-	return OrgOptions(input, renderer)
-}
-
-// Org is a convenience name for OrgOptions
-func Org(input []byte, renderer blackfriday.Renderer) []byte {
-	return OrgOptions(input, renderer)
-}
-
-// OrgOptions takes an org content byte slice and a renderer to use
-func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
-	// in the case that we need to render something in isEmpty but there isn't a new line char
-	input = append(input, '\n')
-	var output bytes.Buffer
-
-	p := NewParser(renderer)
-	fmt.Println(p)
-
-	return output.Bytes()
-}
-
-// Helpers
-func skipChar(data []byte, start int, char byte) int {
-	i := start
-	for i < len(data) && charMatches(data[i], char) {
-		i++
+func New(name string, funcs ...map[string]interface{}) *Tree {
+	return &Tree{
+		Name:  name,
+		funcs: funcs,
 	}
-	return i
 }
 
-func isSpace(char byte) bool {
-	return charMatches(char, ' ')
+func (t *Tree) startParse(funcs []map[string]interface{}, lex *lexer, treeSet map[string]*Tree) {
+	t.Root = nil
+	t.lex = lex
+	t.funcs = funcs
+	t.treeSet = treeSet
 }
 
-func isEmpty(data []byte) bool {
-	if len(data) == 0 {
-		return true
-	}
+func (t *Tree) Parse(text string, treeSet map[string]*Tree, funcs ...map[string]interface{}) (tree *Tree, err error) {
+	t.startParse(funcs, lex(t.Name, text), treeSet)
+	t.text = text
+	t.parse()
+	return t, nil
+}
 
-	for i := 0; i < len(data) && !charMatches(data[i], '\n'); i++ {
-		if !charMatches(data[i], ' ') && !charMatches(data[i], '\t') {
-			return false
+func (t *Tree) parse() (items []item) {
+	for {
+		item := t.lex.nextItem()
+		items = append(items, item)
+		if item.typ == itemEOF {
+			break
 		}
 	}
-	return true
+	return
 }
 
+// charMatches is a helper function to evaluate if two bytes are equal
 func charMatches(a byte, b byte) bool {
 	return a == b
 }

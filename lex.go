@@ -44,12 +44,17 @@ const (
 	itemImgOrLinkClose
 	itemImgOrLinkCloseSingle
 
-	itemDefinitionList
+	itemDefinitionTerm
+	itemDefinitionDescription
 	itemOrderedList
+	// [@<d>] to set the value of an ordered list item
+	itemOrderedListNumber
 	itemUnorderedList
 	itemListItem
 
 	itemTable
+
+	itemBlock
 
 	itemHTML
 
@@ -210,10 +215,18 @@ func lexText(l *lexer) stateFn {
 		switch {
 		case l.isNewLine():
 			return lexNewLine
+		case l.isCommentCandidate():
+			return lexComment
+		case l.isBlockCandidate():
+			return lexBlock
 		case l.isTableCandidate():
 			return lexTable
 		case l.isOrderedListCandidate():
 			return lexOrderedList
+		case l.isDefinitionListCandidate():
+			return lexDefinitionList
+		case l.isUnorderedListCandidate():
+			return lexUnorderedList
 		case l.isImgOrLinkCandidate():
 			return lexImgOrLink
 		case l.isBoldCandidate():
@@ -230,6 +243,8 @@ func lexText(l *lexer) stateFn {
 			return lexUnderline
 		case l.isHeadlineCandidate():
 			return lexHeadline
+		case l.isPropertyDrawerCandidate():
+			return lexPropertyDrawer
 		default:
 			l.next()
 		}
@@ -240,6 +255,58 @@ func lexText(l *lexer) stateFn {
 	}
 	l.emit(itemEOF)
 	return nil
+}
+
+func (l *lexer) isCommentCandidate() bool {
+	if !(l.input[l.pos] == '#' && l.input[l.pos+1] == ' ') {
+		return false
+	}
+
+	for idx := int(l.pos - 1); idx >= 0 && l.input[idx] != '\n'; idx-- {
+		if l.input[idx] != ' ' {
+			return false
+		}
+	}
+
+	return true
+}
+
+func lexComment(l *lexer) stateFn {
+	idx := int(l.pos)
+	for ; idx < len(l.input) && l.input[idx] != '\n'; idx++ {
+		if l.input[idx] == '#' {
+			break
+		}
+	}
+	l.pos = Pos(idx + 1)
+	l.emit(itemComment)
+	return lexText
+}
+
+func (l *lexer) isBlockCandidate() bool {
+	if !(l.input[l.pos] == '#' && l.input[l.pos+1] == '+') {
+		return false
+	}
+
+	for idx := int(l.pos - 1); idx >= 0 && l.input[idx] != '\n'; idx-- {
+		if l.input[idx] != ' ' {
+			return false
+		}
+	}
+
+	return true
+}
+
+func lexBlock(l *lexer) stateFn {
+	idx := int(l.pos)
+	for ; idx < len(l.input) && l.input[idx] != '\n'; idx++ {
+		if l.input[idx] == ' ' {
+			break
+		}
+	}
+	l.pos = Pos(idx)
+	l.emit(itemBlock)
+	return lexText
 }
 
 func (l *lexer) isTableCandidate() bool {
@@ -274,8 +341,9 @@ func (l *lexer) isOrderedListCandidate() bool {
 	if !isDigit(l.input[l.pos]) {
 		return false
 	}
-	for idx := int(l.pos); idx > 0; idx-- {
-		if !(l.input[idx] == ' ' || l.input[idx] == '\n') {
+
+	for idx := int(l.pos - 1); idx >= 0 && l.input[idx] != '\n'; idx-- {
+		if l.input[idx] != ' ' {
 			return false
 		}
 	}
@@ -297,16 +365,90 @@ func isDigit(char byte) bool {
 }
 
 func lexOrderedList(l *lexer) stateFn {
-	for idx := int(l.pos); idx < len(l.input); idx++ {
+	for idx := int(l.pos); idx < len(l.input) && l.input[idx] != '\n'; idx++ {
 		if isDigit(l.input[idx]) {
 			continue
 		}
 		if !(l.input[idx] == '.' || l.input[idx] == ')') {
 			l.pos = Pos(idx)
 			l.emit(itemOrderedList)
+			if l.input[l.pos:l.pos+3] == " [@" {
+				foundDigits := false
+				for valIdx := int(l.pos) + 3; valIdx < len(l.input); valIdx++ {
+					if l.input[valIdx] == ']' && foundDigits {
+						l.pos = Pos(valIdx + 1)
+						l.emit(itemOrderedListNumber)
+						break
+					}
+					if isDigit(l.input[valIdx]) {
+						foundDigits = true
+						continue
+					}
+					return lexText
+				}
+			}
 			break
 		}
 	}
+	return lexText
+}
+
+func (l *lexer) isDefinitionListCandidate() bool {
+	if l.input[l.pos] != '-' {
+		return false
+	}
+
+	for idx := int(l.pos - 1); idx >= 0 && l.input[idx] != '\n'; idx-- {
+		if l.input[idx] != ' ' {
+			return false
+		}
+	}
+
+	for idx := int(l.pos + 1); idx+4 < len(l.input) && l.input[idx] != '\n'; idx++ {
+		if l.input[idx:idx+4] == " :: " {
+			return true
+		}
+	}
+
+	return false
+}
+
+func lexDefinitionList(l *lexer) stateFn {
+	l.next()
+	l.emit(itemDefinitionTerm)
+
+	for idx := int(l.pos + 1); idx+2 < len(l.input) && l.input[idx] != '\n'; idx++ {
+		if l.input[idx:idx+2] == "::" {
+			l.pos = Pos(idx)
+			l.emit(itemText)
+			l.pos += 2
+			l.emit(itemDefinitionDescription)
+		}
+	}
+	return lexText
+}
+
+func (l *lexer) isUnorderedListCandidate() bool {
+	if !(l.input[l.pos] == '-' || l.input[l.pos] == '+') {
+		return false
+	}
+
+	for idx := int(l.pos - 1); idx >= 0 && l.input[idx] != '\n'; idx-- {
+		if l.input[idx] != ' ' {
+			return false
+		}
+	}
+
+	if l.input[l.pos+1] != ' ' {
+		return false
+	}
+
+	return true
+}
+
+func lexUnorderedList(l *lexer) stateFn {
+	l.next()
+	l.emit(itemUnorderedList)
 	return lexText
 }
 
@@ -634,6 +776,23 @@ func lexInsideInline(l *lexer, it itemType) stateFn {
 	}
 	l.next()
 	l.emit(it)
+	return lexText
+}
+
+func (l *lexer) isPropertyDrawerCandidate() bool {
+	if (int(l.pos)+len(":PROPERTIES:") <= len(l.input) && l.input[l.pos:int(l.pos)+len(":PROPERTIES:")] == ":PROPERTIES:") || (int(l.pos)+len(":END:") <= len(l.input) && l.input[l.pos:int(l.pos)+len(":END:")] == ":END:") {
+		return true
+	}
+	return false
+}
+
+func lexPropertyDrawer(l *lexer) stateFn {
+	if l.input[l.pos:int(l.pos)+len(":END:")] == ":END:" {
+		l.pos += 5
+	} else if l.input[l.pos:int(l.pos)+len(":PROPERTIES:")] == ":PROPERTIES:" {
+		l.pos += 12
+	}
+	l.emit(itemPropertyDrawer)
 	return lexText
 }
 

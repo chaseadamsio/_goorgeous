@@ -43,6 +43,8 @@ const (
 	itemImgPre
 	itemImgOrLinkClose
 	itemImgOrLinkCloseSingle
+	itemImgOrLinkURL
+	itemImgOrLinkText
 
 	itemDefinitionTerm
 	itemDefinitionDescription
@@ -130,10 +132,10 @@ func (l *lexer) peek() rune {
 	return r
 }
 
-func (l *lexer) hasMatch(delim byte) bool {
-	i := l.pos + 1
-	for int(i) < len(l.input) && l.input[i] != '\n' {
-		if delim == l.input[i] {
+func (l *lexer) hasMatch(curr int, delim byte) bool {
+	i := curr + 1
+	for i < len(l.input) && l.input[i] != '\n' {
+		if delim == l.input[i] && l.isInlineTerminatingChar(i) {
 			return true
 		}
 		i++
@@ -501,6 +503,7 @@ func testImgOrLink(start int, in string) bool {
 }
 
 func lexImgOrLink(l *lexer) stateFn {
+	foundAnchorClose := false
 	if l.pos > l.start {
 		l.emit(itemText)
 	}
@@ -513,22 +516,23 @@ func lexImgOrLink(l *lexer) stateFn {
 
 	for idx := int(l.pos); idx < len(l.input); {
 		if l.input[idx] == ']' {
-			if l.input[idx+1] == ']' {
+			if !foundAnchorClose {
 				l.pos = Pos(idx)
-				if l.pos > l.start {
-					l.emit(itemText)
-					l.pos += 2
-					l.emit(itemImgOrLinkClose)
-				} else {
-					l.pos += 2
-					l.emit(itemImgOrLinkClose)
-				}
+				l.emit(itemImgOrLinkURL)
+				foundAnchorClose = true
+			} else {
+				l.pos = Pos(idx)
+				l.emit(itemImgOrLinkText)
+			}
+			if l.input[idx+1] == ']' {
+				l.pos += 2
+				l.emit(itemImgOrLinkClose)
 				idx += 2
 				continue
 			} else {
 				l.pos = Pos(idx)
 				if l.pos > l.start {
-					l.emit(itemText)
+					l.emit(itemImgOrLinkURL)
 					l.next()
 					l.emit(itemImgOrLinkCloseSingle)
 				} else {
@@ -660,7 +664,7 @@ func (l *lexer) findTags() int {
 			break
 		}
 		if char == delimTags {
-			if l.hasMatch(delimTags) {
+			if l.hasMatch(idx, delimTags) {
 				return idx
 			}
 		}
@@ -737,6 +741,10 @@ func lexUnderline(l *lexer) stateFn {
 }
 
 func (l *lexer) checkDelimCandidate(delim byte, t string) bool {
+	if int(l.pos) > len(l.input) {
+		return false
+	}
+
 	if l.input[l.pos] != delim {
 		return false
 	}
@@ -752,22 +760,21 @@ func (l *lexer) checkDelimCandidate(delim byte, t string) bool {
 
 	}
 
-	if !l.isOpen[t] && !l.hasMatch(delim) {
+	if !l.isOpen[t] && !l.hasMatch(int(l.pos), delim) {
 		return false
 	}
 
-	if !l.isOpen[t] && l.isInlinePreChar() {
+	if !l.isOpen[t] && l.isInlinePreChar(-1) {
 		l.isOpen[t] = true
 		return true
 	}
 
-	if l.isOpen[t] && l.isInlineTerminatingChar() {
+	if l.isOpen[t] && l.isInlineTerminatingChar(-1) {
 		l.isOpen[t] = false
 		return true
 	}
 
 	return false
-
 }
 
 func lexInsideInline(l *lexer, it itemType) stateFn {
@@ -796,10 +803,13 @@ func lexPropertyDrawer(l *lexer) stateFn {
 	return lexText
 }
 
-func (l *lexer) isInlinePreChar() bool {
-	if l.pos-1 >= 0 {
-		delim := l.input[l.pos]
-		char := l.input[l.pos-1]
+func (l *lexer) isInlinePreChar(pos int) bool {
+	if pos == -1 {
+		pos = int(l.pos)
+	}
+	if pos-1 >= 0 {
+		delim := l.input[pos]
+		char := l.input[pos-1]
 
 		if delim == char {
 			return false
@@ -813,10 +823,13 @@ func (l *lexer) isInlinePreChar() bool {
 	return true
 }
 
-func (l *lexer) isInlineTerminatingChar() bool {
-	if int(l.pos)+1 < len(l.input) {
-		delim := l.input[l.pos]
-		char := l.input[l.pos+1]
+func (l *lexer) isInlineTerminatingChar(pos int) bool {
+	if pos == -1 {
+		pos = int(l.pos)
+	}
+	if pos+1 < len(l.input) {
+		delim := l.input[pos]
+		char := l.input[pos+1]
 
 		if delim == char {
 			return false

@@ -469,3 +469,11 @@ func testOrgCommon(testCases map[string]testCase, t *testing.T) {
 		}
 	}
 }
+
+func BenchmarkOrgCommon(b *testing.B) {
+	in := "* Title 1\nThis exports.\n* Title 2                                                          :noexport:\nThis should not export.\n* Org table\n|---+---+---|\n| a | b | c |\n|---+---+---|\n| d | e | f |\n|---+---+---|\n\n* Formatting\n** Fonts\n| Format           | Org mode markup syntax |\n| *Bold*           | =*Bold*=               |\n| /Italics/        | =/Italics/=            |\n| _Underline_      | =_Underline_=          |\n| =Verbatim=       | ==Verbatim==           |\n| +Strike-through+ | =+Strike-through+=     |\n==Verbatim==\n=Verbatim=\nthis is ==inline code==.\nthis has ~~code~.\n** Start a new paragraph\nAn empty line starts a new paragraph.\n#+BEGIN_SRC text\n/Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo\nligula nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque\neu, sem. Nulla consequat massa quis enim./\n"
+	b.ResetTimer()
+	for n := 0; n < b.N; n++ {
+		OrgCommon([]byte(in))
+	}
+}

@@ -133,14 +133,15 @@ func (l *lexer) peek() rune {
 }
 
 func (l *lexer) hasMatch(curr int, delim byte) bool {
+	found := false
 	i := curr + 1
 	for i < len(l.input) && l.input[i] != '\n' {
 		if delim == l.input[i] && l.isInlineTerminatingChar(i) {
-			return true
+			found = true
 		}
 		i++
 	}
-	return false
+	return found
 }
 
 func (l *lexer) backup() {

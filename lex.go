@@ -327,7 +327,7 @@ func lexTable(l *lexer) stateFn {
 		if l.input[idx] == '|' {
 			l.pos = Pos(idx)
 			if l.pos > l.start {
-				l.emit(itemText)
+				lexText(l)
 			}
 			l.next()
 			l.emit(itemTable)

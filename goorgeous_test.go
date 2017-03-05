@@ -203,6 +203,27 @@ func TestOrgCommon(t *testing.T) {
 			"#+BEGIN_CENTER\nthis is a\n\nmulti-lined centered block.\n#+END_CENTER\n",
 			"<center>\nthis is a\n\nmulti-lined centered block.\n</center>\n",
 		},
+
+		"no-table-heading-no-horizontal-splits": {
+			"|foo|bar|baz|\n| d | e | f |\n| g | h | i |\n",
+			"\n<table>\n<tbody>\n<tr>\n<td>foo</td>\n<td>bar</td>\n<td>baz</td>\n</tr>\n<tr>\n<td>d</td>\n<td>e</td>\n<td>f</td>\n</tr>\n<tr>\n<td>g</td>\n<td>h</td>\n<td>i</td>\n</tr>\n</tbody>\n</table>\n",
+		},
+		"table-heading": {
+			"|foo|bar|baz|\n|---+---+---|\n| d | e | f |\n| g | h | i |\n",
+			"\n<table>\n<thead>\n<tr>\n<th>foo</th>\n<th>bar</th>\n<th>baz</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>d</td>\n<td>e</td>\n<td>f</td>\n</tr>\n<tr>\n<td>g</td>\n<td>h</td>\n<td>i</td>\n</tr>\n</tbody>\n</table>\n",
+		},
+		"no-table-heading-horizontal-splits": {
+			"|---+---+---|\n| d | e | f |\n|---+---+---|\n| g | h | i |\n|---+---+---|\n",
+			"\n<table>\n<tbody>\n<tr>\n<td>d</td>\n<td>e</td>\n<td>f</td>\n</tr>\n<tr>\n<td>g</td>\n<td>h</td>\n<td>i</td>\n</tr>\n</tbody>\n</table>\n",
+		},
+		"table-with-inlined-elements": {
+			"| Format           | Org mode markup syntax |\n| *Bold*           | =*Bold*=               |\n| /Italics/        | =/Italics/=            |\n| _Underline_      | =_Underline_=          |\n| =Verbatim=       | ==Verbatim== |\n| +Strike-through+ | =+Strike-through+=     |\n",
+			"\n<table>\n<tbody>\n<tr>\n<td>Format</td>\n<td>Org mode markup syntax</td>\n</tr>\n<tr>\n<td><strong>Bold</strong></td>\n<td><code>*Bold*</code></td>\n</tr>\n<tr>\n<td><em>Italics</em></td>\n<td><code>/Italics/</code></td>\n</tr>\n<tr>\n<td><span style=\"text-decoration: underline;\">Underline</span></td>\n<td><code>_Underline_</code></td>\n</tr>\n<tr>\n<td><code>Verbatim</code></td>\n<td><code>=Verbatim=</code></td>\n</tr>\n<tr>\n<td><del>Strike-through</del></td>\n<td><code>+Strike-through+</code></td>\n</tr>\n</tbody>\n</table>\n",
+		},
+		"table-with-inlined-elements-follow-up-headline": {
+			"| Format           | Org mode markup syntax |\n| *Bold*           | =*Bold*=               |\n| /Italics/        | =/Italics/=            |\n| _Underline_      | =_Underline_=          |\n| =Verbatim=       | ==Verbatim== |\n| +Strike-through+ | =+Strike-through+=     |\n* This is a headline",
+			"\n<table>\n<tbody>\n<tr>\n<td>Format</td>\n<td>Org mode markup syntax</td>\n</tr>\n<tr>\n<td><strong>Bold</strong></td>\n<td><code>*Bold*</code></td>\n</tr>\n<tr>\n<td><em>Italics</em></td>\n<td><code>/Italics/</code></td>\n</tr>\n<tr>\n<td><span style=\"text-decoration: underline;\">Underline</span></td>\n<td><code>_Underline_</code></td>\n</tr>\n<tr>\n<td><code>Verbatim</code></td>\n<td><code>=Verbatim=</code></td>\n</tr>\n<tr>\n<td><del>Strike-through</del></td>\n<td><code>+Strike-through+</code></td>\n</tr>\n</tbody>\n</table>\n",
+		},
 	}
 
 	for caseName, tc := range testCases {

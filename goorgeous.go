@@ -91,7 +91,7 @@ const (
 
 	NodeTable
 	NodeTH
-	NodeTR
+	NodeTableRow
 	NodeTD
 	NODEHTML
 )
@@ -116,6 +116,10 @@ func NewTree() *Tree {
 
 func (t *Tree) backup() {
 	t.peekCount++
+}
+
+func (t *Tree) recall() item {
+	return t.token[t.peekCount-1]
 }
 
 func (t *Tree) peek() item {
@@ -162,6 +166,7 @@ func (t *Tree) parse() {
 }
 
 func (t *Tree) getInlineNode() Node {
+
 	switch token := t.next(); token.typ {
 	case itemImgOrLinkOpen:
 		var link, text string
@@ -256,6 +261,27 @@ func (t *Tree) getInlineNode() Node {
 func (t *Tree) getBlockNode() Node {
 
 	switch token := t.next(); token.typ {
+	case itemTable:
+		var c []Node
+		for t.peek().typ != itemEOF {
+			n := t.next()
+			if n.typ == itemTable {
+				continue
+			}
+			if n.typ == itemNewLine {
+				if t.peek().typ != itemTable {
+					t.backup()
+					break
+				}
+				c = append(c, t.newNewLine("\n"))
+				continue
+			}
+			t.backup()
+			fmt.Println(t.peek().val)
+			c = append(c, t.getInlineNode())
+		}
+		return t.newTable(c)
+
 	case itemBlock:
 		el := token.val[8:]
 		syntax := ""
@@ -826,4 +852,55 @@ func (t *BlockNode) Element() string {
 
 func (t *BlockNode) Nodes() []Node {
 	return t.children
+}
+
+type TableNode struct {
+	NodeType
+	tr       *Tree
+	Text     []byte
+	children []Node
+	attrs    map[string]interface{}
+}
+
+func (t *Tree) newTable(children []Node) *TableNode {
+	return &TableNode{tr: t, NodeType: NodeTable, children: children}
+}
+
+func (t *TableNode) setAttr(k string, v interface{}) {
+	setAttr(t.attrs, k, v)
+}
+
+func (t *TableNode) getAttr(k string) interface{} {
+	return getAttr(t.attrs, k)
+}
+
+func (t *TableNode) generateHTML() []byte {
+	var tmp bytes.Buffer
+	for idx, c := range t.children {
+		if idx == 0 {
+			tmp.Write([]byte("<tbody>\n<tr>\n"))
+		}
+		if c.String() == "\n" {
+			tmp.Write([]byte("</tr>\n<tr>\n"))
+		} else {
+			tmp.WriteString("<td>" + strings.Trim(string(c.generateHTML()), " ") + "</td>\n")
+		}
+	}
+	return []byte("<table>\n" + tmp.String() + "</tr>\n</tbody>\n</table>\n")
+}
+
+func (t *TableNode) ID() string {
+	return ""
+}
+
+func (t *TableNode) String() string {
+	return string(t.Text)
+}
+
+func (t *TableNode) Element() string {
+	return "table"
+}
+
+func (t *TableNode) Nodes() []Node {
+	return make([]Node, 1)
 }

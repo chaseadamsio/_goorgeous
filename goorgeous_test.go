@@ -226,6 +226,12 @@ func TestRenderingInline(t *testing.T) {
 		"no-inline": {"this string should have no inline changes.\n",
 			"<p>this string should have no inline changes.</p>\n",
 		},
+		"newline": {"this string should have\nan inline change.\n",
+			"<p>this string should have\nan inline change.</p>\n",
+		},
+		"double-newline": {"this string should have\nan inline change.\n\nAnd a new paragraph.\n",
+			"<p>this string should have\nan inline change.</p>\n\n<p>And a new paragraph.</p>\n",
+		},
 		"emphasis": {
 			"this string /has emphasis text/.\n",
 			"<p>this string <em>has emphasis text</em>.</p>\n",
@@ -330,7 +336,7 @@ func TestRenderingLinksAndImages(t *testing.T) {
 			"<p>this has <img src=\"https://github.com/chaseadamsio/goorgeous/img.png\" alt=\"https://github.com/chaseadamsio/goorgeous/img.png\" title=\"https://github.com/chaseadamsio/goorgeous/img.png\" /> as an image.</p>\n",
 		},
 		"image-alt": {
-			"this has [[file:../gopher.gif][a uni-gopher]] as an image.",
+			"this has [[file:../gopher.gif][a uni-gopher]] as an image.\n",
 			"<p>this has <img src=\"../gopher.gif\" alt=\"a uni-gopher\" title=\"a uni-gopher\" /> as an image.</p>\n",
 		},
 	}

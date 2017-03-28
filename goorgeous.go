@@ -65,6 +65,24 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 	for scanner.Scan() {
 		data := scanner.Bytes()
 
+		if !isEmpty(data) && isComment(data) || IsKeyword(data) {
+			switch {
+			case inList:
+				p.generateList(&output, tmpBlock.Bytes(), listType)
+				inList = false
+				listType = ""
+				tmpBlock.Reset()
+			case inTable:
+				p.generateTable(&output, tmpBlock.Bytes())
+				inTable = false
+				tmpBlock.Reset()
+			case inParagraph:
+				p.generateParagraph(&output, tmpBlock.Bytes()[:len(tmpBlock.Bytes())-1])
+				inParagraph = false
+				tmpBlock.Reset()
+			}
+		}
+
 		switch {
 		case isEmpty(data):
 			switch {

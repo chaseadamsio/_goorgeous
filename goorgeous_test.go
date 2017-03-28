@@ -338,6 +338,24 @@ func TestRenderingLinksAndImages(t *testing.T) {
 	testOrgCommon(testCases, t)
 }
 
+func TestRenderingFootnotes(t *testing.T) {
+	testCases := testCase{"Test 1[fn:1] and Test 2[fn: 2] and Test 3[fn:3] also test lettres[fn:let] then final test[fn:4]\n\n[fn:let] what?\n\n\n[fn:6] And test it[fn:7].\n\n* Footnotes\n\n[fn:1] Test 1\n\n[fn:3] Test 3\n\n[fn:2] Test2\n\n[fn:5] missing?\n\n[fn:6] Six?\n\n[fn:7] Seven??",
+		"<p>Test 1<sup class=\"footnote-ref\" id=\"fnref:1\"><a rel=\"footnote\" href=\"#fn:1\">1</a></sup> and Test 2[fn: 2] and Test 3<sup class=\"footnote-ref\" id=\"fnref:3\"><a rel=\"footnote\" href=\"#fn:3\">2</a></sup> also test lettres<sup class=\"footnote-ref\" id=\"fnref:let\"><a rel=\"footnote\" href=\"#fn:let\">3</a></sup> then final test<sup class=\"footnote-ref\" id=\"fnref:4\"><a rel=\"footnote\" href=\"#fn:4\">4</a></sup></p>\n\n<h1 id=\"footnotes\">Footnotes</h1>\n<div class=\"footnotes\">\n\n<hr />\n\n<ol>\n<li id=\"fn:1\">Test 1 <a class=\"footnote-return\" href=\"#fnref:1\"><sup>↩</sup></a></li>\n\n<li id=\"fn:3\">Test 3 <a class=\"footnote-return\" href=\"#fnref:3\"><sup>↩</sup></a></li>\n\n<li id=\"fn:let\">what? <a class=\"footnote-return\" href=\"#fnref:let\"><sup>↩</sup></a></li>\n\n<li id=\"fn:4\">DEFINITION NOT FOUND <a class=\"footnote-return\" href=\"#fnref:4\"><sup>↩</sup></a></li>\n</ol>\n</div>"}
+
+	flags := blackfriday.HTML_USE_XHTML;
+	flags |= blackfriday.LIST_ITEM_BEGINNING_OF_LIST
+	flags |= blackfriday.HTML_FOOTNOTE_RETURN_LINKS
+
+	var parameters blackfriday.HtmlRendererParameters
+	parameters.FootnoteReturnLinkContents = "<sup>↩</sup>"
+	
+	renderer := blackfriday.HtmlRendererWithParameters(flags, "", "", parameters)
+	out := Org([]byte(testCases.in),renderer)
+	if !bytes.Equal(out,[]byte(testCases.expected)) {
+		t.Errorf("Footnote for Org() from: \n %s \n result: \n  %s\n wants:\n  %s",testCases.in, string(out), testCases.expected)
+	}
+}	
+
 func TestRenderingBlock(t *testing.T) {
 
 	testCases := map[string]testCase{

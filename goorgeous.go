@@ -413,7 +413,6 @@ func isBlock(data []byte) bool {
 }
 
 // ~~ Footnotes
-var reFootnoteRef = regexp.MustCompile(`.+?\[fn:([\w]+)\]`)
 var reFootnoteDef = regexp.MustCompile(`^\[fn:([\w]+)\] +(.+)`)
 
 func isFootnoteDef(data []byte) bool {

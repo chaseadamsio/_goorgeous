@@ -63,12 +63,31 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 	marker := ""
 	syntax := ""
 	listType := ""
+	inParagraph := false
 	inList := false
 	inTable := false
 	var tmpBlock bytes.Buffer
 
 	for scanner.Scan() {
 		data := scanner.Bytes()
+
+		if !isEmpty(data) && isComment(data) || IsKeyword(data) {
+			switch {
+			case inList:
+				p.generateList(&output, tmpBlock.Bytes(), listType)
+				inList = false
+				listType = ""
+				tmpBlock.Reset()
+			case inTable:
+				p.generateTable(&output, tmpBlock.Bytes())
+				inTable = false
+				tmpBlock.Reset()
+			case inParagraph:
+				p.generateParagraph(&output, tmpBlock.Bytes()[:len(tmpBlock.Bytes())-1])
+				inParagraph = false
+				tmpBlock.Reset()
+			}
+		}
 
 		switch {
 		case isEmpty(data):
@@ -81,7 +100,10 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 			case inTable:
 				p.generateTable(&output, tmpBlock.Bytes())
 				inTable = false
-				listType = ""
+				tmpBlock.Reset()
+			case inParagraph:
+				p.generateParagraph(&output, tmpBlock.Bytes()[:len(tmpBlock.Bytes())-1])
+				inParagraph = false
 				tmpBlock.Reset()
 			case marker != "":
 				tmpBlock.WriteByte('\n')
@@ -203,10 +225,19 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 		case isHorizontalRule(data):
 			p.r.HRule(&output)
 		default:
-			p.generateParagraph(&output, data)
+			if inParagraph == false {
+				inParagraph = true
+			}
+			tmpBlock.Write(data)
+			tmpBlock.WriteByte('\n')
 		}
 	}
 
+
+  if len(tmpBlock.Bytes()) > 0 {
+		p.generateParagraph(&output, tmpBlock.Bytes()[:len(tmpBlock.Bytes())-1])
+	}
+  
 	// Writing footnote def. list
 	if len(p.notes) > 0 {
 		flags := blackfriday.LIST_ITEM_BEGINNING_OF_LIST
@@ -217,6 +248,7 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 			return true
 		})
 	}
+
 	return output.Bytes()
 }
 

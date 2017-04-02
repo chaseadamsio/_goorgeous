@@ -226,6 +226,12 @@ func TestRenderingInline(t *testing.T) {
 		"no-inline": {"this string should have no inline changes.\n",
 			"<p>this string should have no inline changes.</p>\n",
 		},
+		"newline": {"this string should have\nan inline change.\n",
+			"<p>this string should have\nan inline change.</p>\n",
+		},
+		"double-newline": {"this string should have\nan inline change.\n\nAnd a new paragraph.\n",
+			"<p>this string should have\nan inline change.</p>\n\n<p>And a new paragraph.</p>\n",
+		},
 		"emphasis": {
 			"this string /has emphasis text/.\n",
 			"<p>this string <em>has emphasis text</em>.</p>\n",
@@ -330,7 +336,7 @@ func TestRenderingLinksAndImages(t *testing.T) {
 			"<p>this has <img src=\"https://github.com/chaseadamsio/goorgeous/img.png\" alt=\"https://github.com/chaseadamsio/goorgeous/img.png\" title=\"https://github.com/chaseadamsio/goorgeous/img.png\" /> as an image.</p>\n",
 		},
 		"image-alt": {
-			"this has [[file:../gopher.gif][a uni-gopher]] as an image.",
+			"this has [[file:../gopher.gif][a uni-gopher]] as an image.\n",
 			"<p>this has <img src=\"../gopher.gif\" alt=\"a uni-gopher\" title=\"a uni-gopher\" /> as an image.</p>\n",
 		},
 	}
@@ -475,6 +481,16 @@ func TestRenderingPropertiesDrawer(t *testing.T) {
 		},
 	}
 
+	testOrgCommon(testCases, t)
+}
+
+func TestRenderingComplexTexts(t *testing.T) {
+	testCases := map[string]testCase{
+		"newline": {
+			"** Start a new paragraph\nAn empty line starts a new paragraph.\n#+BEGIN_SRC text\n/Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo\nligula nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque\neu, sem. Nulla consequat massa quis enim./\n\n/In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam\ndictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus\nelementum semper nisi./\n#+END_SRC\n/Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, sem. Nulla consequat massa quis enim./\n\n/In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi./\n",
+			"<h2 id=\"start-a-new-paragraph\">Start a new paragraph</h2>\n\n<p>An empty line starts a new paragraph.</p>\n\n<pre><code class=\"language-text\">\n/Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo\nligula nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque\neu, sem. Nulla consequat massa quis enim./\n\n/In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam\ndictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus\nelementum semper nisi./\n</code></pre>\n\n<p><em>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, sem. Nulla consequat massa quis enim.</em></p>\n\n<p><em>In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi.</em></p>\n",
+		},
+	}
 	testOrgCommon(testCases, t)
 }
 

@@ -12,14 +12,14 @@ import (
 type inlineParser func(p *parser, out *bytes.Buffer, data []byte, offset int) int
 
 type footnotes struct {
-	id string
+	id  string
 	def string
 }
 
 type parser struct {
 	r              blackfriday.Renderer
 	inlineCallback [256]inlineParser
-	notes []footnotes
+	notes          []footnotes
 }
 
 // NewParser returns a new parser with the inlineCallbacks required for org content
@@ -103,6 +103,18 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 				tmpBlock.Reset()
 			case inParagraph:
 				p.generateParagraph(&output, tmpBlock.Bytes()[:len(tmpBlock.Bytes())-1])
+				inParagraph = false
+				tmpBlock.Reset()
+			case inTable:
+				if tmpBlock.Len() > 0 {
+					p.generateTable(&output, tmpBlock.Bytes())
+				}
+				inTable = false
+				tmpBlock.Reset()
+			case inParagraph:
+				if tmpBlock.Len() > 0 {
+					p.generateParagraph(&output, tmpBlock.Bytes()[:len(tmpBlock.Bytes())-1])
+				}
 				inParagraph = false
 				tmpBlock.Reset()
 			case marker != "":
@@ -233,17 +245,16 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 		}
 	}
 
-
-  if len(tmpBlock.Bytes()) > 0 {
+	if len(tmpBlock.Bytes()) > 0 {
 		p.generateParagraph(&output, tmpBlock.Bytes()[:len(tmpBlock.Bytes())-1])
 	}
-  
+
 	// Writing footnote def. list
 	if len(p.notes) > 0 {
 		flags := blackfriday.LIST_ITEM_BEGINNING_OF_LIST
 		p.r.Footnotes(&output, func() bool {
 			for i := range p.notes {
-				p.r.FootnoteItem(&output, []byte(p.notes[i].id), []byte(p.notes[i].def),flags)
+				p.r.FootnoteItem(&output, []byte(p.notes[i].id), []byte(p.notes[i].def), flags)
 			}
 			return true
 		})
@@ -646,8 +657,8 @@ func generateLinkOrImg(p *parser, out *bytes.Buffer, data []byte, offset int) in
 	closedLink := false
 	hasContent := false
 
-	if bytes.Equal(data[0:3],[]byte("fn:")) {
-		isFootnote = true;
+	if bytes.Equal(data[0:3], []byte("fn:")) {
+		isFootnote = true
 	} else if data[0] != '[' {
 		return 0
 	}
@@ -663,10 +674,10 @@ func generateLinkOrImg(p *parser, out *bytes.Buffer, data []byte, offset int) in
 			if isImage {
 				hyperlink = data[start+5 : i]
 			} else if isFootnote {
-				refid := data[start+2:i]
-				if bytes.Equal(refid,bytes.Trim(refid, " ")) {
+				refid := data[start+2 : i]
+				if bytes.Equal(refid, bytes.Trim(refid, " ")) {
 					p.notes = append(p.notes, footnotes{string(refid), "DEFINITION NOT FOUND"})
-					p.r.FootnoteRef(out,refid,len(p.notes))
+					p.r.FootnoteRef(out, refid, len(p.notes))
 					return i + 2
 				} else {
 					return 0

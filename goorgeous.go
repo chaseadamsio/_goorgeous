@@ -11,9 +11,15 @@ import (
 
 type inlineParser func(p *parser, out *bytes.Buffer, data []byte, offset int) int
 
+type footnotes struct {
+	id  string
+	def string
+}
+
 type parser struct {
 	r              blackfriday.Renderer
 	inlineCallback [256]inlineParser
+	notes          []footnotes
 }
 
 // NewParser returns a new parser with the inlineCallbacks required for org content
@@ -87,11 +93,17 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 		case isEmpty(data):
 			switch {
 			case inList:
-				if tmpBlock.Len() > 0 {
-					p.generateList(&output, tmpBlock.Bytes(), listType)
-				}
+				p.generateList(&output, tmpBlock.Bytes(), listType)
 				inList = false
 				listType = ""
+				tmpBlock.Reset()
+			case inTable:
+				p.generateTable(&output, tmpBlock.Bytes())
+				inTable = false
+				tmpBlock.Reset()
+			case inParagraph:
+				p.generateParagraph(&output, tmpBlock.Bytes()[:len(tmpBlock.Bytes())-1])
+				inParagraph = false
 				tmpBlock.Reset()
 			case inTable:
 				if tmpBlock.Len() > 0 {
@@ -161,6 +173,13 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 				marker = string(matches[2])
 				syntax = string(matches[3])
 			}
+		case isFootnoteDef(data):
+			matches := reFootnoteDef.FindSubmatch(data)
+			for i := range p.notes {
+				if p.notes[i].id == string(matches[1]) {
+					p.notes[i].def = string(matches[2])
+				}
+			}
 		case isTable(data):
 			if inTable != true {
 				inTable = true
@@ -228,6 +247,17 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 
 	if len(tmpBlock.Bytes()) > 0 {
 		p.generateParagraph(&output, tmpBlock.Bytes()[:len(tmpBlock.Bytes())-1])
+	}
+
+	// Writing footnote def. list
+	if len(p.notes) > 0 {
+		flags := blackfriday.LIST_ITEM_BEGINNING_OF_LIST
+		p.r.Footnotes(&output, func() bool {
+			for i := range p.notes {
+				p.r.FootnoteItem(&output, []byte(p.notes[i].id), []byte(p.notes[i].def), flags)
+			}
+			return true
+		})
 	}
 
 	return output.Bytes()
@@ -425,6 +455,13 @@ func isBlock(data []byte) bool {
 	return reBlock.Match(data)
 }
 
+// ~~ Footnotes
+var reFootnoteDef = regexp.MustCompile(`^\[fn:([\w]+)\] +(.+)`)
+
+func isFootnoteDef(data []byte) bool {
+	return reFootnoteDef.Match(data)
+}
+
 // Elements
 // ~~ Keywords
 func IsKeyword(data []byte) bool {
@@ -607,7 +644,7 @@ func generateStrikethrough(p *parser, out *bytes.Buffer, data []byte, offset int
 	return generator(p, out, data, offset, '+', true, p.r.StrikeThrough)
 }
 
-// ~~ Images and Links
+// ~~ Images and Links (inc. Footnote)
 var reLinkOrImg = regexp.MustCompile(`\[\[(.+?)\]\[?(.*?)\]?\]`)
 
 func generateLinkOrImg(p *parser, out *bytes.Buffer, data []byte, offset int) int {
@@ -616,10 +653,13 @@ func generateLinkOrImg(p *parser, out *bytes.Buffer, data []byte, offset int) in
 	i := start
 	var hyperlink []byte
 	isImage := false
+	isFootnote := false
 	closedLink := false
 	hasContent := false
 
-	if data[0] != '[' {
+	if bytes.Equal(data[0:3], []byte("fn:")) {
+		isFootnote = true
+	} else if data[0] != '[' {
 		return 0
 	}
 
@@ -633,6 +673,15 @@ func generateLinkOrImg(p *parser, out *bytes.Buffer, data []byte, offset int) in
 		case charMatches(currChar, ']') && closedLink == false:
 			if isImage {
 				hyperlink = data[start+5 : i]
+			} else if isFootnote {
+				refid := data[start+2 : i]
+				if bytes.Equal(refid, bytes.Trim(refid, " ")) {
+					p.notes = append(p.notes, footnotes{string(refid), "DEFINITION NOT FOUND"})
+					p.r.FootnoteRef(out, refid, len(p.notes))
+					return i + 2
+				} else {
+					return 0
+				}
 			} else if bytes.Equal(data[i-4:i], []byte(".org")) {
 				orgStart := start
 				if bytes.Equal(data[orgStart:orgStart+2], []byte("./")) {

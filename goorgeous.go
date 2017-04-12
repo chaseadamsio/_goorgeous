@@ -162,7 +162,11 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 
 			}
 			if marker != "" {
-				if marker != "SRC" && marker != "EXAMPLE" && marker != "VERSE" {
+				if marker == "VERSE" {
+					tmpBlock.WriteByte('\n')
+					tmpBlock.Write(data)
+					tmpBlock.WriteString("<br />")
+				} else if marker != "SRC" && marker != "EXAMPLE" {
 					var tmpBuf bytes.Buffer
 					tmpBuf.Write([]byte("<p>\n"))
 					p.inline(&tmpBuf, data)

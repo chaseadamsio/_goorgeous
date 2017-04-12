@@ -145,6 +145,12 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 						p.inline(&tmpBuf, tmpBlock.Bytes())
 						output.Write(tmpBuf.Bytes())
 						output.WriteString("</center>\n")
+					case "VERSE":
+						var tmpBuf bytes.Buffer
+						output.WriteString("<p class=\"verse\">")
+						p.inline(&tmpBuf, tmpBlock.Bytes())
+						output.Write(tmpBuf.Bytes())
+						output.WriteString("\n</p>\n")
 					default:
 						tmpBlock.WriteByte('\n')
 						p.r.BlockCode(&output, tmpBlock.Bytes(), syntax)
@@ -156,7 +162,7 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 
 			}
 			if marker != "" {
-				if marker != "SRC" && marker != "EXAMPLE" {
+				if marker != "SRC" && marker != "EXAMPLE" && marker != "VERSE" {
 					var tmpBuf bytes.Buffer
 					tmpBuf.Write([]byte("<p>\n"))
 					p.inline(&tmpBuf, data)

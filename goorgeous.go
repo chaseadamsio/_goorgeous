@@ -74,16 +74,22 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 		if !isEmpty(data) && isComment(data) || IsKeyword(data) {
 			switch {
 			case inList:
-				p.generateList(&output, tmpBlock.Bytes(), listType)
+				if tmpBlock.Len() > 0 {
+					p.generateList(&output, tmpBlock.Bytes(), listType)
+				}
 				inList = false
 				listType = ""
 				tmpBlock.Reset()
 			case inTable:
-				p.generateTable(&output, tmpBlock.Bytes())
+				if tmpBlock.Len() > 0 {
+					p.generateTable(&output, tmpBlock.Bytes())
+				}
 				inTable = false
 				tmpBlock.Reset()
 			case inParagraph:
-				p.generateParagraph(&output, tmpBlock.Bytes()[:len(tmpBlock.Bytes())-1])
+				if tmpBlock.Len() > 0 {
+					p.generateParagraph(&output, tmpBlock.Bytes()[:len(tmpBlock.Bytes())-1])
+				}
 				inParagraph = false
 				tmpBlock.Reset()
 			}
@@ -93,17 +99,11 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 		case isEmpty(data):
 			switch {
 			case inList:
-				p.generateList(&output, tmpBlock.Bytes(), listType)
+				if tmpBlock.Len() > 0 {
+					p.generateList(&output, tmpBlock.Bytes(), listType)
+				}
 				inList = false
 				listType = ""
-				tmpBlock.Reset()
-			case inTable:
-				p.generateTable(&output, tmpBlock.Bytes())
-				inTable = false
-				tmpBlock.Reset()
-			case inParagraph:
-				p.generateParagraph(&output, tmpBlock.Bytes()[:len(tmpBlock.Bytes())-1])
-				inParagraph = false
 				tmpBlock.Reset()
 			case inTable:
 				if tmpBlock.Len() > 0 {

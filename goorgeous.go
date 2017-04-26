@@ -403,7 +403,10 @@ func isTable(data []byte) bool {
 func (p *parser) generateTable(output *bytes.Buffer, data []byte) {
 	var table bytes.Buffer
 	rows := bytes.Split(bytes.Trim(data, "\n"), []byte("\n"))
-	hasTableHeaders := reTableHeaders.Match(rows[1])
+	hasTableHeaders := len(rows) > 1
+	if len(rows) > 1 {
+		hasTableHeaders = reTableHeaders.Match(rows[1])
+	}
 	tbodySet := false
 
 	for idx, row := range rows {

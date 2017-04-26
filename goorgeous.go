@@ -66,6 +66,7 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 	inParagraph := false
 	inList := false
 	inTable := false
+	inFixedWidthArea := false
 	var tmpBlock bytes.Buffer
 
 	for scanner.Scan() {
@@ -92,7 +93,15 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 				}
 				inParagraph = false
 				tmpBlock.Reset()
+			case inFixedWidthArea:
+				if tmpBlock.Len() > 0 {
+					tmpBlock.WriteString("</pre>\n")
+					output.Write(tmpBlock.Bytes())
+				}
+				inFixedWidthArea = false
+				tmpBlock.Reset()
 			}
+
 		}
 
 		switch {
@@ -116,6 +125,13 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 					p.generateParagraph(&output, tmpBlock.Bytes()[:len(tmpBlock.Bytes())-1])
 				}
 				inParagraph = false
+				tmpBlock.Reset()
+			case inFixedWidthArea:
+				if tmpBlock.Len() > 0 {
+					tmpBlock.WriteString("</pre>\n")
+					output.Write(tmpBlock.Bytes())
+				}
+				inFixedWidthArea = false
 				tmpBlock.Reset()
 			case marker != "":
 				tmpBlock.WriteByte('\n')
@@ -236,9 +252,33 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 			tmpBlock.WriteString("</li>\n")
 		case isHorizontalRule(data):
 			p.r.HRule(&output)
+		case isExampleLine(data):
+			if inParagraph == true {
+				if len(tmpBlock.Bytes()) > 0 {
+					p.generateParagraph(&output, tmpBlock.Bytes()[:len(tmpBlock.Bytes())-1])
+					inParagraph = false
+				}
+				tmpBlock.Reset()
+			}
+			if inFixedWidthArea != true {
+				tmpBlock.WriteString("<pre class=\"example\">\n")
+				inFixedWidthArea = true
+			}
+			matches := reExampleLine.FindSubmatch(data)
+			tmpBlock.Write(matches[1])
+			tmpBlock.WriteString("\n")
+			break
 		default:
 			if inParagraph == false {
 				inParagraph = true
+				if inFixedWidthArea == true {
+					if tmpBlock.Len() > 0 {
+						tmpBlock.WriteString("</pre>")
+						output.Write(tmpBlock.Bytes())
+					}
+					inFixedWidthArea = false
+					tmpBlock.Reset()
+				}
 			}
 			tmpBlock.Write(data)
 			tmpBlock.WriteByte('\n')
@@ -246,7 +286,12 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 	}
 
 	if len(tmpBlock.Bytes()) > 0 {
-		p.generateParagraph(&output, tmpBlock.Bytes()[:len(tmpBlock.Bytes())-1])
+		if inParagraph == true {
+			p.generateParagraph(&output, tmpBlock.Bytes()[:len(tmpBlock.Bytes())-1])
+		} else if inFixedWidthArea == true {
+			tmpBlock.WriteString("</pre>\n")
+			output.Write(tmpBlock.Bytes())
+		}
 	}
 
 	// Writing footnote def. list
@@ -377,6 +422,13 @@ var reDefinitionList = regexp.MustCompile(`^\s*-\s+(.+?)\s+::\s+(.*)`)
 
 func isDefinitionList(data []byte) bool {
 	return reDefinitionList.Match(data)
+}
+
+// ~~ Example lines
+var reExampleLine = regexp.MustCompile(`^\s*:\s(\s*.*)|^\s*:$`)
+
+func isExampleLine(data []byte) bool {
+	return reExampleLine.Match(data)
 }
 
 // ~~ Ordered Lists

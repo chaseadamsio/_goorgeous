@@ -498,6 +498,36 @@ func TestRenderingComplexTexts(t *testing.T) {
 	testOrgCommon(testCases, t)
 }
 
+func TestFixedWidthAreas(t *testing.T) {
+	testCases := map[string]testCase{
+		"single-line-fixed-width": {
+			": Fixed width area\n",
+			"<pre class=\"example\">\nFixed width area\n</pre>\n",
+		},
+		"double-line-fixed-width": {
+			": Line 1\n:    Line 2\n",
+			"<pre class=\"example\">\nLine 1\n   Line 2\n</pre>\n",
+		},
+		"paragraph-fixed-width-transition": {
+			"     Here is an example\n        : Some example from a text file.",
+			"<p>Here is an example</p>\n<pre class=\"example\">\nSome example from a text file.\n</pre>\n",
+		},
+		"babel-output-fixed-width": {
+			"#+RESULTS[26164fcdb01a7c6a9329d20d4754e15f7739ad20]:\n: Hello, World!\n: The output of this code can be seen in the post.",
+			"<pre class=\"example\">\nHello, World!\nThe output of this code can be seen in the post.\n</pre>\n",
+		},
+		"fixed-width-to-paragraph-transition": {
+			": example\nEnd\n",
+			"<pre class=\"example\">\nexample\n</pre>\n<p>End</p>\n",
+		},
+		"fixed-width-paragraph-comment": {
+			"p\n: e\n# comment\n",
+			"<p>p</p>\n<pre class=\"example\">\ne\n</pre>\n<!-- comment -->\n",
+		},
+	}
+	testOrgCommon(testCases, t)
+}
+
 func testOrgCommon(testCases map[string]testCase, t *testing.T) {
 	for caseName, tc := range testCases {
 

@@ -556,7 +556,7 @@ func (p *parser) generateParagraph(out *bytes.Buffer, data []byte) {
 func (p *parser) generateList(output *bytes.Buffer, data []byte, listType string) {
 	generateList := func() bool {
 		output.WriteByte('\n')
-		output.Write(data)
+		p.inline(output, bytes.Trim(data, " "))
 		return true
 	}
 	switch listType {

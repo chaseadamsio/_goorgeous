@@ -371,6 +371,14 @@ func TestRenderingLinksAndImages(t *testing.T) {
 			"this has [[file:../gopher.gif][a uni-gopher]] as an image.\n",
 			"<p>this has <img src=\"../gopher.gif\" alt=\"a uni-gopher\" title=\"a uni-gopher\" /> as an image.</p>\n",
 		},
+		"link-inside-simple-ol": {
+			"1. this\n2. is\n3. an\n4. ordered\n5. list with [[https://github.com/chaseadamsio/goorgeous][goorgeous by chaseadamsio]] as a link\n",
+			"<ol>\n<li>this</li>\n<li>is</li>\n<li>an</li>\n<li>ordered</li>\n<li>list with <a href=\"https://github.com/chaseadamsio/goorgeous\" title=\"goorgeous by chaseadamsio\">goorgeous by chaseadamsio</a> as a link</li>\n</ol>\n",
+		},
+		"link-inside-simple-ul": {
+			"- this\n- is\n- an\n- unordered\n- list with [[https://github.com/chaseadamsio/goorgeous][goorgeous by chaseadamsio]] as a link\n",
+			"<ul>\n<li>this</li>\n<li>is</li>\n<li>an</li>\n<li>unordered</li>\n<li>list with <a href=\"https://github.com/chaseadamsio/goorgeous\" title=\"goorgeous by chaseadamsio\">goorgeous by chaseadamsio</a> as a link</li>\n</ul>\n",
+		},
 	}
 
 	testOrgCommon(testCases, t)

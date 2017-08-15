@@ -268,6 +268,14 @@ func TestRenderingInline(t *testing.T) {
 			"this string does not/have emphasis text [[https://somelinkshouldntrenderaccidentalemphasis.com]].\n",
 			"<p>this string does not/have emphasis text <a href=\"https://somelinkshouldntrenderaccidentalemphasis.com\" title=\"https://somelinkshouldntrenderaccidentalemphasis.com\">https://somelinkshouldntrenderaccidentalemphasis.com</a>.</p>\n",
 		},
+		"emphasis-inside-simple-ol": {
+			"1. this\n2. is\n3. an\n4. ordered\n5. /list/\n",
+			"<ol>\n<li>this</li>\n<li>is</li>\n<li>an</li>\n<li>ordered</li>\n<li><em>list</em></li>\n</ol>\n",
+		},
+		"emphasis-inside-simple-ul": {
+			"- this\n- is\n- an\n- unordered\n- /list/\n",
+			"<ul>\n<li>this</li>\n<li>is</li>\n<li>an</li>\n<li>unordered</li>\n<li><em>list</em></li>\n</ul>\n",
+		},
 		"bold": {
 			"this string *has bold text*.\n",
 			"<p>this string <strong>has bold text</strong>.</p>\n",
@@ -283,6 +291,14 @@ func TestRenderingInline(t *testing.T) {
 		"bold-not-no-spaces-split": {
 			"this string*doesn't have bold text.*\n",
 			"<p>this string*doesn't have bold text.*</p>\n",
+		},
+		"bold-inside-simple-ol": {
+			"1. this\n2. is\n3. an\n4. ordered\n5. *list*\n",
+			"<ol>\n<li>this</li>\n<li>is</li>\n<li>an</li>\n<li>ordered</li>\n<li><strong>list</strong></li>\n</ol>\n",
+		},
+		"bold-inside-simple-ul": {
+			"- this\n- is\n- an\n- unordered\n- *list*\n",
+			"<ul>\n<li>this</li>\n<li>is</li>\n<li>an</li>\n<li>unordered</li>\n<li><strong>list</strong></li>\n</ul>\n",
 		},
 		"underline": {
 			"this is _underlined text_.\n",
@@ -304,6 +320,14 @@ func TestRenderingInline(t *testing.T) {
 			"==Verbatim==\n",
 			"<p><code>=Verbatim=</code></p>\n",
 		},
+		"verbatim-inside-simple-ol": {
+			"1. this\n2. is\n3. an\n4. ordered\n5. =list=\n",
+			"<ol>\n<li>this</li>\n<li>is</li>\n<li>an</li>\n<li>ordered</li>\n<li><code>list</code></li>\n</ol>\n",
+		},
+		"verbatim-inside-simple-ul": {
+			"- this\n- is\n- an\n- unordered\n- =list=\n",
+			"<ul>\n<li>this</li>\n<li>is</li>\n<li>an</li>\n<li>unordered</li>\n<li><code>list</code></li>\n</ul>\n",
+		},
 		"code": {
 			"this has ~code~.\n",
 			"<p>this has <code>code</code>.</p>\n",
@@ -315,6 +339,14 @@ func TestRenderingInline(t *testing.T) {
 		"code-with-tilde": {
 			"this has ~~code~.\n",
 			"<p>this has <code>~code</code>.</p>\n",
+		},
+		"code-inside-simple-ol": {
+			"1. this\n2. is\n3. an\n4. ordered\n5. ~list~\n",
+			"<ol>\n<li>this</li>\n<li>is</li>\n<li>an</li>\n<li>ordered</li>\n<li><code>list</code></li>\n</ol>\n",
+		},
+		"code-inside-simple-ul": {
+			"- this\n- is\n- an\n- unordered\n- ~list~\n",
+			"<ul>\n<li>this</li>\n<li>is</li>\n<li>an</li>\n<li>unordered</li>\n<li><code>list</code></li>\n</ul>\n",
 		},
 	}
 
@@ -338,6 +370,14 @@ func TestRenderingLinksAndImages(t *testing.T) {
 		"image-alt": {
 			"this has [[file:../gopher.gif][a uni-gopher]] as an image.\n",
 			"<p>this has <img src=\"../gopher.gif\" alt=\"a uni-gopher\" title=\"a uni-gopher\" /> as an image.</p>\n",
+		},
+		"link-inside-simple-ol": {
+			"1. this\n2. is\n3. an\n4. ordered\n5. list with [[https://github.com/chaseadamsio/goorgeous][goorgeous by chaseadamsio]] as a link\n",
+			"<ol>\n<li>this</li>\n<li>is</li>\n<li>an</li>\n<li>ordered</li>\n<li>list with <a href=\"https://github.com/chaseadamsio/goorgeous\" title=\"goorgeous by chaseadamsio\">goorgeous by chaseadamsio</a> as a link</li>\n</ol>\n",
+		},
+		"link-inside-simple-ul": {
+			"- this\n- is\n- an\n- unordered\n- list with [[https://github.com/chaseadamsio/goorgeous][goorgeous by chaseadamsio]] as a link\n",
+			"<ul>\n<li>this</li>\n<li>is</li>\n<li>an</li>\n<li>unordered</li>\n<li>list with <a href=\"https://github.com/chaseadamsio/goorgeous\" title=\"goorgeous by chaseadamsio\">goorgeous by chaseadamsio</a> as a link</li>\n</ul>\n",
 		},
 	}
 

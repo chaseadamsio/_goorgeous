@@ -622,7 +622,8 @@ func isTerminatingChar(char byte) bool {
 func findLastCharInInline(data []byte, char byte) int {
 	timesFound := 0
 	last := 0
-	for i := 0; i < len(data); i++ {
+	// Start from character after the inline indicator
+	for i := 1; i < len(data); i++ {
 		if timesFound == 1 {
 			break
 		}

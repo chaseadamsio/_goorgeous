@@ -236,6 +236,10 @@ func TestRenderingInline(t *testing.T) {
 			"this string /has emphasis text/.\n",
 			"<p>this string <em>has emphasis text</em>.</p>\n",
 		},
+		"emphasis-with-dot-at-front": {
+			"this string /.has emphasis text/.\n",
+			"<p>this string <em>.has emphasis text</em>.</p>\n",
+		},
 		"emphasis-with-slash-inside": {
 			"this string /has a slash/inside and emphasis text/.\n",
 			"<p>this string <em>has a slash/inside and emphasis text</em>.</p>\n",
@@ -280,6 +284,10 @@ func TestRenderingInline(t *testing.T) {
 			"this string *has bold text*.\n",
 			"<p>this string <strong>has bold text</strong>.</p>\n",
 		},
+		"bold-with-dot-at-front": {
+			"this string *.has bold text*.\n",
+			"<p>this string <strong>.has bold text</strong>.</p>\n",
+		},
 		"bold-with-asterisk-inside": {
 			"this string *has *asterisk and bold text*.\n",
 			"<p>this string <strong>has *asterisk and bold text</strong>.</p>\n",
@@ -304,9 +312,17 @@ func TestRenderingInline(t *testing.T) {
 			"this is _underlined text_.\n",
 			"<p>this is <span style=\"text-decoration: underline;\">underlined text</span>.</p>\n",
 		},
+		"underline-with-dot-at-front": {
+			"this is _.underlined text_.\n",
+			"<p>this is <span style=\"text-decoration: underline;\">.underlined text</span>.</p>\n",
+		},
 		"verbatim": {
 			"this is =inline code=.\n",
 			"<p>this is <code>inline code</code>.</p>\n",
+		},
+		"verbatim-with-dot-at-front": {
+			"this is =.inline code=.\n",
+			"<p>this is <code>.inline code</code>.</p>\n",
 		},
 		"verbatim-with-equal-in-code": {
 			"this is =inline=code=.\n",
@@ -331,6 +347,10 @@ func TestRenderingInline(t *testing.T) {
 		"code": {
 			"this has ~code~.\n",
 			"<p>this has <code>code</code>.</p>\n",
+		},
+		"code-with-dot-at-front": {
+			"this has ~.code~.\n",
+			"<p>this has <code>.code</code>.</p>\n",
 		},
 		"code-not": {
 			"this has not~code~.\n",

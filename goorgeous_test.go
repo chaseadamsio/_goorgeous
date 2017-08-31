@@ -236,7 +236,7 @@ func TestRenderingInline(t *testing.T) {
 			"this string /has emphasis text/.\n",
 			"<p>this string <em>has emphasis text</em>.</p>\n",
 		},
-		"emphasis-with-dot": {
+		"emphasis-with-dot-at-front": {
 			"this string /.has emphasis text/.\n",
 			"<p>this string <em>.has emphasis text</em>.</p>\n",
 		},
@@ -284,7 +284,7 @@ func TestRenderingInline(t *testing.T) {
 			"this string *has bold text*.\n",
 			"<p>this string <strong>has bold text</strong>.</p>\n",
 		},
-		"bold-with-dot": {
+		"bold-with-dot-at-front": {
 			"this string *.has bold text*.\n",
 			"<p>this string <strong>.has bold text</strong>.</p>\n",
 		},
@@ -312,7 +312,7 @@ func TestRenderingInline(t *testing.T) {
 			"this is _underlined text_.\n",
 			"<p>this is <span style=\"text-decoration: underline;\">underlined text</span>.</p>\n",
 		},
-		"underline-with-dot": {
+		"underline-with-dot-at-front": {
 			"this is _.underlined text_.\n",
 			"<p>this is <span style=\"text-decoration: underline;\">.underlined text</span>.</p>\n",
 		},

@@ -27,7 +27,7 @@ The purpose of this package is to come as close as possible as parsing an =*.org
 
 ** Org Headers
 
-To retreive the headers from a =[]byte=, call =OrgHeaders= and it will return a =map[string]interface{}=: 
+To retrieve the headers from a =[]byte=, call =OrgHeaders= and it will return a =map[string]interface{}=: 
 
 #+BEGIN_SRC go
   input := "#+title: goorgeous\n* Some Headline\n"

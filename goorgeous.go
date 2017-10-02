@@ -525,7 +525,7 @@ func IsKeyword(data []byte) bool {
 
 // ~~ Comments
 func isComment(data []byte) bool {
-	return charMatches(data[0], '#') && charMatches(data[1], ' ')
+	return len(data) > 1 && charMatches(data[0], '#') && charMatches(data[1], ' ')
 }
 
 func (p *parser) generateComment(out *bytes.Buffer, data []byte) {

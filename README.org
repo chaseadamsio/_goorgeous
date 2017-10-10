@@ -31,7 +31,7 @@ To retrieve the headers from a =[]byte=, call =OrgHeaders= and it will return a 
 
 #+BEGIN_SRC go
   input := "#+title: goorgeous\n* Some Headline\n"
-  out := goorgeous.OrgHeaders(input) 
+  out, _ := goorgeous.OrgHeaders(input) 
 #+END_SRC
 
 #+BEGIN_SRC go
@@ -46,7 +46,7 @@ After importing =github.com/chaseadamsio/goorgeous=, you can call =Org= with a =
 
 #+BEGIN_SRC go
   input := "#+TITLE: goorgeous\n* Some Headline\n"
-  out := goorgeous.Org(input) 
+  out := goorgeous.OrgCommon([]byte(input)) 
 #+END_SRC
 
 =out= will be:

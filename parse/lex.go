@@ -1,5 +1,7 @@
 package parse
 
+import "unicode/utf8"
+
 // item is an instance of a token with
 // the type of the token as well as the start
 // and end position of the the tokenized value
@@ -17,6 +19,7 @@ type Lexer struct {
 	state stateFn
 	start int
 	pos   int
+	width int
 	items chan item
 }
 
@@ -65,8 +68,11 @@ func lexText(l *Lexer) stateFn {
 	for l.pos < len(l.input) {
 		switch l.input[l.pos] {
 		case '\n':
-			emitItemText(l)
 			return lexNewLine
+		case '*':
+			return lexAsterisk
+		case '#':
+			return lexComment
 		default:
 			l.pos++
 		}
@@ -79,8 +85,56 @@ func lexText(l *Lexer) stateFn {
 // lexNewline emits a newline and returns
 // the lexText stateFn
 func lexNewLine(l *Lexer) stateFn {
+	emitItemText(l)
 	l.emit(itemNewline)
 	return lexText
+}
+
+// lexAsterisk emits a newline and returns
+// the lexText stateFn
+func lexAsterisk(l *Lexer) stateFn {
+	emitItemText(l)
+	l.emit(itemAsterisk)
+	return lexText
+}
+
+// lexComment emits a newline and returns
+// the lexText stateFn
+func lexComment(l *Lexer) stateFn {
+	// TODO fix this method:
+	// currently it's failing because the actual value isn't picking up
+	// the space in same value as the itemComment, and the # is an itemText
+	if l.peek() == ' ' {
+		emitItemText(l)
+		l.pos++ // advance so '# ' is collected
+		l.emit(itemComment)
+	}
+	return lexText
+}
+
+// next returns the next rune in the input
+func (l *Lexer) next() rune {
+	l.pos++ // l.pos needs to advance to be able to get the next character
+	if l.pos >= len(l.input) {
+		l.width = 0
+		return eof
+	}
+	r, w := utf8.DecodeRuneInString(string(l.input[l.pos:]))
+	l.width = w
+	l.pos += l.width
+	return r
+}
+
+// backup steps back one rune.
+func (l *Lexer) backup() {
+	l.pos -= l.width
+}
+
+// peek returns the next rune in the input collection
+func (l *Lexer) peek() rune {
+	r := l.next()
+	l.backup()
+	return r
 }
 
 // emit takes an itemType for the current

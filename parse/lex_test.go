@@ -6,8 +6,10 @@ import (
 )
 
 var (
-	tEOF     = mkItem(itemEOF, "")
-	tNewline = mkItem(itemNewline, "\n")
+	tEOF      = mkItem(itemEOF, "")
+	tNewline  = mkItem(itemNewline, "\n")
+	tAsterisk = mkItem(itemAsterisk, "*")
+	tComment  = mkItem(itemComment, "# ")
 )
 
 // testCase is a test input string and
@@ -17,23 +19,159 @@ type testCase struct {
 	items []item
 }
 
-func TestLexer(t *testing.T) {
-	testCases := []testCase{
-		{"this is some text", []item{
+var testCases = map[string]testCase{
+	"empty string": {
+		"", // should handle empty strings gracefully
+		[]item{
+			tEOF,
+		}},
+
+	"simple string no newline": {
+		"this is some text",
+		[]item{
 			mkItem(itemText, "this is some text"),
 			tEOF,
 		}},
-		{"this is some text\n", []item{
+
+	"simple string with newline": {
+		"this is some text\n",
+		[]item{
 			mkItem(itemText, "this is some text"),
 			tNewline,
 			tEOF,
 		}},
-	}
 
-	for _, tc := range testCases {
-		items := collect(&tc)
+	"asterisk - header level 1": {
+		"* this is some text\n",
+		[]item{
+			tAsterisk,
+			mkItem(itemText, " this is some text"),
+			tNewline,
+			tEOF,
+		}},
+
+	"asterisk - header level 2": {
+		"** this is some text\n",
+		[]item{
+			tAsterisk,
+			tAsterisk,
+			mkItem(itemText, " this is some text"),
+			tNewline,
+			tEOF,
+		}},
+
+	"asterisk - header level 3": {
+		"*** this is some text\n",
+		[]item{
+			tAsterisk,
+			tAsterisk,
+			tAsterisk,
+			mkItem(itemText, " this is some text"),
+			tNewline,
+			tEOF,
+		}},
+
+	"asterisk - header level 4": {
+		"**** this is some text\n",
+		[]item{
+			tAsterisk,
+			tAsterisk,
+			tAsterisk,
+			tAsterisk,
+			mkItem(itemText, " this is some text"),
+			tNewline,
+			tEOF,
+		}},
+
+	"asterisk - header level 5": {
+		"***** this is some text\n",
+		[]item{
+			tAsterisk,
+			tAsterisk,
+			tAsterisk,
+			tAsterisk,
+			tAsterisk,
+			mkItem(itemText, " this is some text"),
+			tNewline,
+			tEOF,
+		}},
+
+	"asterisk - header level 6": {
+		"****** this is some text\n",
+		[]item{
+			tAsterisk,
+			tAsterisk,
+			tAsterisk,
+			tAsterisk,
+			tAsterisk,
+			tAsterisk,
+			mkItem(itemText, " this is some text"),
+			tNewline,
+			tEOF,
+		}},
+
+	"asterisk - not header": {
+		"this ***** is some text\n",
+		[]item{
+			mkItem(itemText, "this "),
+			tAsterisk,
+			tAsterisk,
+			tAsterisk,
+			tAsterisk,
+			tAsterisk,
+			mkItem(itemText, " is some text"),
+			tNewline,
+			tEOF,
+		}},
+
+	"asterisk - not header - alt": {
+		"this***** is some text\n",
+		[]item{
+			mkItem(itemText, "this"),
+			tAsterisk,
+			tAsterisk,
+			tAsterisk,
+			tAsterisk,
+			tAsterisk,
+			mkItem(itemText, " is some text"),
+			tNewline,
+			tEOF,
+		}},
+
+	"asterisk bold": {"this is *some text*\n",
+		[]item{
+			mkItem(itemText, "this is "),
+			tAsterisk,
+			mkItem(itemText, "some text"),
+			tAsterisk,
+			tNewline,
+			tEOF,
+		}},
+
+	"asterisk - not bold": {"this is *some text\n",
+		[]item{
+			mkItem(itemText, "this is "),
+			tAsterisk,
+			mkItem(itemText, "some text"),
+			tNewline,
+			tEOF,
+		}},
+
+	"comment": {"# this is a comment\n",
+		[]item{
+			tComment,
+			mkItem(itemText, "this is a comment"),
+			tNewline,
+			tEOF,
+		}},
+}
+
+func TestLexer(t *testing.T) {
+	for caseName, tc := range testCases {
+		l := NewLexer(tc.input)
+		items := collect(l)
 		if !equal(tc.items, items, false) {
-			t.Errorf("items are not equal.\n got %v+\n expected %v\n", items, tc.items)
+			t.Errorf("'%s' case failed. items are not equal.\n got %v+\n expected %v\n", caseName, items, tc.items)
 		}
 	}
 }
@@ -49,8 +187,7 @@ func mkItem(typ itemType, val string) item {
 
 // collect runs the lexer and collects all of the items that are
 // emitted by nextItem, and returns a slice of item
-func collect(tc *testCase) (items []item) {
-	l := NewLexer(tc.input)
+func collect(l *Lexer) (items []item) {
 	for {
 		item := l.nextItem()
 		items = append(items, item)

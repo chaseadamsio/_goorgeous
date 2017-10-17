@@ -2,30 +2,48 @@ package parse
 
 import "strconv"
 
-// itemType identifies the type of lex items
-type itemType int
+// elType identifies the type of lex items
+type elType int
 
 const (
-	itemError itemType = iota
-	itemNewline
-	itemEOF
-	itemText
-	itemAsterisk // "*" indicates either a headline or a bold token
-	itemComment  // "#  " indicates a comment token
+	elError elType = iota
+	elNewline
+	elSpace
+	elEOF
+	elWord
+	elAsterisk // "*" indicates either a headline or a bold token
+	elHash     // "#  " indicates a comment token
+	elSlash
+	elEqual
+	elTilde
+	elUnderscore
+	elColon
+	elBracketLeft
+	elBracketRight
+	elPipe
 )
 
-var itemTypes = [...]string{
-	itemError:    "itemError",
-	itemNewline:  "itemNewline",
-	itemEOF:      "itemEOF",
-	itemText:     "itemText",
-	itemAsterisk: "*",
+var elTypes = [...]string{
+	elError:        "elError",
+	elNewline:      "elNewline",
+	elEOF:          "elEOF",
+	elWord:         "elText",
+	elAsterisk:     "*",
+	elHash:         "#",
+	elSlash:        "/",
+	elEqual:        "=",
+	elTilde:        "~",
+	elUnderscore:   "_",
+	elColon:        ":",
+	elBracketLeft:  "[",
+	elBracketRight: "]",
+	elPipe:         "|",
 }
 
-func (typ itemType) String() string {
+func (typ elType) String() string {
 	s := ""
-	if 0 <= typ && typ < itemType(len(itemTypes)) {
-		s = itemTypes[typ]
+	if 0 <= typ && typ < elType(len(elTypes)) {
+		s = elTypes[typ]
 	}
 	if s == "" {
 		s = "token(" + strconv.Itoa(int(typ)) + ")"

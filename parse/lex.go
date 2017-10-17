@@ -6,7 +6,7 @@ import "unicode/utf8"
 // the type of the token as well as the start
 // and end position of the the tokenized value
 type item struct {
-	typ   itemType
+	typ   elType
 	val   []byte
 	start int
 	end   int
@@ -49,16 +49,35 @@ func (l *Lexer) run() {
 	close(l.items)
 }
 
-// emitItemText emits item text if it the current
+// emitElText emits item text if it the current
 // pos is greater than the start (as is the case)
 // when some text has been passed over before finding
 // a token
-func emitItemText(l *Lexer) {
+func emitElText(l *Lexer) {
 	if l.pos > l.start {
-		l.emit(itemText)
+		l.emit(elWord)
 	}
 	if l.pos+1 <= len(l.input) {
 		l.pos++
+	}
+}
+
+var lexFuncs map[byte]elType
+
+func init() {
+	lexFuncs = map[byte]elType{
+		' ':  elSpace,
+		'\n': elNewline,
+		'*':  elAsterisk,
+		'#':  elHash,
+		'/':  elSlash,
+		'=':  elEqual,
+		'~':  elTilde,
+		'_':  elUnderscore,
+		':':  elColon,
+		'[':  elBracketLeft,
+		']':  elBracketRight,
+		'|':  elPipe,
 	}
 }
 
@@ -66,50 +85,23 @@ func emitItemText(l *Lexer) {
 // token and returns the lexer for that token
 func lexText(l *Lexer) stateFn {
 	for l.pos < len(l.input) {
-		switch l.input[l.pos] {
-		case '\n':
-			return lexNewLine
-		case '*':
-			return lexAsterisk
-		case '#':
-			return lexComment
-		default:
-			l.pos++
+		if typ, isPresent := lexFuncs[l.input[l.pos]]; isPresent {
+			return lexToken(l, typ)
 		}
+		l.pos++
 	}
-	emitItemText(l)
-	l.emit(itemEOF)
+
+	emitElText(l)
+	l.emit(elEOF)
 	return nil
 }
 
-// lexNewline emits a newline and returns
-// the lexText stateFn
-func lexNewLine(l *Lexer) stateFn {
-	emitItemText(l)
-	l.emit(itemNewline)
-	return lexText
-}
-
-// lexAsterisk emits a newline and returns
-// the lexText stateFn
-func lexAsterisk(l *Lexer) stateFn {
-	emitItemText(l)
-	l.emit(itemAsterisk)
-	return lexText
-}
-
-// lexComment emits a newline and returns
-// the lexText stateFn
-func lexComment(l *Lexer) stateFn {
-	// TODO fix this method:
-	// currently it's failing because the actual value isn't picking up
-	// the space in same value as the itemComment, and the # is an itemText
-	if l.peek() == ' ' {
-		emitItemText(l)
-		l.pos++ // advance so '# ' is collected
-		l.emit(itemComment)
+func lexToken(l *Lexer, typ elType) func(*Lexer) stateFn {
+	return func(l *Lexer) stateFn {
+		emitElText(l)
+		l.emit(typ)
+		return lexText
 	}
-	return lexText
 }
 
 // next returns the next rune in the input
@@ -141,7 +133,7 @@ func (l *Lexer) peek() rune {
 // token to emit and sends a new item to the
 // items channel with the start and end position
 // of the item
-func (l *Lexer) emit(typ itemType) {
+func (l *Lexer) emit(typ elType) {
 	l.items <- item{
 		typ:   typ,
 		val:   l.input[l.start:l.pos],

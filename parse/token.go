@@ -13,10 +13,12 @@ const (
 	elWord
 	elAsterisk // "*" indicates either a headline or a bold token
 	elHash     // "#  " indicates a comment token
+	elPlus
 	elSlash
 	elEqual
 	elTilde
 	elUnderscore
+	elDash
 	elColon
 	elBracketLeft
 	elBracketRight
@@ -30,10 +32,12 @@ var elTypes = [...]string{
 	elWord:         "elText",
 	elAsterisk:     "*",
 	elHash:         "#",
+	elPlus:         "+",
 	elSlash:        "/",
 	elEqual:        "=",
 	elTilde:        "~",
 	elUnderscore:   "_",
+	elDash:         "-",
 	elColon:        ":",
 	elBracketLeft:  "[",
 	elBracketRight: "]",

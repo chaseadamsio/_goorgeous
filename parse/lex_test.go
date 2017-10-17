@@ -11,9 +11,11 @@ var (
 	tNewline      = mkItem(elNewline, "\n")
 	tAsterisk     = mkItem(elAsterisk, "*")
 	tHash         = mkItem(elHash, "#")
+	tPlus         = mkItem(elPlus, "+")
 	tSlash        = mkItem(elSlash, "/")
 	tEqual        = mkItem(elEqual, "=")
 	tTilde        = mkItem(elTilde, "~")
+	tDash         = mkItem(elDash, "-")
 	tUnderscore   = mkItem(elUnderscore, "_")
 	tColon        = mkItem(elColon, ":")
 	tBracketLeft  = mkItem(elBracketLeft, "[")
@@ -180,6 +182,16 @@ var testCases = map[string]testCase{
 			tEOF,
 		}},
 
+	"strikethrough": {"+this is a sentence+ with strikethrough.\n",
+		[]item{
+			tPlus,
+			mkItem(elWord, "this"), tSpace, mkItem(elWord, "is"), tSpace, mkItem(elWord, "a"), tSpace, mkItem(elWord, "sentence"),
+			tPlus,
+			tSpace, mkItem(elWord, "with"), tSpace, mkItem(elWord, "strikethrough."),
+			tNewline,
+			tEOF,
+		}},
+
 	"inline verbatim": {"=this is a sentence= with verbatim.\n",
 		[]item{
 			tEqual,
@@ -243,9 +255,80 @@ var testCases = map[string]testCase{
 			mkItem(elWord, "file"), tColon,
 			mkItem(elWord, ".."), tSlash, mkItem(elWord, "gopher.gif"),
 			tBracketRight, tBracketLeft,
-			mkItem(elWord, "a"), tSpace, mkItem(elWord, "uni-gopher"),
+			mkItem(elWord, "a"), tSpace, mkItem(elWord, "uni"), tDash, mkItem(elWord, "gopher"),
 			tBracketRight, tBracketRight,
 			tSpace, mkItem(elWord, "as"), tSpace, mkItem(elWord, "an"), tSpace, mkItem(elWord, "image."),
+			tNewline,
+			tEOF,
+		}},
+
+	"definition": {"- definition lists :: these are useful sometimes\n- item 2 :: M-RET again gives another item, and long lines wrap in a tidy way underneath the definition\n",
+		[]item{
+			tDash,
+			tSpace, mkItem(elWord, "definition"), tSpace, mkItem(elWord, "lists"), tSpace,
+			tColon, tColon,
+			tSpace, mkItem(elWord, "these"), tSpace, mkItem(elWord, "are"), tSpace, mkItem(elWord, "useful"), tSpace, mkItem(elWord, "sometimes"),
+			tNewline,
+			tDash,
+			tSpace, mkItem(elWord, "item"), tSpace, mkItem(elWord, "2"), tSpace,
+			tColon, tColon,
+			tSpace, mkItem(elWord, "M"), tDash, mkItem(elWord, "RET"), tSpace, mkItem(elWord, "again"), tSpace, mkItem(elWord, "gives"), tSpace, mkItem(elWord, "another"),
+			tSpace, mkItem(elWord, "item,"), tSpace, mkItem(elWord, "and"), tSpace, mkItem(elWord, "long"), tSpace, mkItem(elWord, "lines"), tSpace, mkItem(elWord, "wrap"),
+			tSpace, mkItem(elWord, "in"), tSpace, mkItem(elWord, "a"), tSpace, mkItem(elWord, "tidy"), tSpace, mkItem(elWord, "way"),
+			tSpace, mkItem(elWord, "underneath"), tSpace, mkItem(elWord, "the"), tSpace, mkItem(elWord, "definition"),
+			tNewline,
+			tEOF,
+		}},
+
+	"ul - plus": {"+ this\n+ is\n+ an\n+ unordered\n+ list\n",
+		[]item{
+			tPlus,
+			tSpace, mkItem(elWord, "this"),
+			tNewline,
+			tPlus,
+			tSpace, mkItem(elWord, "is"),
+			tNewline,
+			tPlus,
+			tSpace, mkItem(elWord, "an"),
+			tNewline,
+			tPlus,
+			tSpace, mkItem(elWord, "unordered"),
+			tNewline,
+			tPlus,
+			tSpace, mkItem(elWord, "list"),
+			tNewline,
+			tEOF,
+		}},
+
+	"ul - dash": {"- this\n- is\n- an\n- unordered\n- list\n",
+		[]item{
+			tDash,
+			tSpace, mkItem(elWord, "this"),
+			tNewline,
+			tDash,
+			tSpace, mkItem(elWord, "is"),
+			tNewline,
+			tDash,
+			tSpace, mkItem(elWord, "an"),
+			tNewline,
+			tDash,
+			tSpace, mkItem(elWord, "unordered"),
+			tNewline,
+			tDash,
+			tSpace, mkItem(elWord, "list"),
+			tNewline,
+			tEOF,
+		}},
+
+	"SRC block": {"#+BEGIN_SRC sh\necho \"foo\"\n#+END_SRC\n",
+		[]item{
+			tHash, tPlus,
+			mkItem(elWord, "BEGIN"), tUnderscore, mkItem(elWord, "SRC"), tSpace, mkItem(elWord, "sh"),
+			tNewline,
+			mkItem(elWord, "echo"), tSpace, mkItem(elWord, "\"foo\""),
+			tNewline,
+			tHash, tPlus,
+			mkItem(elWord, "END"), tUnderscore, mkItem(elWord, "SRC"),
 			tNewline,
 			tEOF,
 		}},

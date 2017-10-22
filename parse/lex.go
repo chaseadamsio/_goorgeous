@@ -6,6 +6,15 @@ import "unicode/utf8"
 // the type of the token as well as the start
 // and end position of the the tokenized value
 type item struct {
+	typ   tokenType
+	val   []byte
+	start int
+	end   int
+}
+
+type elType int
+
+type el struct {
 	typ   elType
 	val   []byte
 	start int
@@ -15,12 +24,13 @@ type item struct {
 // Lexer is an input lexer that
 // tokenizes the input for org mode syntax
 type Lexer struct {
-	input []byte
-	state stateFn
-	start int
-	pos   int
-	width int
-	items chan item
+	input    []byte
+	state    stateFn
+	start    int
+	pos      int
+	width    int
+	items    chan item
+	elements chan el
 }
 
 const eof = -1
@@ -55,31 +65,31 @@ func (l *Lexer) run() {
 // a token
 func emitElText(l *Lexer) {
 	if l.pos > l.start {
-		l.emit(elWord)
+		l.emit(tokenWord)
 	}
 	if l.pos+1 <= len(l.input) {
 		l.pos++
 	}
 }
 
-var lexFuncs map[byte]elType
+var lexFuncs map[byte]tokenType
 
 func init() {
-	lexFuncs = map[byte]elType{
-		' ':  elSpace,
-		'\n': elNewline,
-		'*':  elAsterisk,
-		'#':  elHash,
-		'+':  elPlus,
-		'/':  elSlash,
-		'=':  elEqual,
-		'~':  elTilde,
-		'-':  elDash,
-		'_':  elUnderscore,
-		':':  elColon,
-		'[':  elBracketLeft,
-		']':  elBracketRight,
-		'|':  elPipe,
+	lexFuncs = map[byte]tokenType{
+		' ':  tokenSpace,
+		'\n': tokenNewline,
+		'*':  tokenAsterisk,
+		'#':  tokenHash,
+		'+':  tokenPlus,
+		'/':  tokenSlash,
+		'=':  tokenEqual,
+		'~':  tokenTilde,
+		'-':  tokenDash,
+		'_':  tokenUnderscore,
+		':':  tokenColon,
+		'[':  tokenBracketLeft,
+		']':  tokenBracketRight,
+		'|':  tokenPipe,
 	}
 }
 
@@ -94,11 +104,11 @@ func lexText(l *Lexer) stateFn {
 	}
 
 	emitElText(l)
-	l.emit(elEOF)
+	l.emit(tokenEOF)
 	return nil
 }
 
-func lexToken(l *Lexer, typ elType) func(*Lexer) stateFn {
+func lexToken(l *Lexer, typ tokenType) func(*Lexer) stateFn {
 	return func(l *Lexer) stateFn {
 		emitElText(l)
 		l.emit(typ)
@@ -135,7 +145,7 @@ func (l *Lexer) peek() rune {
 // token to emit and sends a new item to the
 // items channel with the start and end position
 // of the item
-func (l *Lexer) emit(typ elType) {
+func (l *Lexer) emit(typ tokenType) {
 	l.items <- item{
 		typ:   typ,
 		val:   l.input[l.start:l.pos],
@@ -151,3 +161,50 @@ func (l *Lexer) nextItem() item {
 	item := <-l.items
 	return item
 }
+
+// eval reads tokens off of the lexer item channel and
+// determines if tokens are true tokens or if they're
+// false values
+func eval(l *Lexer) {
+	items := make([]item, 0)
+	for {
+		item := l.nextItem()
+		items = append(items, item)
+		if item.typ == tokenNewline {
+			process(items)
+			items = nil
+		}
+		if item.typ == tokenEOF || item.typ == tokenError {
+			break
+		}
+	}
+}
+
+// process takes a list of items and determines whether each item
+// is a true match for an element or is a part of a greater element.
+// If it is an element, it sends that element as the new element type
+// on a channel, otherwise, it joins items that are space and textual
+// elements together and sends that on as an itemText
+func process(items []item) {
+	for idx := 0; idx < len(items); idx++ {
+		item := items[idx]
+		switch item.typ {
+		case tokenAsterisk:
+			// is it a candidate for a headline?
+			// determine the
+		}
+	}
+}
+
+// func isHeadline(item item, currPos int, items []item) (match bool, headline el, newPos int) {
+// 	nextPos := currPos + 1
+// 	if currPos == 0 && items[nextPos].typ == tokenSpace {
+// 	}
+// 	if currPos == 0 && items[nextPos].typ == tokenAsterisk {
+// 		for idx := nextPos; idx < 4 && idx < len(items); idx++ {
+// 			if items[idx].typ != tokenAsterisk {
+// 				return false
+// 			}
+// 		}
+// 	}
+// }

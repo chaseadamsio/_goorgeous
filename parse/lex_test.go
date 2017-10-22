@@ -6,21 +6,21 @@ import (
 )
 
 var (
-	tEOF          = mkItem(elEOF, "")
-	tSpace        = mkItem(elSpace, " ")
-	tNewline      = mkItem(elNewline, "\n")
-	tAsterisk     = mkItem(elAsterisk, "*")
-	tHash         = mkItem(elHash, "#")
-	tPlus         = mkItem(elPlus, "+")
-	tSlash        = mkItem(elSlash, "/")
-	tEqual        = mkItem(elEqual, "=")
-	tTilde        = mkItem(elTilde, "~")
-	tDash         = mkItem(elDash, "-")
-	tUnderscore   = mkItem(elUnderscore, "_")
-	tColon        = mkItem(elColon, ":")
-	tBracketLeft  = mkItem(elBracketLeft, "[")
-	tBracketRight = mkItem(elBracketRight, "]")
-	tPipe         = mkItem(elPipe, "|")
+	tEOF          = mkItem(tokenEOF, "")
+	tSpace        = mkItem(tokenSpace, " ")
+	tNewline      = mkItem(tokenNewline, "\n")
+	tAsterisk     = mkItem(tokenAsterisk, "*")
+	tHash         = mkItem(tokenHash, "#")
+	tPlus         = mkItem(tokenPlus, "+")
+	tSlash        = mkItem(tokenSlash, "/")
+	tEqual        = mkItem(tokenEqual, "=")
+	tTilde        = mkItem(tokenTilde, "~")
+	tDash         = mkItem(tokenDash, "-")
+	tUnderscore   = mkItem(tokenUnderscore, "_")
+	tColon        = mkItem(tokenColon, ":")
+	tBracketLeft  = mkItem(tokenBracketLeft, "[")
+	tBracketRight = mkItem(tokenBracketRight, "]")
+	tPipe         = mkItem(tokenPipe, "|")
 )
 
 // testCase is a test input string and
@@ -40,14 +40,14 @@ var testCases = map[string]testCase{
 	"simple string no newline": {
 		"this is some text",
 		[]item{
-			mkItem(elWord, "this"), tSpace, mkItem(elWord, "is"), tSpace, mkItem(elWord, "some"), tSpace, mkItem(elWord, "text"),
+			mkItem(tokenWord, "this"), tSpace, mkItem(tokenWord, "is"), tSpace, mkItem(tokenWord, "some"), tSpace, mkItem(tokenWord, "text"),
 			tEOF,
 		}},
 
 	"simple string with newline": {
 		"this is some text\n",
 		[]item{
-			mkItem(elWord, "this"), tSpace, mkItem(elWord, "is"), tSpace, mkItem(elWord, "some"), tSpace, mkItem(elWord, "text"),
+			mkItem(tokenWord, "this"), tSpace, mkItem(tokenWord, "is"), tSpace, mkItem(tokenWord, "some"), tSpace, mkItem(tokenWord, "text"),
 			tNewline,
 			tEOF,
 		}},
@@ -56,7 +56,18 @@ var testCases = map[string]testCase{
 		"* this is some text\n",
 		[]item{
 			tAsterisk,
-			tSpace, mkItem(elWord, "this"), tSpace, mkItem(elWord, "is"), tSpace, mkItem(elWord, "some"), tSpace, mkItem(elWord, "text"),
+			tSpace, mkItem(tokenWord, "this"), tSpace, mkItem(tokenWord, "is"), tSpace, mkItem(tokenWord, "some"), tSpace, mkItem(tokenWord, "text"),
+			tNewline,
+			tEOF,
+		}},
+
+	"previous text - header level 1": {
+		"this is some text.\n* this is some text\n",
+		[]item{
+			mkItem(tokenWord, "this"), tSpace, mkItem(tokenWord, "is"), tSpace, mkItem(tokenWord, "some"), tSpace, mkItem(tokenWord, "text."),
+			tNewline,
+			tAsterisk,
+			tSpace, mkItem(tokenWord, "this"), tSpace, mkItem(tokenWord, "is"), tSpace, mkItem(tokenWord, "some"), tSpace, mkItem(tokenWord, "text"),
 			tNewline,
 			tEOF,
 		}},
@@ -65,7 +76,7 @@ var testCases = map[string]testCase{
 		"** this is some text\n",
 		[]item{
 			tAsterisk, tAsterisk,
-			tSpace, mkItem(elWord, "this"), tSpace, mkItem(elWord, "is"), tSpace, mkItem(elWord, "some"), tSpace, mkItem(elWord, "text"),
+			tSpace, mkItem(tokenWord, "this"), tSpace, mkItem(tokenWord, "is"), tSpace, mkItem(tokenWord, "some"), tSpace, mkItem(tokenWord, "text"),
 			tNewline,
 			tEOF,
 		}},
@@ -74,7 +85,7 @@ var testCases = map[string]testCase{
 		"*** this is some text\n",
 		[]item{
 			tAsterisk, tAsterisk, tAsterisk,
-			tSpace, mkItem(elWord, "this"), tSpace, mkItem(elWord, "is"), tSpace, mkItem(elWord, "some"), tSpace, mkItem(elWord, "text"),
+			tSpace, mkItem(tokenWord, "this"), tSpace, mkItem(tokenWord, "is"), tSpace, mkItem(tokenWord, "some"), tSpace, mkItem(tokenWord, "text"),
 			tNewline,
 			tEOF,
 		}},
@@ -83,7 +94,7 @@ var testCases = map[string]testCase{
 		"**** this is some text\n",
 		[]item{
 			tAsterisk, tAsterisk, tAsterisk, tAsterisk,
-			tSpace, mkItem(elWord, "this"), tSpace, mkItem(elWord, "is"), tSpace, mkItem(elWord, "some"), tSpace, mkItem(elWord, "text"),
+			tSpace, mkItem(tokenWord, "this"), tSpace, mkItem(tokenWord, "is"), tSpace, mkItem(tokenWord, "some"), tSpace, mkItem(tokenWord, "text"),
 			tNewline,
 			tEOF,
 		}},
@@ -92,7 +103,7 @@ var testCases = map[string]testCase{
 		"***** this is some text\n",
 		[]item{
 			tAsterisk, tAsterisk, tAsterisk, tAsterisk, tAsterisk,
-			tSpace, mkItem(elWord, "this"), tSpace, mkItem(elWord, "is"), tSpace, mkItem(elWord, "some"), tSpace, mkItem(elWord, "text"),
+			tSpace, mkItem(tokenWord, "this"), tSpace, mkItem(tokenWord, "is"), tSpace, mkItem(tokenWord, "some"), tSpace, mkItem(tokenWord, "text"),
 			tNewline,
 			tEOF,
 		}},
@@ -101,7 +112,7 @@ var testCases = map[string]testCase{
 		"****** this is some text\n",
 		[]item{
 			tAsterisk, tAsterisk, tAsterisk, tAsterisk, tAsterisk, tAsterisk,
-			tSpace, mkItem(elWord, "this"), tSpace, mkItem(elWord, "is"), tSpace, mkItem(elWord, "some"), tSpace, mkItem(elWord, "text"),
+			tSpace, mkItem(tokenWord, "this"), tSpace, mkItem(tokenWord, "is"), tSpace, mkItem(tokenWord, "some"), tSpace, mkItem(tokenWord, "text"),
 			tNewline,
 			tEOF,
 		}},
@@ -109,10 +120,10 @@ var testCases = map[string]testCase{
 	"not header": {
 		"this ***** is some text\n",
 		[]item{
-			mkItem(elWord, "this"),
+			mkItem(tokenWord, "this"),
 			tSpace,
 			tAsterisk, tAsterisk, tAsterisk, tAsterisk, tAsterisk,
-			tSpace, mkItem(elWord, "is"), tSpace, mkItem(elWord, "some"), tSpace, mkItem(elWord, "text"),
+			tSpace, mkItem(tokenWord, "is"), tSpace, mkItem(tokenWord, "some"), tSpace, mkItem(tokenWord, "text"),
 			tNewline,
 			tEOF,
 		}},
@@ -120,18 +131,18 @@ var testCases = map[string]testCase{
 	"not header alt": {
 		"this***** is some text\n",
 		[]item{
-			mkItem(elWord, "this"),
+			mkItem(tokenWord, "this"),
 			tAsterisk, tAsterisk, tAsterisk, tAsterisk, tAsterisk,
-			tSpace, mkItem(elWord, "is"), tSpace, mkItem(elWord, "some"), tSpace, mkItem(elWord, "text"),
+			tSpace, mkItem(tokenWord, "is"), tSpace, mkItem(tokenWord, "some"), tSpace, mkItem(tokenWord, "text"),
 			tNewline,
 			tEOF,
 		}},
 
 	"bold": {"this is *some text*\n",
 		[]item{
-			mkItem(elWord, "this"), tSpace, mkItem(elWord, "is"), tSpace,
+			mkItem(tokenWord, "this"), tSpace, mkItem(tokenWord, "is"), tSpace,
 			tAsterisk,
-			mkItem(elWord, "some"), tSpace, mkItem(elWord, "text"),
+			mkItem(tokenWord, "some"), tSpace, mkItem(tokenWord, "text"),
 			tAsterisk,
 			tNewline,
 			tEOF,
@@ -139,9 +150,9 @@ var testCases = map[string]testCase{
 
 	"not bold": {"this is *some text\n",
 		[]item{
-			mkItem(elWord, "this"), tSpace, mkItem(elWord, "is"), tSpace,
+			mkItem(tokenWord, "this"), tSpace, mkItem(tokenWord, "is"), tSpace,
 			tAsterisk,
-			mkItem(elWord, "some"), tSpace, mkItem(elWord, "text"),
+			mkItem(tokenWord, "some"), tSpace, mkItem(tokenWord, "text"),
 			tNewline,
 			tEOF,
 		}},
@@ -149,7 +160,7 @@ var testCases = map[string]testCase{
 	"comment": {"# this is a comment\n",
 		[]item{
 			tHash,
-			tSpace, mkItem(elWord, "this"), tSpace, mkItem(elWord, "is"), tSpace, mkItem(elWord, "a"), tSpace, mkItem(elWord, "comment"),
+			tSpace, mkItem(tokenWord, "this"), tSpace, mkItem(tokenWord, "is"), tSpace, mkItem(tokenWord, "a"), tSpace, mkItem(tokenWord, "comment"),
 			tNewline,
 			tEOF,
 		}},
@@ -157,7 +168,7 @@ var testCases = map[string]testCase{
 	"not comment": {"#this is not a comment\n",
 		[]item{
 			tHash,
-			mkItem(elWord, "this"), tSpace, mkItem(elWord, "is"), tSpace, mkItem(elWord, "not"), tSpace, mkItem(elWord, "a"), tSpace, mkItem(elWord, "comment"),
+			mkItem(tokenWord, "this"), tSpace, mkItem(tokenWord, "is"), tSpace, mkItem(tokenWord, "not"), tSpace, mkItem(tokenWord, "a"), tSpace, mkItem(tokenWord, "comment"),
 			tNewline,
 			tEOF,
 		}},
@@ -165,9 +176,9 @@ var testCases = map[string]testCase{
 	"underline": {"_this is a sentence_ with underline.\n",
 		[]item{
 			tUnderscore,
-			mkItem(elWord, "this"), tSpace, mkItem(elWord, "is"), tSpace, mkItem(elWord, "a"), tSpace, mkItem(elWord, "sentence"),
+			mkItem(tokenWord, "this"), tSpace, mkItem(tokenWord, "is"), tSpace, mkItem(tokenWord, "a"), tSpace, mkItem(tokenWord, "sentence"),
 			tUnderscore,
-			tSpace, mkItem(elWord, "with"), tSpace, mkItem(elWord, "underline."),
+			tSpace, mkItem(tokenWord, "with"), tSpace, mkItem(tokenWord, "underline."),
 			tNewline,
 			tEOF,
 		}},
@@ -175,9 +186,9 @@ var testCases = map[string]testCase{
 	"italic": {"/this is a sentence/ with italic.\n",
 		[]item{
 			tSlash,
-			mkItem(elWord, "this"), tSpace, mkItem(elWord, "is"), tSpace, mkItem(elWord, "a"), tSpace, mkItem(elWord, "sentence"),
+			mkItem(tokenWord, "this"), tSpace, mkItem(tokenWord, "is"), tSpace, mkItem(tokenWord, "a"), tSpace, mkItem(tokenWord, "sentence"),
 			tSlash,
-			tSpace, mkItem(elWord, "with"), tSpace, mkItem(elWord, "italic."),
+			tSpace, mkItem(tokenWord, "with"), tSpace, mkItem(tokenWord, "italic."),
 			tNewline,
 			tEOF,
 		}},
@@ -185,9 +196,9 @@ var testCases = map[string]testCase{
 	"strikethrough": {"+this is a sentence+ with strikethrough.\n",
 		[]item{
 			tPlus,
-			mkItem(elWord, "this"), tSpace, mkItem(elWord, "is"), tSpace, mkItem(elWord, "a"), tSpace, mkItem(elWord, "sentence"),
+			mkItem(tokenWord, "this"), tSpace, mkItem(tokenWord, "is"), tSpace, mkItem(tokenWord, "a"), tSpace, mkItem(tokenWord, "sentence"),
 			tPlus,
-			tSpace, mkItem(elWord, "with"), tSpace, mkItem(elWord, "strikethrough."),
+			tSpace, mkItem(tokenWord, "with"), tSpace, mkItem(tokenWord, "strikethrough."),
 			tNewline,
 			tEOF,
 		}},
@@ -195,9 +206,9 @@ var testCases = map[string]testCase{
 	"inline verbatim": {"=this is a sentence= with verbatim.\n",
 		[]item{
 			tEqual,
-			mkItem(elWord, "this"), tSpace, mkItem(elWord, "is"), tSpace, mkItem(elWord, "a"), tSpace, mkItem(elWord, "sentence"),
+			mkItem(tokenWord, "this"), tSpace, mkItem(tokenWord, "is"), tSpace, mkItem(tokenWord, "a"), tSpace, mkItem(tokenWord, "sentence"),
 			tEqual,
-			tSpace, mkItem(elWord, "with"), tSpace, mkItem(elWord, "verbatim."),
+			tSpace, mkItem(tokenWord, "with"), tSpace, mkItem(tokenWord, "verbatim."),
 			tNewline,
 			tEOF,
 		}},
@@ -205,59 +216,59 @@ var testCases = map[string]testCase{
 	"inline code": {"~this is a sentence~ with code.\n",
 		[]item{
 			tTilde,
-			mkItem(elWord, "this"), tSpace, mkItem(elWord, "is"), tSpace, mkItem(elWord, "a"), tSpace, mkItem(elWord, "sentence"),
+			mkItem(tokenWord, "this"), tSpace, mkItem(tokenWord, "is"), tSpace, mkItem(tokenWord, "a"), tSpace, mkItem(tokenWord, "sentence"),
 			tTilde,
-			tSpace, mkItem(elWord, "with"), tSpace, mkItem(elWord, "code."),
+			tSpace, mkItem(tokenWord, "with"), tSpace, mkItem(tokenWord, "code."),
 			tNewline,
 			tEOF,
 		}},
 
 	"anchor - link as URL": {"this has [[https://github.com/chaseadamsio/goorgeous]] as a link.\n",
 		[]item{
-			mkItem(elWord, "this"), tSpace, mkItem(elWord, "has"), tSpace,
+			mkItem(tokenWord, "this"), tSpace, mkItem(tokenWord, "has"), tSpace,
 			tBracketLeft, tBracketLeft,
-			mkItem(elWord, "https"), tColon, tSlash, tSlash, mkItem(elWord, "github.com"), tSlash, mkItem(elWord, "chaseadamsio"), tSlash, mkItem(elWord, "goorgeous"),
+			mkItem(tokenWord, "https"), tColon, tSlash, tSlash, mkItem(tokenWord, "github.com"), tSlash, mkItem(tokenWord, "chaseadamsio"), tSlash, mkItem(tokenWord, "goorgeous"),
 			tBracketRight, tBracketRight,
-			tSpace, mkItem(elWord, "as"), tSpace, mkItem(elWord, "a"), tSpace, mkItem(elWord, "link."),
+			tSpace, mkItem(tokenWord, "as"), tSpace, mkItem(tokenWord, "a"), tSpace, mkItem(tokenWord, "link."),
 			tNewline,
 			tEOF,
 		}},
 
 	"anchor - text": {"this has [[https://github.com/chaseadamsio/goorgeous][goorgeous by chaseadamsio]] as a link.\n",
 		[]item{
-			mkItem(elWord, "this"), tSpace, mkItem(elWord, "has"), tSpace,
+			mkItem(tokenWord, "this"), tSpace, mkItem(tokenWord, "has"), tSpace,
 			tBracketLeft, tBracketLeft,
-			mkItem(elWord, "https"), tColon, tSlash, tSlash, mkItem(elWord, "github.com"), tSlash, mkItem(elWord, "chaseadamsio"), tSlash, mkItem(elWord, "goorgeous"),
+			mkItem(tokenWord, "https"), tColon, tSlash, tSlash, mkItem(tokenWord, "github.com"), tSlash, mkItem(tokenWord, "chaseadamsio"), tSlash, mkItem(tokenWord, "goorgeous"),
 			tBracketRight, tBracketLeft,
-			mkItem(elWord, "goorgeous"), tSpace, mkItem(elWord, "by"), tSpace, mkItem(elWord, "chaseadamsio"),
+			mkItem(tokenWord, "goorgeous"), tSpace, mkItem(tokenWord, "by"), tSpace, mkItem(tokenWord, "chaseadamsio"),
 			tBracketRight, tBracketRight,
-			tSpace, mkItem(elWord, "as"), tSpace, mkItem(elWord, "a"), tSpace, mkItem(elWord, "link."),
+			tSpace, mkItem(tokenWord, "as"), tSpace, mkItem(tokenWord, "a"), tSpace, mkItem(tokenWord, "link."),
 			tNewline,
 			tEOF,
 		}},
 
 	"image - basic": {"this has [[file:https://github.com/chaseadamsio/goorgeous/img.png]] as an image.\n",
 		[]item{
-			mkItem(elWord, "this"), tSpace, mkItem(elWord, "has"), tSpace,
+			mkItem(tokenWord, "this"), tSpace, mkItem(tokenWord, "has"), tSpace,
 			tBracketLeft, tBracketLeft,
-			mkItem(elWord, "file"), tColon,
-			mkItem(elWord, "https"), tColon, tSlash, tSlash, mkItem(elWord, "github.com"), tSlash, mkItem(elWord, "chaseadamsio"), tSlash, mkItem(elWord, "goorgeous"), tSlash, mkItem(elWord, "img.png"),
+			mkItem(tokenWord, "file"), tColon,
+			mkItem(tokenWord, "https"), tColon, tSlash, tSlash, mkItem(tokenWord, "github.com"), tSlash, mkItem(tokenWord, "chaseadamsio"), tSlash, mkItem(tokenWord, "goorgeous"), tSlash, mkItem(tokenWord, "img.png"),
 			tBracketRight, tBracketRight,
-			tSpace, mkItem(elWord, "as"), tSpace, mkItem(elWord, "an"), tSpace, mkItem(elWord, "image."),
+			tSpace, mkItem(tokenWord, "as"), tSpace, mkItem(tokenWord, "an"), tSpace, mkItem(tokenWord, "image."),
 			tNewline,
 			tEOF,
 		}},
 
 	"image - alt": {"this has [[file:../gopher.gif][a uni-gopher]] as an image.\n",
 		[]item{
-			mkItem(elWord, "this"), tSpace, mkItem(elWord, "has"), tSpace,
+			mkItem(tokenWord, "this"), tSpace, mkItem(tokenWord, "has"), tSpace,
 			tBracketLeft, tBracketLeft,
-			mkItem(elWord, "file"), tColon,
-			mkItem(elWord, ".."), tSlash, mkItem(elWord, "gopher.gif"),
+			mkItem(tokenWord, "file"), tColon,
+			mkItem(tokenWord, ".."), tSlash, mkItem(tokenWord, "gopher.gif"),
 			tBracketRight, tBracketLeft,
-			mkItem(elWord, "a"), tSpace, mkItem(elWord, "uni"), tDash, mkItem(elWord, "gopher"),
+			mkItem(tokenWord, "a"), tSpace, mkItem(tokenWord, "uni"), tDash, mkItem(tokenWord, "gopher"),
 			tBracketRight, tBracketRight,
-			tSpace, mkItem(elWord, "as"), tSpace, mkItem(elWord, "an"), tSpace, mkItem(elWord, "image."),
+			tSpace, mkItem(tokenWord, "as"), tSpace, mkItem(tokenWord, "an"), tSpace, mkItem(tokenWord, "image."),
 			tNewline,
 			tEOF,
 		}},
@@ -265,17 +276,17 @@ var testCases = map[string]testCase{
 	"definition": {"- definition lists :: these are useful sometimes\n- item 2 :: M-RET again gives another item, and long lines wrap in a tidy way underneath the definition\n",
 		[]item{
 			tDash,
-			tSpace, mkItem(elWord, "definition"), tSpace, mkItem(elWord, "lists"), tSpace,
+			tSpace, mkItem(tokenWord, "definition"), tSpace, mkItem(tokenWord, "lists"), tSpace,
 			tColon, tColon,
-			tSpace, mkItem(elWord, "these"), tSpace, mkItem(elWord, "are"), tSpace, mkItem(elWord, "useful"), tSpace, mkItem(elWord, "sometimes"),
+			tSpace, mkItem(tokenWord, "these"), tSpace, mkItem(tokenWord, "are"), tSpace, mkItem(tokenWord, "useful"), tSpace, mkItem(tokenWord, "sometimes"),
 			tNewline,
 			tDash,
-			tSpace, mkItem(elWord, "item"), tSpace, mkItem(elWord, "2"), tSpace,
+			tSpace, mkItem(tokenWord, "item"), tSpace, mkItem(tokenWord, "2"), tSpace,
 			tColon, tColon,
-			tSpace, mkItem(elWord, "M"), tDash, mkItem(elWord, "RET"), tSpace, mkItem(elWord, "again"), tSpace, mkItem(elWord, "gives"), tSpace, mkItem(elWord, "another"),
-			tSpace, mkItem(elWord, "item,"), tSpace, mkItem(elWord, "and"), tSpace, mkItem(elWord, "long"), tSpace, mkItem(elWord, "lines"), tSpace, mkItem(elWord, "wrap"),
-			tSpace, mkItem(elWord, "in"), tSpace, mkItem(elWord, "a"), tSpace, mkItem(elWord, "tidy"), tSpace, mkItem(elWord, "way"),
-			tSpace, mkItem(elWord, "underneath"), tSpace, mkItem(elWord, "the"), tSpace, mkItem(elWord, "definition"),
+			tSpace, mkItem(tokenWord, "M"), tDash, mkItem(tokenWord, "RET"), tSpace, mkItem(tokenWord, "again"), tSpace, mkItem(tokenWord, "gives"), tSpace, mkItem(tokenWord, "another"),
+			tSpace, mkItem(tokenWord, "item,"), tSpace, mkItem(tokenWord, "and"), tSpace, mkItem(tokenWord, "long"), tSpace, mkItem(tokenWord, "lines"), tSpace, mkItem(tokenWord, "wrap"),
+			tSpace, mkItem(tokenWord, "in"), tSpace, mkItem(tokenWord, "a"), tSpace, mkItem(tokenWord, "tidy"), tSpace, mkItem(tokenWord, "way"),
+			tSpace, mkItem(tokenWord, "underneath"), tSpace, mkItem(tokenWord, "the"), tSpace, mkItem(tokenWord, "definition"),
 			tNewline,
 			tEOF,
 		}},
@@ -283,19 +294,19 @@ var testCases = map[string]testCase{
 	"ul - plus": {"+ this\n+ is\n+ an\n+ unordered\n+ list\n",
 		[]item{
 			tPlus,
-			tSpace, mkItem(elWord, "this"),
+			tSpace, mkItem(tokenWord, "this"),
 			tNewline,
 			tPlus,
-			tSpace, mkItem(elWord, "is"),
+			tSpace, mkItem(tokenWord, "is"),
 			tNewline,
 			tPlus,
-			tSpace, mkItem(elWord, "an"),
+			tSpace, mkItem(tokenWord, "an"),
 			tNewline,
 			tPlus,
-			tSpace, mkItem(elWord, "unordered"),
+			tSpace, mkItem(tokenWord, "unordered"),
 			tNewline,
 			tPlus,
-			tSpace, mkItem(elWord, "list"),
+			tSpace, mkItem(tokenWord, "list"),
 			tNewline,
 			tEOF,
 		}},
@@ -303,19 +314,19 @@ var testCases = map[string]testCase{
 	"ul - dash": {"- this\n- is\n- an\n- unordered\n- list\n",
 		[]item{
 			tDash,
-			tSpace, mkItem(elWord, "this"),
+			tSpace, mkItem(tokenWord, "this"),
 			tNewline,
 			tDash,
-			tSpace, mkItem(elWord, "is"),
+			tSpace, mkItem(tokenWord, "is"),
 			tNewline,
 			tDash,
-			tSpace, mkItem(elWord, "an"),
+			tSpace, mkItem(tokenWord, "an"),
 			tNewline,
 			tDash,
-			tSpace, mkItem(elWord, "unordered"),
+			tSpace, mkItem(tokenWord, "unordered"),
 			tNewline,
 			tDash,
-			tSpace, mkItem(elWord, "list"),
+			tSpace, mkItem(tokenWord, "list"),
 			tNewline,
 			tEOF,
 		}},
@@ -323,12 +334,12 @@ var testCases = map[string]testCase{
 	"SRC block": {"#+BEGIN_SRC sh\necho \"foo\"\n#+END_SRC\n",
 		[]item{
 			tHash, tPlus,
-			mkItem(elWord, "BEGIN"), tUnderscore, mkItem(elWord, "SRC"), tSpace, mkItem(elWord, "sh"),
+			mkItem(tokenWord, "BEGIN"), tUnderscore, mkItem(tokenWord, "SRC"), tSpace, mkItem(tokenWord, "sh"),
 			tNewline,
-			mkItem(elWord, "echo"), tSpace, mkItem(elWord, "\"foo\""),
+			mkItem(tokenWord, "echo"), tSpace, mkItem(tokenWord, "\"foo\""),
 			tNewline,
 			tHash, tPlus,
-			mkItem(elWord, "END"), tUnderscore, mkItem(elWord, "SRC"),
+			mkItem(tokenWord, "END"), tUnderscore, mkItem(tokenWord, "SRC"),
 			tNewline,
 			tEOF,
 		}},
@@ -342,11 +353,16 @@ func TestLexer(t *testing.T) {
 			t.Errorf("'%s' case failed. items are not equal.\n got  %v+\n want %v\n", caseName, items, tc.items)
 		}
 	}
+
+	for _, tc := range testCases {
+		l := NewLexer(tc.input)
+		eval(l)
+	}
 }
 
 // mkItem is a helper to make it easier to generate items for
 // test cases
-func mkItem(typ elType, val string) item {
+func mkItem(typ tokenType, val string) item {
 	return item{
 		typ: typ,
 		val: []byte(val),
@@ -359,7 +375,7 @@ func collect(l *Lexer) (items []item) {
 	for {
 		item := l.nextItem()
 		items = append(items, item)
-		if item.typ == elEOF || item.typ == elError {
+		if item.typ == tokenEOF || item.typ == tokenError {
 			break
 		}
 	}

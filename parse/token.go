@@ -2,51 +2,51 @@ package parse
 
 import "strconv"
 
-// elType identifies the type of lex items
-type elType int
+// tokenType identifies the type of lex items
+type tokenType int
 
 const (
-	elError elType = iota
-	elNewline
-	elSpace
-	elEOF
-	elWord
-	elAsterisk // "*" indicates either a headline or a bold token
-	elHash     // "#  " indicates a comment token
-	elPlus
-	elSlash
-	elEqual
-	elTilde
-	elUnderscore
-	elDash
-	elColon
-	elBracketLeft
-	elBracketRight
-	elPipe
+	tokenError tokenType = iota
+	tokenNewline
+	tokenSpace
+	tokenEOF
+	tokenWord
+	tokenAsterisk // "*" indicates either a headline or a bold token
+	tokenHash     // "#  " indicates a comment token
+	tokenPlus
+	tokenSlash
+	tokenEqual
+	tokenTilde
+	tokenUnderscore
+	tokenDash
+	tokenColon
+	tokenBracketLeft
+	tokenBracketRight
+	tokenPipe
 )
 
 var elTypes = [...]string{
-	elError:        "elError",
-	elNewline:      "elNewline",
-	elEOF:          "elEOF",
-	elWord:         "elText",
-	elAsterisk:     "*",
-	elHash:         "#",
-	elPlus:         "+",
-	elSlash:        "/",
-	elEqual:        "=",
-	elTilde:        "~",
-	elUnderscore:   "_",
-	elDash:         "-",
-	elColon:        ":",
-	elBracketLeft:  "[",
-	elBracketRight: "]",
-	elPipe:         "|",
+	tokenError:        "tokenError",
+	tokenNewline:      "tokenNewline",
+	tokenEOF:          "tokenEOF",
+	tokenWord:         "tokenText",
+	tokenAsterisk:     "*",
+	tokenHash:         "#",
+	tokenPlus:         "+",
+	tokenSlash:        "/",
+	tokenEqual:        "=",
+	tokenTilde:        "~",
+	tokenUnderscore:   "_",
+	tokenDash:         "-",
+	tokenColon:        ":",
+	tokenBracketLeft:  "[",
+	tokenBracketRight: "]",
+	tokenPipe:         "|",
 }
 
-func (typ elType) String() string {
+func (typ tokenType) String() string {
 	s := ""
-	if 0 <= typ && typ < elType(len(elTypes)) {
+	if 0 <= typ && typ < tokenType(len(elTypes)) {
 		s = elTypes[typ]
 	}
 	if s == "" {

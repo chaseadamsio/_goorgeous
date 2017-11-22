@@ -489,6 +489,59 @@ func TestRenderingBlock(t *testing.T) {
 			"#+BEGIN_CENTER\nthis is a\nmulti-lined centered block.\n#+END_CENTER\n",
 			"<center>\n<p>\nthis is a\n</p>\n<p>\nmulti-lined centered block.\n</p>\n</center>\n",
 		},
+
+		"SRC_INDENTED": {
+			"   #+BEGIN_SRC sh\necho \"foo\"\n   #+END_SRC\n",
+			"<pre><code class=\"language-sh\">\necho &quot;foo&quot;\n</code></pre>\n",
+		},
+		"SRC_MULTILINE_INDENTED": {
+			"\t\t#+BEGIN_SRC sh\necho \"foo\"\necho \"bar\"\n\t\t#+END_SRC\n",
+			"<pre><code class=\"language-sh\">\necho &quot;foo&quot;\necho &quot;bar&quot;\n</code></pre>\n",
+		},
+		"SRC_MULTILINE_MULTI_NEWLINE_INDENTED": {
+			"     #+BEGIN_SRC sh\necho \"foo\"\n\necho \"bar\"\n     #+END_SRC\n",
+			"<pre><code class=\"language-sh\">\necho &quot;foo&quot;\n\necho &quot;bar&quot;\n</code></pre>\n",
+		},
+		"SRC_MULTILINE_MANY_MULTI_NEWLINE_INDENTED": {
+			" #+BEGIN_SRC sh\necho \"foo\"\n\necho \"bar\"\n\necho \"foo\"\n\necho \"bar\"\n #+END_SRC\n",
+			"<pre><code class=\"language-sh\">\necho &quot;foo&quot;\n\necho &quot;bar&quot;\n\necho &quot;foo&quot;\n\necho &quot;bar&quot;\n</code></pre>\n",
+		},
+		"SRC_MULTILINE_MANY_MULTI_NEWLINE_TEXT_INDENTED": {
+			"\t   \t#+BEGIN_SRC text\n/Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo\nligula nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque\neu, sem. Nulla consequat massa quis enim./\n\n/In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam\ndictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus\nelementum semper nisi./\n\t   \t#+END_SRC",
+			"<pre><code class=\"language-text\">\n/Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo\nligula nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque\neu, sem. Nulla consequat massa quis enim./\n\n/In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam\ndictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus\nelementum semper nisi./\n</code></pre>\n",
+		},
+		"EXAMPLE_INDENTED": {
+			"\t\t  #+BEGIN_EXAMPLE sh\necho \"foo\"\n\t\t  #+END_EXAMPLE\n",
+			"<pre><code class=\"language-sh\">\necho &quot;foo&quot;\n</code></pre>\n",
+		},
+		"EXAMPLE_MULTILINE_INDENTED": {
+			"        #+BEGIN_EXAMPLE sh\necho \"foo\"\necho \"bar\"\n        #+END_EXAMPLE\n",
+			"<pre><code class=\"language-sh\">\necho &quot;foo&quot;\necho &quot;bar&quot;\n</code></pre>\n",
+		},
+		"EXAMPLE_MULTILINE_MULTI_NEWLINE_INDENTED": {
+			" #+BEGIN_EXAMPLE sh\necho \"foo\"\n\necho \"bar\"\n #+END_EXAMPLE\n",
+			"<pre><code class=\"language-sh\">\necho &quot;foo&quot;\n\necho &quot;bar&quot;\n</code></pre>\n",
+		},
+		"EXAMPLE_MULTILINE_MANY_MULTI_NEWLINE_INDENTED": {
+			"   #+BEGIN_EXAMPLE sh\necho \"foo\"\n\necho \"bar\"\n\necho \"foo\"\n\necho \"bar\"\n   #+END_EXAMPLE\n",
+			"<pre><code class=\"language-sh\">\necho &quot;foo&quot;\n\necho &quot;bar&quot;\n\necho &quot;foo&quot;\n\necho &quot;bar&quot;\n</code></pre>\n",
+		},
+		"QUOTE_INDENTED": {
+			"\t\t\t#+BEGIN_QUOTE\nthis is a quote.\n\t\t\t#+END_QUOTE\n",
+			"<blockquote>\n<p>\nthis is a quote.\n</p>\n</blockquote>\n",
+		},
+		"QUOTE_MULTILINE_INDENTED": {
+			"      #+BEGIN_QUOTE\nthis is a quote\nwith multiple lines.\n      #+END_QUOTE\n",
+			"<blockquote>\n<p>\nthis is a quote\n</p>\n<p>\nwith multiple lines.\n</p>\n</blockquote>\n",
+		},
+		"CENTER_INDENTED": {
+			"\t#+BEGIN_CENTER\nthis is a centered block.\n\t#+END_CENTER\n",
+			"<center>\n<p>\nthis is a centered block.\n</p>\n</center>\n",
+		},
+		"CENTER_MULTILINE_INDENTED": {
+			"   #+BEGIN_CENTER\nthis is a\nmulti-lined centered block.\n   #+END_CENTER\n",
+			"<center>\n<p>\nthis is a\n</p>\n<p>\nmulti-lined centered block.\n</p>\n</center>\n",
+		},
 	}
 
 	testOrgCommon(testCases, t)

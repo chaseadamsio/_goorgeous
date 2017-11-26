@@ -189,7 +189,9 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 					tmpBlock.Write(tmpBuf.Bytes())
 
 				} else {
-					tmpBlock.WriteByte('\n')
+					if !(tmpBlock.Len() == 0 && (marker == "SRC" || marker == "EXAMPLE")) {
+						tmpBlock.WriteByte('\n')
+					}
 					tmpBlock.Write(data)
 				}
 

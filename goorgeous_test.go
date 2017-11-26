@@ -439,39 +439,39 @@ func TestRenderingBlock(t *testing.T) {
 	testCases := map[string]testCase{
 		"SRC": {
 			"#+BEGIN_SRC sh\necho \"foo\"\n#+END_SRC\n",
-			"<pre><code class=\"language-sh\">\necho &quot;foo&quot;\n</code></pre>\n",
+			"<pre><code class=\"language-sh\">echo &quot;foo&quot;\n</code></pre>\n",
 		},
 		"SRC_MULTILINE": {
 			"#+BEGIN_SRC sh\necho \"foo\"\necho \"bar\"\n#+END_SRC\n",
-			"<pre><code class=\"language-sh\">\necho &quot;foo&quot;\necho &quot;bar&quot;\n</code></pre>\n",
+			"<pre><code class=\"language-sh\">echo &quot;foo&quot;\necho &quot;bar&quot;\n</code></pre>\n",
 		},
 		"SRC_MULTILINE_MULTI_NEWLINE": {
 			"#+BEGIN_SRC sh\necho \"foo\"\n\necho \"bar\"\n#+END_SRC\n",
-			"<pre><code class=\"language-sh\">\necho &quot;foo&quot;\n\necho &quot;bar&quot;\n</code></pre>\n",
+			"<pre><code class=\"language-sh\">echo &quot;foo&quot;\n\necho &quot;bar&quot;\n</code></pre>\n",
 		},
 		"SRC_MULTILINE_MANY_MULTI_NEWLINE": {
 			"#+BEGIN_SRC sh\necho \"foo\"\n\necho \"bar\"\n\necho \"foo\"\n\necho \"bar\"\n#+END_SRC\n",
-			"<pre><code class=\"language-sh\">\necho &quot;foo&quot;\n\necho &quot;bar&quot;\n\necho &quot;foo&quot;\n\necho &quot;bar&quot;\n</code></pre>\n",
+			"<pre><code class=\"language-sh\">echo &quot;foo&quot;\n\necho &quot;bar&quot;\n\necho &quot;foo&quot;\n\necho &quot;bar&quot;\n</code></pre>\n",
 		},
 		"SRC_MULTILINE_MANY_MULTI_NEWLINE_TEXT": {
 			"#+BEGIN_SRC text\n/Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo\nligula nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque\neu, sem. Nulla consequat massa quis enim./\n\n/In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam\ndictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus\nelementum semper nisi./\n#+END_SRC",
-			"<pre><code class=\"language-text\">\n/Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo\nligula nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque\neu, sem. Nulla consequat massa quis enim./\n\n/In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam\ndictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus\nelementum semper nisi./\n</code></pre>\n",
+			"<pre><code class=\"language-text\">/Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo\nligula nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque\neu, sem. Nulla consequat massa quis enim./\n\n/In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam\ndictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus\nelementum semper nisi./\n</code></pre>\n",
 		},
 		"EXAMPLE": {
 			"#+BEGIN_EXAMPLE sh\necho \"foo\"\n#+END_EXAMPLE\n",
-			"<pre><code class=\"language-sh\">\necho &quot;foo&quot;\n</code></pre>\n",
+			"<pre><code class=\"language-sh\">echo &quot;foo&quot;\n</code></pre>\n",
 		},
 		"EXAMPLE_MULTILINE": {
 			"#+BEGIN_EXAMPLE sh\necho \"foo\"\necho \"bar\"\n#+END_EXAMPLE\n",
-			"<pre><code class=\"language-sh\">\necho &quot;foo&quot;\necho &quot;bar&quot;\n</code></pre>\n",
+			"<pre><code class=\"language-sh\">echo &quot;foo&quot;\necho &quot;bar&quot;\n</code></pre>\n",
 		},
 		"EXAMPLE_MULTILINE_MULTI_NEWLINE": {
 			"#+BEGIN_EXAMPLE sh\necho \"foo\"\n\necho \"bar\"\n#+END_EXAMPLE\n",
-			"<pre><code class=\"language-sh\">\necho &quot;foo&quot;\n\necho &quot;bar&quot;\n</code></pre>\n",
+			"<pre><code class=\"language-sh\">echo &quot;foo&quot;\n\necho &quot;bar&quot;\n</code></pre>\n",
 		},
 		"EXAMPLE_MULTILINE_MANY_MULTI_NEWLINE": {
 			"#+BEGIN_EXAMPLE sh\necho \"foo\"\n\necho \"bar\"\n\necho \"foo\"\n\necho \"bar\"\n#+END_EXAMPLE\n",
-			"<pre><code class=\"language-sh\">\necho &quot;foo&quot;\n\necho &quot;bar&quot;\n\necho &quot;foo&quot;\n\necho &quot;bar&quot;\n</code></pre>\n",
+			"<pre><code class=\"language-sh\">echo &quot;foo&quot;\n\necho &quot;bar&quot;\n\necho &quot;foo&quot;\n\necho &quot;bar&quot;\n</code></pre>\n",
 		},
 		"QUOTE": {
 			"#+BEGIN_QUOTE\nthis is a quote.\n#+END_QUOTE\n",
@@ -492,39 +492,39 @@ func TestRenderingBlock(t *testing.T) {
 
 		"SRC_INDENTED": {
 			"   #+BEGIN_SRC sh\necho \"foo\"\n   #+END_SRC\n",
-			"<pre><code class=\"language-sh\">\necho &quot;foo&quot;\n</code></pre>\n",
+			"<pre><code class=\"language-sh\">echo &quot;foo&quot;\n</code></pre>\n",
 		},
 		"SRC_MULTILINE_INDENTED": {
 			"\t\t#+BEGIN_SRC sh\necho \"foo\"\necho \"bar\"\n\t\t#+END_SRC\n",
-			"<pre><code class=\"language-sh\">\necho &quot;foo&quot;\necho &quot;bar&quot;\n</code></pre>\n",
+			"<pre><code class=\"language-sh\">echo &quot;foo&quot;\necho &quot;bar&quot;\n</code></pre>\n",
 		},
 		"SRC_MULTILINE_MULTI_NEWLINE_INDENTED": {
 			"     #+BEGIN_SRC sh\necho \"foo\"\n\necho \"bar\"\n     #+END_SRC\n",
-			"<pre><code class=\"language-sh\">\necho &quot;foo&quot;\n\necho &quot;bar&quot;\n</code></pre>\n",
+			"<pre><code class=\"language-sh\">echo &quot;foo&quot;\n\necho &quot;bar&quot;\n</code></pre>\n",
 		},
 		"SRC_MULTILINE_MANY_MULTI_NEWLINE_INDENTED": {
 			" #+BEGIN_SRC sh\necho \"foo\"\n\necho \"bar\"\n\necho \"foo\"\n\necho \"bar\"\n #+END_SRC\n",
-			"<pre><code class=\"language-sh\">\necho &quot;foo&quot;\n\necho &quot;bar&quot;\n\necho &quot;foo&quot;\n\necho &quot;bar&quot;\n</code></pre>\n",
+			"<pre><code class=\"language-sh\">echo &quot;foo&quot;\n\necho &quot;bar&quot;\n\necho &quot;foo&quot;\n\necho &quot;bar&quot;\n</code></pre>\n",
 		},
 		"SRC_MULTILINE_MANY_MULTI_NEWLINE_TEXT_INDENTED": {
 			"\t   \t#+BEGIN_SRC text\n/Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo\nligula nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque\neu, sem. Nulla consequat massa quis enim./\n\n/In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam\ndictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus\nelementum semper nisi./\n\t   \t#+END_SRC",
-			"<pre><code class=\"language-text\">\n/Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo\nligula nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque\neu, sem. Nulla consequat massa quis enim./\n\n/In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam\ndictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus\nelementum semper nisi./\n</code></pre>\n",
+			"<pre><code class=\"language-text\">/Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo\nligula nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque\neu, sem. Nulla consequat massa quis enim./\n\n/In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam\ndictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus\nelementum semper nisi./\n</code></pre>\n",
 		},
 		"EXAMPLE_INDENTED": {
 			"\t\t  #+BEGIN_EXAMPLE sh\necho \"foo\"\n\t\t  #+END_EXAMPLE\n",
-			"<pre><code class=\"language-sh\">\necho &quot;foo&quot;\n</code></pre>\n",
+			"<pre><code class=\"language-sh\">echo &quot;foo&quot;\n</code></pre>\n",
 		},
 		"EXAMPLE_MULTILINE_INDENTED": {
 			"        #+BEGIN_EXAMPLE sh\necho \"foo\"\necho \"bar\"\n        #+END_EXAMPLE\n",
-			"<pre><code class=\"language-sh\">\necho &quot;foo&quot;\necho &quot;bar&quot;\n</code></pre>\n",
+			"<pre><code class=\"language-sh\">echo &quot;foo&quot;\necho &quot;bar&quot;\n</code></pre>\n",
 		},
 		"EXAMPLE_MULTILINE_MULTI_NEWLINE_INDENTED": {
 			" #+BEGIN_EXAMPLE sh\necho \"foo\"\n\necho \"bar\"\n #+END_EXAMPLE\n",
-			"<pre><code class=\"language-sh\">\necho &quot;foo&quot;\n\necho &quot;bar&quot;\n</code></pre>\n",
+			"<pre><code class=\"language-sh\">echo &quot;foo&quot;\n\necho &quot;bar&quot;\n</code></pre>\n",
 		},
 		"EXAMPLE_MULTILINE_MANY_MULTI_NEWLINE_INDENTED": {
 			"   #+BEGIN_EXAMPLE sh\necho \"foo\"\n\necho \"bar\"\n\necho \"foo\"\n\necho \"bar\"\n   #+END_EXAMPLE\n",
-			"<pre><code class=\"language-sh\">\necho &quot;foo&quot;\n\necho &quot;bar&quot;\n\necho &quot;foo&quot;\n\necho &quot;bar&quot;\n</code></pre>\n",
+			"<pre><code class=\"language-sh\">echo &quot;foo&quot;\n\necho &quot;bar&quot;\n\necho &quot;foo&quot;\n\necho &quot;bar&quot;\n</code></pre>\n",
 		},
 		"QUOTE_INDENTED": {
 			"\t\t\t#+BEGIN_QUOTE\nthis is a quote.\n\t\t\t#+END_QUOTE\n",
@@ -616,7 +616,7 @@ func TestRenderingComplexTexts(t *testing.T) {
 	testCases := map[string]testCase{
 		"newline": {
 			"** Start a new paragraph\nAn empty line starts a new paragraph.\n#+BEGIN_SRC text\n/Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo\nligula nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque\neu, sem. Nulla consequat massa quis enim./\n\n/In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam\ndictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus\nelementum semper nisi./\n#+END_SRC\n/Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, sem. Nulla consequat massa quis enim./\n\n/In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi./\n",
-			"<h2 id=\"start-a-new-paragraph\">Start a new paragraph</h2>\n\n<p>An empty line starts a new paragraph.</p>\n\n<pre><code class=\"language-text\">\n/Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo\nligula nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque\neu, sem. Nulla consequat massa quis enim./\n\n/In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam\ndictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus\nelementum semper nisi./\n</code></pre>\n\n<p><em>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, sem. Nulla consequat massa quis enim.</em></p>\n\n<p><em>In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi.</em></p>\n",
+			"<h2 id=\"start-a-new-paragraph\">Start a new paragraph</h2>\n\n<p>An empty line starts a new paragraph.</p>\n\n<pre><code class=\"language-text\">/Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo\nligula nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque\neu, sem. Nulla consequat massa quis enim./\n\n/In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam\ndictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus\nelementum semper nisi./\n</code></pre>\n\n<p><em>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, sem. Nulla consequat massa quis enim.</em></p>\n\n<p><em>In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi.</em></p>\n",
 		},
 	}
 	testOrgCommon(testCases, t)

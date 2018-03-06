@@ -1,16 +1,16 @@
 {
 	"ImportPath": "github.com/chaseadamsio/goorgeous",
-	"GoVersion": "go1.9",
-	"GodepVersion": "v79",
+	"GoVersion": "go1.10",
+	"GodepVersion": "v80",
 	"Deps": [
 		{
 			"ImportPath": "github.com/russross/blackfriday",
-			"Comment": "v1.5-7-g6d1ef89",
-			"Rev": "6d1ef893fcb01b4f50cb6e57ed7df3e2e627b6b2"
+			"Comment": "v1.5.1",
+			"Rev": "55d61fa8aa702f59229e6cff85793c22e580eaf5"
 		},
 		{
 			"ImportPath": "github.com/shurcooL/sanitized_anchor_name",
-			"Rev": "10ef21a441db47d8b13ebcc5fd2310f636973c77"
+			"Rev": "86672fcb3f950f35f2e675df2240550f2a50762f"
 		}
 	]
 }

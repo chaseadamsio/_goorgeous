@@ -122,6 +122,10 @@ func TestIsHeader(t *testing.T) {
 		{"#+ TITLE", false},
 		{"# TITLE", false},
 		{"TITLE", false},
+		{"#+title", true},
+		{"#+ title", false},
+		{"# title", false},
+		{"title", false},
 	}
 
 	for _, tc := range testCases {
@@ -542,6 +546,111 @@ func TestRenderingBlock(t *testing.T) {
 			"   #+BEGIN_CENTER\nthis is a\nmulti-lined centered block.\n   #+END_CENTER\n",
 			"<center>\n<p>\nthis is a\n</p>\n<p>\nmulti-lined centered block.\n</p>\n</center>\n",
 		},
+		"SRC_lowercase": {
+			"#+begin_src sh\necho \"foo\"\n#+end_src\n",
+			"<pre><code class=\"language-sh\">echo &quot;foo&quot;\n</code></pre>\n",
+		},
+		"SRC_MULTILINE_lowercase": {
+			"#+begin_src sh\necho \"foo\"\necho \"bar\"\n#+end_src\n",
+			"<pre><code class=\"language-sh\">echo &quot;foo&quot;\necho &quot;bar&quot;\n</code></pre>\n",
+		},
+		"SRC_MULTILINE_MULTI_NEWLINE_lowercase": {
+			"#+begin_src sh\necho \"foo\"\n\necho \"bar\"\n#+end_src\n",
+			"<pre><code class=\"language-sh\">echo &quot;foo&quot;\n\necho &quot;bar&quot;\n</code></pre>\n",
+		},
+		"SRC_MULTILINE_MANY_MULTI_NEWLINE_lowercase": {
+			"#+begin_src sh\necho \"foo\"\n\necho \"bar\"\n\necho \"foo\"\n\necho \"bar\"\n#+end_src\n",
+			"<pre><code class=\"language-sh\">echo &quot;foo&quot;\n\necho &quot;bar&quot;\n\necho &quot;foo&quot;\n\necho &quot;bar&quot;\n</code></pre>\n",
+		},
+		"SRC_MULTILINE_MANY_MULTI_NEWLINE_TEXT_lowercase": {
+			"#+begin_src text\n/Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo\nligula nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque\neu, sem. Nulla consequat massa quis enim./\n\n/In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam\ndictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus\nelementum semper nisi./\n#+end_src",
+			"<pre><code class=\"language-text\">/Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo\nligula nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque\neu, sem. Nulla consequat massa quis enim./\n\n/In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam\ndictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus\nelementum semper nisi./\n</code></pre>\n",
+		},
+		"EXAMPLE_lowercase": {
+			"#+begin_example sh\necho \"foo\"\n#+end_example\n",
+			"<pre><code class=\"language-sh\">echo &quot;foo&quot;\n</code></pre>\n",
+		},
+		"EXAMPLE_MULTILINE_lowercase": {
+			"#+begin_example sh\necho \"foo\"\necho \"bar\"\n#+end_example\n",
+			"<pre><code class=\"language-sh\">echo &quot;foo&quot;\necho &quot;bar&quot;\n</code></pre>\n",
+		},
+		"EXAMPLE_MULTILINE_MULTI_NEWLINE_lowercase": {
+			"#+begin_example sh\necho \"foo\"\n\necho \"bar\"\n#+end_example\n",
+			"<pre><code class=\"language-sh\">echo &quot;foo&quot;\n\necho &quot;bar&quot;\n</code></pre>\n",
+		},
+		"EXAMPLE_MULTILINE_MANY_MULTI_NEWLINE_lowercase": {
+			"#+begin_example sh\necho \"foo\"\n\necho \"bar\"\n\necho \"foo\"\n\necho \"bar\"\n#+end_example\n",
+			"<pre><code class=\"language-sh\">echo &quot;foo&quot;\n\necho &quot;bar&quot;\n\necho &quot;foo&quot;\n\necho &quot;bar&quot;\n</code></pre>\n",
+		},
+		"QUOTE_lowercase": {
+			"#+begin_quote\nthis is a quote.\n#+end_quote\n",
+			"<blockquote>\n<p>\nthis is a quote.\n</p>\n</blockquote>\n",
+		},
+		"QUOTE_MULTILINE_lowercase": {
+			"#+begin_quote\nthis is a quote\nwith multiple lines.\n#+end_quote\n",
+			"<blockquote>\n<p>\nthis is a quote\n</p>\n<p>\nwith multiple lines.\n</p>\n</blockquote>\n",
+		},
+		"CENTER_lowercase": {
+			"#+begin_center\nthis is a centered block.\n#+end_center\n",
+			"<center>\n<p>\nthis is a centered block.\n</p>\n</center>\n",
+		},
+		"CENTER_MULTILINE_lowercase": {
+			"#+begin_center\nthis is a\nmulti-lined centered block.\n#+end_center\n",
+			"<center>\n<p>\nthis is a\n</p>\n<p>\nmulti-lined centered block.\n</p>\n</center>\n",
+		},
+
+		"SRC_INDENTED_lowercase": {
+			"   #+begin_src sh\necho \"foo\"\n   #+end_src\n",
+			"<pre><code class=\"language-sh\">echo &quot;foo&quot;\n</code></pre>\n",
+		},
+		"SRC_MULTILINE_INDENTED_lowercase": {
+			"\t\t#+begin_src sh\necho \"foo\"\necho \"bar\"\n\t\t#+end_src\n",
+			"<pre><code class=\"language-sh\">echo &quot;foo&quot;\necho &quot;bar&quot;\n</code></pre>\n",
+		},
+		"SRC_MULTILINE_MULTI_NEWLINE_INDENTED_lowercase": {
+			"     #+begin_src sh\necho \"foo\"\n\necho \"bar\"\n     #+end_src\n",
+			"<pre><code class=\"language-sh\">echo &quot;foo&quot;\n\necho &quot;bar&quot;\n</code></pre>\n",
+		},
+		"SRC_MULTILINE_MANY_MULTI_NEWLINE_INDENTED_lowercase": {
+			" #+begin_src sh\necho \"foo\"\n\necho \"bar\"\n\necho \"foo\"\n\necho \"bar\"\n #+end_src\n",
+			"<pre><code class=\"language-sh\">echo &quot;foo&quot;\n\necho &quot;bar&quot;\n\necho &quot;foo&quot;\n\necho &quot;bar&quot;\n</code></pre>\n",
+		},
+		"SRC_MULTILINE_MANY_MULTI_NEWLINE_TEXT_INDENTED_lowercase": {
+			"\t   \t#+begin_src text\n/Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo\nligula nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque\neu, sem. Nulla consequat massa quis enim./\n\n/In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam\ndictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus\nelementum semper nisi./\n\t   \t#+end_src",
+			"<pre><code class=\"language-text\">/Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo\nligula nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque\neu, sem. Nulla consequat massa quis enim./\n\n/In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam\ndictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus\nelementum semper nisi./\n</code></pre>\n",
+		},
+		"EXAMPLE_INDENTED_lowercase": {
+			"\t\t  #+begin_example sh\necho \"foo\"\n\t\t  #+end_example\n",
+			"<pre><code class=\"language-sh\">echo &quot;foo&quot;\n</code></pre>\n",
+		},
+		"EXAMPLE_MULTILINE_INDENTED_lowercase": {
+			"        #+begin_example sh\necho \"foo\"\necho \"bar\"\n        #+end_example\n",
+			"<pre><code class=\"language-sh\">echo &quot;foo&quot;\necho &quot;bar&quot;\n</code></pre>\n",
+		},
+		"EXAMPLE_MULTILINE_MULTI_NEWLINE_INDENTED_lowercase": {
+			" #+begin_example sh\necho \"foo\"\n\necho \"bar\"\n #+end_example\n",
+			"<pre><code class=\"language-sh\">echo &quot;foo&quot;\n\necho &quot;bar&quot;\n</code></pre>\n",
+		},
+		"EXAMPLE_MULTILINE_MANY_MULTI_NEWLINE_INDENTED_lowercase": {
+			"   #+begin_example sh\necho \"foo\"\n\necho \"bar\"\n\necho \"foo\"\n\necho \"bar\"\n   #+end_example\n",
+			"<pre><code class=\"language-sh\">echo &quot;foo&quot;\n\necho &quot;bar&quot;\n\necho &quot;foo&quot;\n\necho &quot;bar&quot;\n</code></pre>\n",
+		},
+		"QUOTE_INDENTED_lowercase": {
+			"\t\t\t#+begin_quote\nthis is a quote.\n\t\t\t#+end_quote\n",
+			"<blockquote>\n<p>\nthis is a quote.\n</p>\n</blockquote>\n",
+		},
+		"QUOTE_MULTILINE_INDENTED_lowercase": {
+			"      #+begin_quote\nthis is a quote\nwith multiple lines.\n      #+end_quote\n",
+			"<blockquote>\n<p>\nthis is a quote\n</p>\n<p>\nwith multiple lines.\n</p>\n</blockquote>\n",
+		},
+		"CENTER_INDENTED_lowercase": {
+			"\t#+begin_center\nthis is a centered block.\n\t#+end_center\n",
+			"<center>\n<p>\nthis is a centered block.\n</p>\n</center>\n",
+		},
+		"CENTER_MULTILINE_INDENTED_lowercase": {
+			"   #+begin_center\nthis is a\nmulti-lined centered block.\n   #+end_center\n",
+			"<center>\n<p>\nthis is a\n</p>\n<p>\nmulti-lined centered block.\n</p>\n</center>\n",
+		},
 	}
 
 	testOrgCommon(testCases, t)
@@ -607,6 +716,10 @@ func TestRenderingPropertiesDrawer(t *testing.T) {
 			"* Heading\n:PROPERTIES:\n:header-args: :tangle ~/.filename\n:END:\n next block.",
 			"<h1 id=\"heading\">Heading</h1>\n\n<p>next block.</p>\n",
 		},
+		"basic_lowercase": {
+			"* Heading\n:properties:\n:header-args: :tangle ~/.filename\n:end:\n next block.",
+			"<h1 id=\"heading\">Heading</h1>\n\n<p>next block.</p>\n",
+		},
 	}
 
 	testOrgCommon(testCases, t)
@@ -616,6 +729,10 @@ func TestRenderingComplexTexts(t *testing.T) {
 	testCases := map[string]testCase{
 		"newline": {
 			"** Start a new paragraph\nAn empty line starts a new paragraph.\n#+BEGIN_SRC text\n/Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo\nligula nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque\neu, sem. Nulla consequat massa quis enim./\n\n/In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam\ndictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus\nelementum semper nisi./\n#+END_SRC\n/Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, sem. Nulla consequat massa quis enim./\n\n/In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi./\n",
+			"<h2 id=\"start-a-new-paragraph\">Start a new paragraph</h2>\n\n<p>An empty line starts a new paragraph.</p>\n\n<pre><code class=\"language-text\">/Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo\nligula nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque\neu, sem. Nulla consequat massa quis enim./\n\n/In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam\ndictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus\nelementum semper nisi./\n</code></pre>\n\n<p><em>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, sem. Nulla consequat massa quis enim.</em></p>\n\n<p><em>In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi.</em></p>\n",
+		},
+		"newline_lowercase": {
+			"** Start a new paragraph\nAn empty line starts a new paragraph.\n#+begin_src text\n/Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo\nligula nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque\neu, sem. Nulla consequat massa quis enim./\n\n/In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam\ndictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus\nelementum semper nisi./\n#+end_src\n/Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, sem. Nulla consequat massa quis enim./\n\n/In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi./\n",
 			"<h2 id=\"start-a-new-paragraph\">Start a new paragraph</h2>\n\n<p>An empty line starts a new paragraph.</p>\n\n<pre><code class=\"language-text\">/Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo\nligula nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque\neu, sem. Nulla consequat massa quis enim./\n\n/In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam\ndictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus\nelementum semper nisi./\n</code></pre>\n\n<p><em>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, sem. Nulla consequat massa quis enim.</em></p>\n\n<p><em>In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi.</em></p>\n",
 		},
 	}

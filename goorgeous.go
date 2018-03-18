@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"regexp"
+	"strings"
 
 	"github.com/russross/blackfriday"
 	"github.com/shurcooL/sanitized_anchor_name"
@@ -146,19 +147,19 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 			default:
 				continue
 			}
-		case isPropertyDrawer(data) || marker == "PROPERTIES":
+		case isPropertyDrawer(data) || strings.EqualFold(marker, "PROPERTIES"):
 			if marker == "" {
 				marker = "PROPERTIES"
 			}
-			if bytes.Equal(data, []byte(":END:")) {
+			if bytes.EqualFold(data, []byte(":END:")) {
 				marker = ""
 			}
 			continue
 		case isBlock(data) || marker != "":
 			matches := reBlock.FindSubmatch(data)
 			if len(matches) > 0 {
-				if string(matches[1]) == "END" {
-					switch marker {
+				if bytes.EqualFold(matches[1], []byte("END")) {
+					switch strings.ToUpper(marker) {
 					case "QUOTE":
 						var tmpBuf bytes.Buffer
 						p.inline(&tmpBuf, tmpBlock.Bytes())
@@ -180,7 +181,7 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 
 			}
 			if marker != "" {
-				if marker != "SRC" && marker != "EXAMPLE" {
+				if !strings.EqualFold(marker, "SRC") && !strings.EqualFold(marker, "EXAMPLE") {
 					var tmpBuf bytes.Buffer
 					tmpBuf.Write([]byte("<p>\n"))
 					p.inline(&tmpBuf, data)
@@ -189,7 +190,7 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 					tmpBlock.Write(tmpBuf.Bytes())
 
 				} else {
-					if !(tmpBlock.Len() == 0 && (marker == "SRC" || marker == "EXAMPLE")) {
+					if !(tmpBlock.Len() == 0 && (strings.EqualFold(marker, "SRC") || strings.EqualFold(marker, "EXAMPLE"))) {
 						tmpBlock.WriteByte('\n')
 					}
 					tmpBlock.Write(data)
@@ -412,8 +413,10 @@ func (p *parser) generateHeadline(out *bytes.Buffer, data []byte) {
 	p.r.Header(out, generate, level, headlineID)
 }
 
+var reStatus = regexp.MustCompile(`(?i)(todo|done)`)
+
 func hasStatus(data []byte) bool {
-	return bytes.Contains(data, []byte("TODO")) || bytes.Contains(data, []byte("DONE"))
+	return reStatus.Match(data)
 }
 
 func hasPriority(char byte) bool {
@@ -521,11 +524,11 @@ func (p *parser) generateTable(output *bytes.Buffer, data []byte) {
 // ~~ Property Drawers
 
 func isPropertyDrawer(data []byte) bool {
-	return bytes.Equal(data, []byte(":PROPERTIES:"))
+	return bytes.EqualFold(data, []byte(":PROPERTIES:"))
 }
 
 // ~~ Dynamic Blocks
-var reBlock = regexp.MustCompile(`^\s*#\+(BEGIN|END)_(\w+)\s*([0-9A-Za-z_\-]*)?`)
+var reBlock = regexp.MustCompile(`(?i)^\s*#\+(BEGIN|END)_(\w+)\s*([0-9A-Za-z_\-]*)?`)
 
 func isBlock(data []byte) bool {
 	return reBlock.Match(data)

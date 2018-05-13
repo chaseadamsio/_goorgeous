@@ -265,7 +265,6 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 				tmpBlock.WriteString(" value=\"")
 				tmpBlock.Write(matches[2])
 				tmpBlock.WriteString("\"")
-				matches[3] = matches[3][1:]
 			}
 			p.inline(&work, matches[3])
 			tmpBlock.WriteString(">")
@@ -453,7 +452,7 @@ func isExampleLine(data []byte) bool {
 }
 
 // ~~ Ordered Lists
-var reOrderedList = regexp.MustCompile(`^(\s*)\d+\.\s+\[?@?(\d*)\]?(.+)`)
+var reOrderedList = regexp.MustCompile(`^(\s*)\d+\.\s+(?:\[@(\d+)\])*(.+)`)
 
 func isOrderedList(data []byte) bool {
 	return reOrderedList.Match(data)

@@ -395,6 +395,14 @@ func TestRenderingLinksAndImages(t *testing.T) {
 			"1. this\n2. is\n3. an\n4. ordered\n5. list with [[https://github.com/chaseadamsio/goorgeous][goorgeous by chaseadamsio]] as a link\n",
 			"<ol>\n<li>this</li>\n<li>is</li>\n<li>an</li>\n<li>ordered</li>\n<li>list with <a href=\"https://github.com/chaseadamsio/goorgeous\" title=\"goorgeous by chaseadamsio\">goorgeous by chaseadamsio</a> as a link</li>\n</ol>\n",
 		},
+		"link-inside-simple-ol-at-start": {
+			"1. [[https://github.com/chaseadamsio/goorgeous][goorgeous by chaseadamsio]] as a link\n",
+			"<ol>\n<li><a href=\"https://github.com/chaseadamsio/goorgeous\" title=\"goorgeous by chaseadamsio\">goorgeous by chaseadamsio</a> as a link</li>\n</ol>\n",
+		},
+		"link-inside-simple-ol-at-start-with-changed-number": {
+			"1. [@3][[https://github.com/chaseadamsio/goorgeous][goorgeous by chaseadamsio]] as a link\n",
+			"<ol>\n<li value=\"3\"><a href=\"https://github.com/chaseadamsio/goorgeous\" title=\"goorgeous by chaseadamsio\">goorgeous by chaseadamsio</a> as a link</li>\n</ol>\n",
+		},
 		"link-inside-simple-ul": {
 			"- this\n- is\n- an\n- unordered\n- list with [[https://github.com/chaseadamsio/goorgeous][goorgeous by chaseadamsio]] as a link\n",
 			"<ul>\n<li>this</li>\n<li>is</li>\n<li>an</li>\n<li>unordered</li>\n<li>list with <a href=\"https://github.com/chaseadamsio/goorgeous\" title=\"goorgeous by chaseadamsio\">goorgeous by chaseadamsio</a> as a link</li>\n</ul>\n",
@@ -586,7 +594,7 @@ func TestLists(t *testing.T) {
 		},
 		"ol-change-number": {
 			"1. this\n2. is\n3. [@10] changed to 10\n4. ordered\n5. list\n",
-			"<ol>\n<li>this</li>\n<li>is</li>\n<li value=\"10\">changed to 10</li>\n<li>ordered</li>\n<li>list</li>\n</ol>\n",
+			"<ol>\n<li>this</li>\n<li>is</li>\n<li value=\"10\"> changed to 10</li>\n<li>ordered</li>\n<li>list</li>\n</ol>\n",
 		},
 		"simple-ul-plus-sign": {
 			"+ this\n+ is\n+ an\n+ unordered\n+ list\n",

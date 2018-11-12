@@ -338,46 +338,53 @@ func OrgOptions(input []byte, renderer blackfriday.Renderer) []byte {
 
 // Headlines
 func isHeadline(data []byte) bool {
-	if !charMatches(data[0], '*') {
-		return false
-	}
 	level := 0
-	for level < 6 && charMatches(data[level], '*') {
+	for _, c := range data {
+		if !charMatches(c, '*') {
+			break
+		}
 		level++
 	}
-	return charMatches(data[level], ' ')
+	return level != 0
 }
 
 func (p *parser) generateHeadline(out *bytes.Buffer, data []byte) {
-	level := 1
 	status := ""
 	priority := ""
 
-	for level < 6 && data[level] == '*' {
+	level := 0
+	for _, c := range data {
+		if !charMatches(c, '*') {
+			break
+		}
 		level++
+	}
+
+	// Clamp level to 6 because that's as many heading levels as we support
+	if level > 6 {
+		level = 6
 	}
 
 	start := skipChar(data, level, ' ')
 
 	data = data[start:]
-	i := 0
 
 	// Check if has a status so it can be rendered as a separate span that can be hidden or
 	// modified with CSS classes
-	if hasStatus(data[i:4]) {
-		status = string(data[i:4])
-		i += 5 // one extra character for the next whitespace
+	if len(data) > 4 && hasStatus(data[:4]) && isSpace(data[4]) {
+		status = string(data[:4])
+		data = data[5:]
 	}
 
 	// Check if the next byte is a priority marker
-	if data[i] == '[' && hasPriority(data[i+1]) {
-		priority = string(data[i+1])
-		i += 4 // for "[c]" + ' '
+	if len(data) > 1 && data[0] == '[' && hasPriority(data[1]) {
+		priority = string(data[1])
+		data = data[4:] // for "[c]" + ' '
 	}
 
-	tags, tagsFound := findTags(data, i)
+	tags, tagsFound := findTags(data)
 
-	headlineID := sanitized_anchor_name.Create(string(data[i:]))
+	headlineID := sanitized_anchor_name.Create(string(data))
 
 	generate := func() bool {
 		dataEnd := len(data)
@@ -385,7 +392,7 @@ func (p *parser) generateHeadline(out *bytes.Buffer, data []byte) {
 			dataEnd = tagsFound
 		}
 
-		headline := bytes.TrimRight(data[i:dataEnd], " \t")
+		headline := bytes.TrimRight(data[:dataEnd], " \t")
 
 		if status != "" {
 			out.WriteString("<span class=\"todo " + status + "\">" + status + "</span>")
@@ -420,11 +427,11 @@ func hasPriority(char byte) bool {
 	return (charMatches(char, 'A') || charMatches(char, 'B') || charMatches(char, 'C'))
 }
 
-func findTags(data []byte, start int) ([]string, int) {
+func findTags(data []byte) ([]string, int) {
 	tags := []string{}
 	tagOpener := 0
 	tagMarker := tagOpener
-	for tIdx := start; tIdx < len(data); tIdx++ {
+	for tIdx := 0; tIdx < len(data); tIdx++ {
 		if tagMarker > 0 && data[tIdx] == ':' {
 			tags = append(tags, string(data[tagMarker+1:tIdx]))
 			tagMarker = tIdx

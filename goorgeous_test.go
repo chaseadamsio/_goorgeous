@@ -216,6 +216,16 @@ func TestRenderingHeadings(t *testing.T) {
 			"*** *a h3* heading\n",
 			"<h3 id=\"a-h3-heading\"><strong>a h3</strong> heading</h3>\n",
 		},
+
+		// Edge cases
+		"h1-todo": {
+			"* TODO\n",
+			"<h1 id=\"todo\">TODO</h1>\n",
+		},
+		"h1-empty": {
+			"* \n",
+			"<h1></h1>\n",
+		},
 	}
 
 	testOrgCommon(testCases, t)

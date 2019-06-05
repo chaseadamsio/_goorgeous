@@ -11,12 +11,11 @@ const (
 	itemPlus
 	itemColon
 	itemSpace
-	itemOpenBracket
-	itemCloseBracket
+	itemBracket
 	itemBacktick
-	itemOpenParenthesis
-	itemCloseParenthesis
+	itemParenthesis
 	itemEqual
+	itemPipe
 	itemDash
 	itemHash
 	itemText
@@ -33,11 +32,12 @@ var charToItem = map[rune]itemType{
 	':':  itemColon,
 	' ':  itemSpace,
 	'`':  itemBacktick,
-	'[':  itemOpenBracket,
-	']':  itemCloseBracket,
-	'(':  itemOpenParenthesis,
-	')':  itemCloseParenthesis,
+	'[':  itemBracket,
+	']':  itemBracket,
+	'(':  itemParenthesis,
+	')':  itemParenthesis,
 	'=':  itemEqual,
+	'|':  itemPipe,
 	'-':  itemDash,
 	'#':  itemHash,
 }
@@ -76,6 +76,7 @@ func (l lexer) emitEOF() {
 	l.items <- item{itemEOF, "", l.pos, l.pos, l.Line}
 }
 
+// TODO maybe rename this to tokenizer
 func (l *lexer) run() {
 	inTextBlock := false
 	var char rune

@@ -43,19 +43,19 @@ func mkBacktick(pos, offset, line int) item {
 }
 
 func mkOpenBracket(pos, offset, line int) item {
-	return mkItem(itemOpenBracket, "[", pos, offset, line)
+	return mkItem(itemBracket, "[", pos, offset, line)
 }
 
 func mkCloseBracket(pos, offset, line int) item {
-	return mkItem(itemCloseBracket, "]", pos, offset, line)
+	return mkItem(itemBracket, "]", pos, offset, line)
 }
 
 func mkOpenParenthesis(pos, offset, line int) item {
-	return mkItem(itemOpenParenthesis, "(", pos, offset, line)
+	return mkItem(itemParenthesis, "(", pos, offset, line)
 }
 
 func mkCloseParenthesis(pos, offset, line int) item {
-	return mkItem(itemCloseParenthesis, ")", pos, offset, line)
+	return mkItem(itemParenthesis, ")", pos, offset, line)
 }
 
 func mkEqual(pos, offset, line int) item {
@@ -68,6 +68,10 @@ func mkDash(pos, offset, line int) item {
 
 func mkHash(pos, offset, line int) item {
 	return mkItem(itemHash, "#", pos, offset, line)
+}
+
+func mkPipe(pos, offset, line int) item {
+	return mkItem(itemPipe, "|", pos, offset, line)
 }
 
 func mkText(val string, pos, offset, line int) item {
@@ -311,6 +315,85 @@ var lexTests = []testCase{
 			mkSpace(10, 38, 4),
 			mkText("else", 11, 39, 4),
 			mkEOF(43, 43, 4),
+		},
+	},
+	{
+		"table",
+		"| Name  | Phone | Age |\n|-------+-------+-----|\n| Peter |  1234 |  17 |\n| Anna  |  4321 |  25 |\n",
+		[]item{
+			mkPipe(1, 0, 1),
+			mkSpace(2, 1, 1),
+			mkText("Name", 3, 2, 1),
+			mkSpace(7, 6, 1),
+			mkSpace(8, 7, 1),
+			mkPipe(9, 8, 1),
+			mkSpace(10, 9, 1),
+			mkText("Phone", 11, 10, 1),
+			mkSpace(16, 15, 1),
+			mkPipe(17, 16, 1),
+			mkSpace(18, 17, 1),
+			mkText("Age", 19, 18, 1),
+			mkSpace(22, 21, 1),
+			mkPipe(23, 22, 1),
+			mkNewline(24, 23, 1),
+			mkPipe(1, 24, 2),
+			mkDash(2, 25, 2),
+			mkDash(3, 26, 2),
+			mkDash(4, 27, 2),
+			mkDash(5, 28, 2),
+			mkDash(6, 29, 2),
+			mkDash(7, 30, 2),
+			mkDash(8, 31, 2),
+			mkPlus(9, 32, 2),
+			mkDash(10, 33, 2),
+			mkDash(11, 34, 2),
+			mkDash(12, 35, 2),
+			mkDash(13, 36, 2),
+			mkDash(14, 37, 2),
+			mkDash(15, 38, 2),
+			mkDash(16, 39, 2),
+			mkPlus(17, 40, 2),
+			mkDash(18, 41, 2),
+			mkDash(19, 42, 2),
+			mkDash(20, 43, 2),
+			mkDash(21, 44, 2),
+			mkDash(22, 45, 2),
+			mkPipe(23, 46, 2),
+			mkNewline(24, 47, 2),
+			mkPipe(1, 48, 3),
+			mkSpace(2, 49, 3),
+			mkText("Peter", 3, 50, 3),
+			mkSpace(8, 55, 3),
+			mkPipe(9, 56, 3),
+			mkSpace(10, 57, 3),
+			mkSpace(11, 58, 3),
+			mkText("1234", 12, 59, 3),
+			mkSpace(16, 63, 3),
+			mkPipe(17, 64, 3),
+			mkSpace(18, 65, 3),
+			mkSpace(19, 66, 3),
+			mkText("17", 20, 67, 3),
+			mkSpace(22, 69, 3),
+			mkPipe(23, 70, 3),
+			mkNewline(24, 71, 3),
+			mkPipe(1, 72, 4),
+			mkSpace(2, 73, 4),
+			mkText("Anna", 3, 74, 4),
+			mkSpace(7, 78, 4),
+			mkSpace(8, 79, 4),
+			mkPipe(9, 80, 4),
+			mkSpace(10, 81, 4),
+			mkSpace(11, 82, 4),
+			mkText("4321", 12, 83, 4),
+			mkSpace(16, 87, 4),
+			mkPipe(17, 88, 4),
+			mkSpace(18, 89, 4),
+			mkSpace(19, 90, 4),
+			mkText("25", 20, 91, 4),
+			mkSpace(22, 93, 4),
+			mkPipe(23, 94, 4),
+			mkNewline(24, 95, 4),
+			mkEOF(96, 96, 4),
 		},
 	},
 }

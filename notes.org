@@ -1,0 +1,42 @@
+#+TITLE: Notes
+
+
+* Considering the Interface
+
+With ASTs, every type of node may have different properties. In a language like JavaScript, a plain old JS object will satisfy an interface because the object can be switched on typ when transforming and it can have abitrary properties and methods that can be called on that node.
+
+With Go, a struct can not have arbitrary properties or methods but it _can_ satisfy an interface, in which case that interface can be used as an argument to a function call.
+
+In Org mode there are essentially two top-level types of nodes that need to be considered: block-level and inline-level.
+
+** (Greater) Block Level nodes
+
+- Section (container for other block level nodes)
+- Paragraph
+- Headline
+- Greater Block (such as code)
+- Dynamic Block
+- Footnote Definition
+- Inline Task
+- List
+- Property Drawer
+- Table
+
+** Elements (inline)
+
+- Babel call
+- Block? (seems counter-intuitive that these can both be greater and elements)
+- Clock
+- Comment
+- Fixed Width Area
+- Keyword
+- LaTeX Environments
+- Node Properties (in Property Drawers)
+- Horizontal Rule
+- Text Markup
+
+
+Go through all of the tokens in the tokens slice.
+- if you hit a new block level element, check if currently in a block and if that block could be a vaild parent for that element
+    - if not, start a new block of whatever that type is
+    - if it is, walk the children

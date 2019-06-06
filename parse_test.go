@@ -1,72 +1,41 @@
 package goorgeous
 
 import (
+	"fmt"
+	"strings"
 	"testing"
 )
 
 func TestParse(t *testing.T) {
-
-	// type parseTest struct {
-	// 	name     string
-	// 	value    string
-	// 	expected *Tree
-	// }
-
-	n := Parse("* headline")
-	if n.typ != NodeRoot {
-		t.Errorf("expected parent to be of type NodeRoot")
+	for _, tc := range lexTests {
+		if !strings.HasPrefix(tc.name, "headline - deep") {
+			continue
+		}
+		t.Run(tc.name, func(t *testing.T) {
+			fmt.Println("children for", tc.name)
+			// _ = Parse(tc.input)
+			ast := Parse(tc.input)
+			fmt.Println(ast)
+			// if tc.ast != nil {
+			// 	for _, child := range ast.Children() {
+			// 		var path []NodeType
+			// 	}
+			// }
+		})
 	}
-	// t.Log("\n\nn is:", fmt.Sprintf("%+v", n.start))
-	// t.Log("\n\nn is:", fmt.Sprintf("%+v", n.end))
+}
 
-	// expected := []Tree{
-	// 	Tree{
-	// 		typ: NodeHeadline,
-	// 	},
-	// }
-	// if !cmp.Equal(n.children, expected) {
-	// 	t.Errorf("Actual: %#v\n\nExpected:%#v", n.children, expected)
-	// }
-	// t.Log("second parse:")
-	// n = Parse("* headline\nthis is a new line")
-	// t.Log("\n\nn is:", fmt.Sprintf("%+v", n.children))
-
-	// n = Parse("* headline\n\n\nthis is a new line")
-	// t.Log("\n\nn is:", fmt.Sprintf("%+v", n.children))
-
-	// t.Log("fourth parse:")
-	// n = Parse("* headline\n\n\n\n\n\n\nthis is a new line")
-	// t.Log("\n\nn is:", fmt.Sprintf("%+v", n.children))
-	// testCases := []parseTest{
-	// 	{"basic", "* headline", &Tree{
-	// 		Root: &ListNode{
-	// 			NodeType: NodeRoot,
-	// 			Nodes: []Node{
-	// 				&NodeHeadline{
-	// 					Nodes: []Node{
-	// 						&ListNode{
-	// 							NodeType: NodeText,
-	// 							value:    " headline",
-	// 						},
-	// 					},
-	// 				},
-	// 			},
-	// 		},
-	// 	}},
-	// }
-
-	// for _, _ := range testCases {
-	// 	tree := Parse(tc.value)
-	// t.Log(tree, "\nexpected:\n", tc.expected)
-	// 	t.Log(*tree.Root.Nodes)
-	// 	for _, node := range tree.Root.Nodes {
-	// 		t.Log(node)
-	// 	}
-	// }
-	// tree := Parse("* headline")
-
-	// tree = Parse("*not a headline*")
-
-	// tree := Parse("this is*not a headline*")
-
+func getPathForNode(n Node, path []NodeType) []NodeType {
+	path = append(path, n.Type())
+	if n.Parent().Type() != "Root" {
+		path = getPathForNode(n.Parent(), path)
+	} else {
+		var reversedPath []NodeType
+		path = append(path, "Root")
+		for idx := len(path) - 1; idx >= 0; idx-- {
+			reversedPath = append(reversedPath, path[idx])
+		}
+		return reversedPath
+	}
+	return path
 }

@@ -1,128 +1,155 @@
 package goorgeous
 
-// Tree is the general shape of a node
-type Tree struct {
-	typ        NodeType
-	items      []item
-	attributes map[string]interface{}
-	children   []Tree
-	currPos    int
-	start      Pos
-	end        Pos
+type parser struct {
+	depth int
 }
 
-// recursively walk through each token and return a node
-func walk() {
+func (p *parser) peekToNewLine(items []item) (end int) {
+	end = 0
+	itemsLength := len(items)
+	for end < itemsLength {
+		if items[end].typ == itemEOF {
+			return end
+		}
+		if items[end].typ == itemNewLine {
+			return end
+		}
+		end++
+	}
+	return itemsLength
+}
+
+func (p *parser) peekToNextBlock(items []item) (end int) {
+	end = 0
+	itemsLength := len(items)
+	for end < itemsLength {
+		if items[end].typ == itemEOF {
+			return end
+		}
+		if end > 0 && items[end-1].typ == itemNewLine && isHeadline(items[end:], items[end]) {
+			depth := headlineDepth(items[end:])
+			if p.depth < depth {
+				end++
+				continue
+			} else {
+				return end - 2
+			}
+		}
+
+		end++
+	}
+	return itemsLength
+}
+
+func walkElements(parent Node, items []item) {
 
 }
 
-// Parse takes an input string and returns a new Tree
-func Parse(input string) *Tree {
-	l := lex(input)
-
-	root := &Tree{
-		typ: NodeRoot,
-		start: Pos{
-			Column: 1, Offset: 0, Line: 1,
-		},
-	}
-
-	for item := range l.items {
-		root.items = append(root.items, item)
-	}
-
-	root.end = Pos{
-		Column: root.items[len(root.items)-1].Column,
-		Offset: root.items[len(root.items)-1].Offset,
-		Line:   root.items[len(root.items)-1].Line,
-	}
-
+// recursively walk through each token
+func (p *parser) walk(parent Node, items []item) {
 	// create top-level paragraph nodes by creating nodes
 	// on block level elements
 	start := 0
-	for idx, token := range root.items {
-		root.currPos = idx
-		if token.typ == itemNewLine {
-			// previous token was a newlne, don't create a new block
-			if len(root.items) > idx-1 && root.items[idx-1].typ == itemNewLine {
-				start = idx
-				continue
+	current := 0
+	itemsLength := len(items)
+	for current < itemsLength {
+		token := items[current]
+
+		if token.typ == itemAsterisk && isHeadline(items[current:], token) {
+			depth := headlineDepth(items[current:])
+			if p.depth < depth {
+				p.depth = depth
 			}
 
-			child := processNode(root, start)
+			if p.depth > depth {
+				for depth <= p.depth {
+					parent = parent.Parent()
+					p.depth--
+				}
+			}
+			spaceWidth := 1
 
-			child.parse()
-			root.children = append(root.children, child)
-			start = root.currPos
+			peekStart := current + depth + spaceWidth
+
+			headlineEnd := p.peekToNewLine(items)
+
+			// probably looked at this too long but there's a time when a headline is getting
+			// parsed wrond so we still get "* " and have an empty headline. I think this is
+			// probably because of the way we're accessing the slice in the previous call
+			// (as an example, if you comment this out and run the headline - deep test you'll)
+			// see the extra headline that I'm pretty sure is a result of off by a few errors in
+			// the items sent to walk in the "in depth 2" section
+			if len(items[peekStart:peekStart+headlineEnd]) == 0 {
+				current++
+				continue
+			}
+			node := newHeadlineNode(current, peekStart+headlineEnd, depth, parent, items[peekStart:peekStart+headlineEnd])
+
+			end := p.peekToNextBlock(items[peekStart+headlineEnd:])
+			parent.Append(node)
+
+			afterHeadlineNewLine := peekStart + headlineEnd
+
+			if afterHeadlineNewLine < peekStart+end {
+				p.walk(node, items[afterHeadlineNewLine:peekStart+end])
+				current = peekStart + end
+				start = current
+			} else {
+				current = afterHeadlineNewLine
+				start = current
+			}
+
+		} else if token.typ == itemNewLine {
+			if start < current {
+				// node := newSectionNode()
+				node := newTextNode(start, current, parent, items)
+				// node.Append(textNode)
+				parent.Append(node)
+				start = current
+			}
+			current++
+			start = current
+		} else if token.typ == itemEOF {
+			if start < current {
+				node := newTextNode(start, current, parent, items)
+				parent.Append(node)
+			}
+			return
+			// current++
+			// start = current
+		} else {
+			current++
 		}
+
+	}
+}
+
+func findParentInTree(n Node, typ NodeType) bool {
+	if n.Parent().Type() != "Root" && n.Parent().Type() != typ {
+		findParentInTree(n.Parent(), typ)
+	}
+	return n.Parent().Type() == typ
+}
+
+// Parse takes an input string and returns a new Tree
+func Parse(input string) *RootNode {
+	l := lex(input)
+	p := &parser{depth: 0}
+	// items is a slice that contains slices of items that are based on newline.
+	var items []item
+
+	root := newRootNode()
+
+	// gather all of the tokens
+	for item := range l.items {
+		items = append(items, item)
 	}
 
-	if root.currPos > start {
-		child := processNode(root, start)
-		child.parse()
-		root.children = append(root.children, child)
-	}
+	p.walk(root, items)
 
 	return root
 }
 
-func processNode(t *Tree, start int) Tree {
-	if isHeadline(t.items) {
-		t.headline(start)
-	}
-	return Tree{
-		typ:   NodeParagraph,
-		items: t.items[start : t.currPos+1],
-	}
-
-}
-
-func (t *Tree) headline(start int) Tree {
-	depth := headlineDepth(t.items)
-	itemStart := start + depth + 1 // current + depth + 1 for trailing space
-	return Tree{
-		typ: NodeHeadline,
-		attributes: map[string]interface{}{
-			"depth": depth,
-		},
-		items: t.items[itemStart : t.currPos-1],
-		start: Pos{
-			Column: t.items[0].Column,
-			Offset: t.items[0].Offset,
-			Line:   t.items[0].Line,
-		},
-	}
-}
-
-func (t *Tree) parse() {
-	// start := 0
-	// inText := false
-	// text := ""
-	// for idx, _ := range t.items {
-	// 	t.currPos = idx
-	// if token.typ == itemText || token.typ == itemSpace {
-	// 	inText = true
-	// 	text = text + token.val
-	// } else {
-	// 	inText = false
-	// }
-
-	// if !inText && text != "" {
-	// 	child := Tree{
-	// 		typ:   NodeText,
-	// 		items: nil,
-	// 	}
-	// 	n.children = append(n.children, child)
-	// }
-	// start = idx
-	// }
-
-	// if n.currPos > start {
-	// 	child := Tree{
-	// 		typ:   NodeParagraph,
-	// 		items: n.items[start:n.currPos],
-	// 	}
-	// 	// child.parse()
-	// 	n.children = append(n.children, child)
-	// }
+func Append(children []Node, child Node) []Node {
+	return append(children, child)
 }

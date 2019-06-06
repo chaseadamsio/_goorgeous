@@ -2,6 +2,45 @@ package goorgeous
 
 type itemType int
 
+func (i itemType) String() string {
+	var val string
+	switch i {
+	case itemNewLine:
+		val = "NewLine"
+	case itemAsterisk:
+		val = "Asterisk"
+	case itemTilde:
+		val = "Tilde"
+	case itemForwardSlash:
+		val = "ForwardSlash"
+	case itemUnderscore:
+		val = "Underscore"
+	case itemPlus:
+		val = "Plus"
+	case itemColon:
+		val = "Colon"
+	case itemSpace:
+		val = "Space"
+	case itemBracket:
+		val = "Bracket"
+	case itemBacktick:
+		val = "Backtick"
+	case itemParenthesis:
+		val = "Parenthesis"
+	case itemEqual:
+		val = "Equal"
+	case itemPipe:
+		val = "Pipe"
+	case itemDash:
+		val = "Dash"
+	case itemHash:
+		val = "Hash"
+	case itemEOF:
+		val = "EOF"
+	}
+	return val
+}
+
 const (
 	itemNewLine itemType = iota
 	itemAsterisk

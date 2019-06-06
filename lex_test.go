@@ -1,6 +1,7 @@
 package goorgeous
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -45,8 +46,22 @@ func TestLex(t *testing.T) {
 			}
 			if !equal(foundItems, tc.items, true, t) {
 				t.Errorf("got\n\t%v\nexpected\n\t%v", foundItems, tc.items)
+
+				mkItemsText(foundItems)
 			}
 
 		})
 	}
+}
+
+func mkItemsText(items []item) {
+	fmt.Println("[]item{")
+	for _, item := range items {
+		if item.typ == itemText {
+			fmt.Printf("mkText(\"%s\", %d, %d, %d),\n", item.val, item.Column, item.Offset, item.Line)
+		} else {
+			fmt.Printf("mk%s(%d, %d, %d),\n", item.typ, item.Column, item.Offset, item.Line)
+		}
+	}
+	fmt.Println("},")
 }

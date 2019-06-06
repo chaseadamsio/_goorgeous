@@ -71,7 +71,7 @@ func (p *parser) walk(parent Node, items []item) {
 
 			peekStart := current + depth + spaceWidth
 
-			headlineEnd := p.peekToNewLine(items)
+			headlineEnd := p.peekToNewLine(items[peekStart:])
 
 			// probably looked at this too long but there's a time when a headline is getting
 			// parsed wrond so we still get "* " and have an empty headline. I think this is
@@ -85,7 +85,7 @@ func (p *parser) walk(parent Node, items []item) {
 			}
 			node := newHeadlineNode(current, peekStart+headlineEnd, depth, parent, items[peekStart:peekStart+headlineEnd])
 
-			end := p.peekToNextBlock(items[peekStart+headlineEnd:])
+			end := p.peekToNextBlock(items[headlineEnd:])
 			parent.Append(node)
 
 			afterHeadlineNewLine := peekStart + headlineEnd

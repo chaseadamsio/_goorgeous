@@ -40,3 +40,13 @@ Go through all of the tokens in the tokens slice.
 - if you hit a new block level element, check if currently in a block and if that block could be a vaild parent for that element
     - if not, start a new block of whatever that type is
     - if it is, walk the children
+
+* Preview Org
+
+M-: to get eval in the minibuffer, then run this command:
+
+#+BEGIN_SRC emacs-lisp
+(org-element-parse-buffer)
+#+END_SRC
+
+It will output

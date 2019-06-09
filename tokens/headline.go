@@ -2,21 +2,26 @@ package tokens
 
 import "github.com/chaseadamsio/goorgeous/lex"
 
-// a block is a headline if it starts with 1-6 asterisks followed by a space
+const maxHeadlineDepth = 6
+
+// IsHeadline determines inf a collection of items is a headline
 func IsHeadline(items []lex.Item) bool {
+	current := 0
+	itemsLength := len(items)
 	token := items[0]
 	// first item has to be an asterisk
-	if len(items) > 0 && token.Type() != lex.ItemAsterisk { // true and false = false
+	if !token.IsAsterisk() {
 		return false
 	}
-	for idx := 0; idx <= 6; idx++ { // idx = 1
-		if len(items) <= idx { // 22 < 1 => false
-			return false
-		}
-		if items[idx].IsAsterisk() { // " "
+	for current <= maxHeadlineDepth && current < itemsLength {
+		currItem := items[current]
+		// it's still a potential heading
+		if currItem.IsAsterisk() {
+			current++
 			continue
 		}
-		if items[idx].Type() == lex.ItemSpace { // true
+		// space terminates the headline "stars"
+		if currItem.IsSpace() {
 			return true
 		}
 		return false
@@ -24,14 +29,18 @@ func IsHeadline(items []lex.Item) bool {
 	return false
 }
 
+// HeadlineDepth determines the depth of a headline
 func HeadlineDepth(items []lex.Item) int {
 	depth := 0
-	for depth <= 6 { // 1
-		if len(items) > depth && items[depth].Type() == lex.ItemAsterisk { //
+	itemsLength := len(items)
+	for depth <= maxHeadlineDepth {
+		hasNextItem := itemsLength > depth
+		currItem := items[depth]
+		if hasNextItem && currItem.IsAsterisk() {
 			depth++
 			continue
 		}
-		if len(items) > depth && items[depth].Type() == lex.ItemSpace {
+		if hasNextItem && currItem.IsSpace() {
 			return depth
 		}
 	}

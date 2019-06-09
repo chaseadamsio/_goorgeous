@@ -63,7 +63,6 @@ func (n *HeadlineNode) Type() NodeType {
 	return n.NodeType
 }
 
-// Type returns the type of node this is
 func (n *HeadlineNode) String() string {
 	return n.rawvalue
 }

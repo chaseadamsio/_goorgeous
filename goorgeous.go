@@ -6,3 +6,6 @@ package goorgeous
 // continue to walk the text looking for closing marker
 // if we find the closing marker, create a new node
 // if we don't find the closing marker, carry on
+
+func Render() {
+}

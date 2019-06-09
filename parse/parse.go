@@ -19,7 +19,7 @@ func (p *parser) peekToNewLine(items []lex.Item) (end int) {
 			return end
 		}
 		if currItem.IsNewline() {
-			return end + 1 // we don't want to pass the newline character
+			return end // we don't want to pass the newline character
 		}
 		end++
 	}
@@ -50,8 +50,19 @@ func (p *parser) peekToNextBlock(items []lex.Item) (end int) {
 	return itemsLength
 }
 
-func walkElements(parent ast.Node, items []lex.Item) {
-
+func findClosestSectionNode(parent ast.Node) ast.Node {
+	for parent.Type() != "Root" {
+		if parent.Type() == "Section" {
+			return parent
+		}
+		parent = parent.Parent()
+	}
+	if len(parent.Children()) > 0 && parent.Children()[0].Type() == "Section" {
+		return parent.Children()[0]
+	}
+	node := ast.NewSectionNode(parent)
+	parent.Append(node)
+	return node
 }
 
 // recursively walk through each token
@@ -68,6 +79,16 @@ func (p *parser) walk(parent ast.Node, items []lex.Item) {
 			depth := tokens.HeadlineDepth(items[current:])
 
 			if p.depth < depth {
+				// There will always be the chance that content occurs
+				// before a headline, so there's a possiblity that we could be
+				// in a Section. If that's the case, we traverse up to the Root
+				// and reset so that we process the rest of the document properly
+				if p.depth == 0 && parent.Type() != "Root" {
+					for parent.Type() != "Root" {
+						parent = parent.Parent()
+					}
+				}
+				// set the new depth
 				p.depth = depth
 			}
 			spaceWidth := 1
@@ -76,16 +97,6 @@ func (p *parser) walk(parent ast.Node, items []lex.Item) {
 
 			headlineEnd := peekStart + p.peekToNewLine(items[peekStart:])
 
-			// probably looked at this too long but there's a time when a headline is getting
-			// parsed wrond so we still get "* " and have an empty headline. I think this is
-			// probably because of the way we're accessing the slice in the previous call
-			// (as an example, if you comment this out and run the headline - deep test you'll)
-			// see the extra headline that I'm pretty sure is a result of off by a few errors in
-			// the items sent to walk in the "in depth 2" section
-			if len(items[peekStart:headlineEnd]) == 0 {
-				current++
-				continue
-			}
 			node := ast.NewHeadlineNode(current, headlineEnd, depth, parent, items[peekStart:headlineEnd])
 
 			end := headlineEnd + p.peekToNextBlock(items[headlineEnd:])
@@ -101,24 +112,90 @@ func (p *parser) walk(parent ast.Node, items []lex.Item) {
 				start = current
 			}
 
-		} else if token.Type() == lex.ItemNewLine {
-			if start < current {
-				// node := newSectionNode()
-				node := ast.NewTextNode(start, current, parent, items[start:current])
-				// ast.Append(textNode)
+		} else if token.IsNewline() {
+			if start < current && items[current-1].IsNewline() {
+				if parent.Type() != "Section" {
+					parent = findClosestSectionNode(parent)
+				}
+				node := ast.NewParagraphNode(start, current, parent, items[start:current])
 				parent.Append(node)
+				current++
 				start = current
 			}
 			current++
+		} else if tokens.IsOrderedList(token, items, current) {
+			// orderedListEnd := tokens.FindOrderedList(items[current:])
+			// node := ast.NewOrderedListNode(current, orderedListEnd, parent, items[current:current+orderedListEnd])
+			// parent.Append(node)
+			// current = current + orderedListEnd
+			current++
+		} else if tokens.IsUnorderedList(token, items, current) {
+			unorderedListEnd := tokens.FindUnorderedList(items[current:])
+			if parent.Type() != "Section" {
+				parent = findClosestSectionNode(parent)
+			}
+			node := ast.NewUnorderedListNode(current, unorderedListEnd, parent, items[current:current+unorderedListEnd])
+			parent.Append(node)
+			current = current + unorderedListEnd
 			start = current
-		} else if token.Type() == lex.ItemEOF {
+		} else if tokens.IsTable(token, items, current) {
+			tableEnd := tokens.FindTable(items[current:])
+			if parent.Type() != "Section" {
+				parent = findClosestSectionNode(parent)
+			}
+			node := ast.NewTableNode(current, tableEnd, parent, items[current:current+tableEnd])
+			parent.Append(node)
+			current = current + tableEnd
+			start = current
+		} else if tokens.IsKeyword(token, items[current:]) {
+			foundGreaterBlock, end := tokens.FindGreaterBlock(items[current:])
+			if foundGreaterBlock {
+				if parent.Type() != "Section" {
+					parent = findClosestSectionNode(parent)
+				}
+				node := ast.NewGreaterBlockNode(current, end, parent, items[current:current+end])
+				parent.Append(node)
+				current = current + end
+				continue
+			}
+
+			if parent.Type() == "Root" {
+				node := ast.NewSectionNode(parent)
+				parent.Append(node)
+				parent = node
+			}
+			keywordWidth := 2 // #+
+			keywordEnd := current + p.peekToNewLine(items[current:])
+			current = current + keywordWidth
+			node := ast.NewKeywordNode(start, current, parent, items[current:keywordEnd])
+			parent.Append(node)
+			current = keywordEnd
+			start = current
+		} else if tokens.IsFootnoteDefinition(token, items, current) {
 			if start < current {
-				node := ast.NewTextNode(start, current, parent, items[start:current])
+				if parent.Type() != "Section" {
+					parent = findClosestSectionNode(parent)
+				}
+				node := ast.NewParagraphNode(start, current-1, parent, items[start:current-1])
 				parent.Append(node)
 			}
-			return
-			// current++
-			// start = current
+			peekStart := current
+			end := peekStart + p.peekToNewLine(items[peekStart:])
+
+			node := ast.NewFootnoteDefinitionNode(start, current, parent, items[current:end])
+			parent.Append(node)
+			current = end
+			start = current
+		} else if token.IsEOF() || current+1 == itemsLength {
+			if start < current {
+				if parent.Type() != "Section" {
+					parent = findClosestSectionNode(parent)
+				}
+				node := ast.NewParagraphNode(start, current, parent, items[start:current])
+				parent.Append(node)
+			}
+			current++
+			start = current
 		} else {
 			current++
 		}

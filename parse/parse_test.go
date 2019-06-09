@@ -2,40 +2,22 @@ package parse
 
 import (
 	"fmt"
-	"strings"
 	"testing"
-
-	"github.com/chaseadamsio/goorgeous/ast"
 )
 
 func TestParse(t *testing.T) {
 	for _, tc := range tests {
-		if !strings.HasPrefix(tc.name, "headline - deep") {
-			continue
-		}
-		fmt.Println(tc.name)
+		// if !strings.HasSuffix(tc.name, "footnote-number") {
+		// 	continue
+		// }
 		t.Run(tc.name, func(t *testing.T) {
 			ast := Parse(tc.input)
-			if true {
-				t.Error(ast)
-			}
+			fmt.Printf("%v", ast)
+			// if true {
+			// 	t.Errorf("%s\n\t%v", tc.input, ast)
+			// }
 		})
 	}
-}
-
-func getPathForNode(n ast.Node, path []ast.NodeType) []ast.NodeType {
-	path = append(path, n.Type())
-	if n.Parent().Type() != "Root" {
-		path = getPathForNode(n.Parent(), path)
-	} else {
-		var reversedPath []ast.NodeType
-		path = append(path, "Root")
-		for idx := len(path) - 1; idx >= 0; idx-- {
-			reversedPath = append(reversedPath, path[idx])
-		}
-		return reversedPath
-	}
-	return path
 }
 
 type testCase struct {
@@ -54,24 +36,27 @@ type childrenTestNodes []testNode
 var tests = []testCase{
 	{
 		"headers",
-		"#+title: my org mode content\n#+author: Chase Adams\n#+description: This is my description!",
+		"#+title: headers\n#+author: Chase Adams\n#+description: This is my description!",
 		[]testNode{{
 			"Root",
 			[]testNode{{
-				"Headline",
+				"Section",
 				[]testNode{{
-					"Headline",
-					[]testNode{{
-						"Headline",
-						nil,
-					}},
+					"Keyword",
+					nil,
+				}, {
+					"Keyword",
+					nil,
+				}, {
+					"Keyword",
+					nil,
 				}},
 			}},
 		}},
 	},
 	{
 		"basic-happy-path-new-content-after",
-		"#+title: my org mode content\n#+author: Chase Adams\n#+description: This is my description!\n* This starts the content!",
+		"#+title: basic-happy-path-new-content-after\n#+author: Chase Adams\n#+description: This is my description!\n* This starts the content!",
 		[]testNode{{
 			"Root",
 			[]testNode{{
@@ -88,7 +73,7 @@ var tests = []testCase{
 	},
 	{
 		"basic-happy-path-with-tags",
-		"#+title: my org mode tags content\n#+author: Chase Adams\n#+description: This is my description!\n#+tags: org-content org-mode hugo\n",
+		"#+title: basic-happy-path-with-tags\n#+author: Chase Adams\n#+description: This is my description!\n#+tags: org-content org-mode hugo\n",
 		[]testNode{{
 			"Root",
 			[]testNode{{
@@ -139,18 +124,15 @@ var tests = []testCase{
 		}},
 	},
 	{
-		"basic - text",
+		"basic-text",
 		"this is a line.\nthis is a newline.",
 		[]testNode{{
 			"Root",
 			[]testNode{{
-				"Headline",
+				"Section",
 				[]testNode{{
-					"Headline",
-					[]testNode{{
-						"Headline",
-						nil,
-					}},
+					"Text",
+					nil,
 				}},
 			}},
 		}},
@@ -192,6 +174,23 @@ var tests = []testCase{
 	{
 		"headline - deep",
 		"* headline1\n** headline2\n*** headline3\n* headline1-2\n",
+		[]testNode{{
+			"Root",
+			[]testNode{{
+				"Headline",
+				[]testNode{{
+					"Headline",
+					[]testNode{{
+						"Headline",
+						nil,
+					}},
+				}},
+			}},
+		}},
+	},
+	{
+		"headline with paragraph children - deep",
+		"* headline1\nthis is a line.\nthis is another line.\n** headline2\n*** headline3\n* headline1-2\n",
 		[]testNode{{
 			"Root",
 			[]testNode{{
@@ -311,6 +310,57 @@ var tests = []testCase{
 	{
 		"table",
 		"| Name  | Phone | Age |\n|-------+-------+-----|\n| Peter |  1234 |  17 |\n| Anna  |  4321 |  25 |\n",
+		[]testNode{{
+			"Root",
+			[]testNode{{
+				"Headline",
+				[]testNode{{
+					"Headline",
+					[]testNode{{
+						"Headline",
+						nil,
+					}},
+				}},
+			}},
+		}},
+	},
+	{
+		"footnote-number",
+		"The Org homepage[fn:1] now looks a lot better than it used to.\n[fn:1] The link is: https://orgmode.org",
+		[]testNode{{
+			"Root",
+			[]testNode{{
+				"Headline",
+				[]testNode{{
+					"Headline",
+					[]testNode{{
+						"Headline",
+						nil,
+					}},
+				}},
+			}},
+		}},
+	},
+	{
+		"footnote-anonymous-inline-definition",
+		"The Org homepage[fn::This is the inline definition of this footnote] now looks a lot better than it used to.\n",
+		[]testNode{{
+			"Root",
+			[]testNode{{
+				"Headline",
+				[]testNode{{
+					"Headline",
+					[]testNode{{
+						"Headline",
+						nil,
+					}},
+				}},
+			}},
+		}},
+	},
+	{
+		"footnote-inline-description",
+		"The Org homepage[fn:name:a definition]	now looks a lot better than it used to.\n",
 		[]testNode{{
 			"Root",
 			[]testNode{{

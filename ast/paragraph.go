@@ -18,6 +18,9 @@ func NewParagraphNode(start, end int, parent Node, items []lex.Item) *ParagraphN
 		end:      end,
 	}
 
+	child := NewTextNode(start, end, node, items)
+	node.Append(child)
+
 	return node
 }
 

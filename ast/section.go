@@ -1,8 +1,9 @@
 package ast
 
-func NewSectionNode() *SectionNode {
+func NewSectionNode(parent Node) *SectionNode {
 	node := &SectionNode{
 		NodeType: "Section",
+		parent:   parent,
 	}
 
 	return node

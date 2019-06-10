@@ -6,42 +6,42 @@ import (
 	"github.com/chaseadamsio/goorgeous/lex"
 )
 
-func NewTextNode(start, end int, parent Node, items []lex.Item) *TextNode {
-	node := newTextNode("Text", start, end, parent, items)
+func NewTextNode(parent Node, items []lex.Item) *TextNode {
+	node := newTextNode("Text", parent, items)
 	return node
 }
 
-func NewBoldNode(start, end int, parent Node, items []lex.Item) *TextNode {
-	node := newTextNode("Bold", start, end, parent, items)
+func NewBoldNode(parent Node, items []lex.Item) *TextNode {
+	node := newTextNode("Bold", parent, items)
 	return node
 }
 
-func NewItalicNode(start, end int, parent Node, items []lex.Item) *TextNode {
-	node := newTextNode("Italic", start, end, parent, items)
+func NewItalicNode(parent Node, items []lex.Item) *TextNode {
+	node := newTextNode("Italic", parent, items)
 	return node
 }
 
-func NewVerbatimNode(start, end int, parent Node, items []lex.Item) *TextNode {
-	node := newTextNode("Verbatim", start, end, parent, items)
+func NewVerbatimNode(parent Node, items []lex.Item) *TextNode {
+	node := newTextNode("Verbatim", parent, items)
 	return node
 }
 
-func NewStrikeThroughNode(start, end int, parent Node, items []lex.Item) *TextNode {
-	node := newTextNode("StrikeThrough", start, end, parent, items)
+func NewStrikeThroughNode(parent Node, items []lex.Item) *TextNode {
+	node := newTextNode("StrikeThrough", parent, items)
 	return node
 }
 
-func NewUnderlineNode(start, end int, parent Node, items []lex.Item) *TextNode {
-	node := newTextNode("Underline", start, end, parent, items)
+func NewUnderlineNode(parent Node, items []lex.Item) *TextNode {
+	node := newTextNode("Underline", parent, items)
 	return node
 }
 
-func NewCodeNode(start, end int, parent Node, items []lex.Item) *TextNode {
-	node := newTextNode("Code", start, end, parent, items)
+func NewCodeNode(parent Node, items []lex.Item) *TextNode {
+	node := newTextNode("Code", parent, items)
 	return node
 }
 
-func newTextNode(typ NodeType, start, end int, parent Node, items []lex.Item) *TextNode {
+func newTextNode(typ NodeType, parent Node, items []lex.Item) *TextNode {
 	var values []string
 	for _, item := range items {
 		values = append(values, item.Value())
@@ -50,6 +50,8 @@ func newTextNode(typ NodeType, start, end int, parent Node, items []lex.Item) *T
 		NodeType: typ,
 		val:      strings.Join(values, ""),
 		parent:   parent,
+		start:    items[0].Offset(),
+		end:      items[len(items)-1].Offset(),
 	}
 
 	return node

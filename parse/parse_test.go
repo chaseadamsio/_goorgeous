@@ -1,7 +1,6 @@
 package parse
 
 import (
-	"strings"
 	"testing"
 
 	"github.com/chaseadamsio/goorgeous/ast"
@@ -9,9 +8,9 @@ import (
 
 func TestParse(t *testing.T) {
 	for _, tc := range tests {
-		if !strings.HasPrefix(tc.name, "link") {
-			continue
-		}
+		// if !strings.HasPrefix(tc.name, "link") {
+		// 	continue
+		// }
 		t.Run(tc.name, func(t *testing.T) {
 			ast := Parse(tc.input)
 			if true {

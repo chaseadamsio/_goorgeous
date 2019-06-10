@@ -1,4 +1,4 @@
-package tokens
+package parse
 
 import (
 	"testing"
@@ -28,7 +28,7 @@ func TestIsBold(t *testing.T) {
 		for item := range lexedItems {
 			items = append(items, item)
 		}
-		if IsBold(items) != tc.expected {
+		if isBold(items) != tc.expected {
 			t.Errorf("expected \"%s\" to be %t", tc.value, tc.expected)
 		}
 	}
@@ -54,7 +54,7 @@ func TestIsItalic(t *testing.T) {
 		for item := range lexedItems {
 			items = append(items, item)
 		}
-		if IsItalic(items) != tc.expected {
+		if isItalic(items) != tc.expected {
 			t.Errorf("expected \"%s\" to be %t", tc.value, tc.expected)
 		}
 	}
@@ -80,7 +80,7 @@ func TestIsVerbatim(t *testing.T) {
 		for item := range lexedItems {
 			items = append(items, item)
 		}
-		if IsVerbatim(items) != tc.expected {
+		if isVerbatim(items) != tc.expected {
 			t.Errorf("expected \"%s\" to be %t", tc.value, tc.expected)
 		}
 	}
@@ -106,7 +106,7 @@ func TestIsStrikeThrough(t *testing.T) {
 		for item := range lexedItems {
 			items = append(items, item)
 		}
-		if IsStrikeThrough(items) != tc.expected {
+		if isStrikeThrough(items) != tc.expected {
 			t.Errorf("expected \"%s\" to be %t", tc.value, tc.expected)
 		}
 	}
@@ -132,7 +132,7 @@ func TestIsUnderline(t *testing.T) {
 		for item := range lexedItems {
 			items = append(items, item)
 		}
-		if IsUnderline(items) != tc.expected {
+		if isUnderline(items) != tc.expected {
 			t.Errorf("expected \"%s\" to be %t", tc.value, tc.expected)
 		}
 	}
@@ -158,7 +158,7 @@ func TestIsCode(t *testing.T) {
 		for item := range lexedItems {
 			items = append(items, item)
 		}
-		if IsCode(items) != tc.expected {
+		if isCode(items) != tc.expected {
 			t.Errorf("expected \"%s\" to be %t", tc.value, tc.expected)
 		}
 	}

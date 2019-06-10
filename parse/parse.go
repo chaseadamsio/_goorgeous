@@ -67,7 +67,7 @@ func findClosestSectionNode(parent ast.Node) ast.Node {
 
 func appendCurrentItemsToParent(start, current int, parent ast.Node, items []lex.Item) {
 	if start < current {
-		child := ast.NewTextNode(start, current, parent, items)
+		child := ast.NewTextNode(parent, items[start:current])
 		parent.Append(child)
 	}
 }
@@ -95,69 +95,69 @@ func (p *parser) walkElements(parent ast.Node, items []lex.Item) {
 	for current < itemsLength {
 		if isLink(items[current:]) {
 
-			appendCurrentItemsToParent(start, current, parent, items[start:current])
+			appendCurrentItemsToParent(start, current, parent, items)
 
-			end := p.newLink(parent, items[current:])
+			end := current + p.newLink(parent, items[current:])
 			current = end + 1
 			start = current
 
 		} else if isFootnoteDefinition(items[current:]) {
 
-			appendCurrentItemsToParent(start, current, parent, items[start:current])
+			appendCurrentItemsToParent(start, current, parent, items)
 
-			end := p.newFootnoteDefinition(parent, items[current:])
+			end := current + p.newFootnoteDefinition(parent, items[current:])
 			current = end + 1
 			start = current
 
-		} else if tokens.IsBold(items[current:]) {
-			appendCurrentItemsToParent(start, current, parent, items[start:current])
-			current, start = p.appendToParent(start, current, parent, items,
-				tokens.FindBold,
-				func(current, end int, parent ast.Node, items []lex.Item) ast.Node {
-					return ast.NewBoldNode(current, end, parent, items)
-				})
-		} else if tokens.IsVerbatim(items[current:]) {
-			appendCurrentItemsToParent(start, current, parent, items[start:current])
-			current, start = p.appendToParent(start, current, parent, items,
-				tokens.FindVerbatim,
-				func(current, end int, parent ast.Node, items []lex.Item) ast.Node {
-					return ast.NewVerbatimNode(current, end, parent, items)
-				})
-		} else if tokens.IsItalic(items[current:]) {
-			appendCurrentItemsToParent(start, current, parent, items[start:current])
-			current, start = p.appendToParent(start, current, parent, items,
-				tokens.FindItalic,
-				func(current, end int, parent ast.Node, items []lex.Item) ast.Node {
-					return ast.NewItalicNode(current, end, parent, items)
-				})
-		} else if tokens.IsStrikeThrough(items[current:]) {
-			appendCurrentItemsToParent(start, current, parent, items[start:current])
-			current, start = p.appendToParent(start, current, parent, items,
-				tokens.FindStrikeThrough,
-				func(current, end int, parent ast.Node, items []lex.Item) ast.Node {
-					return ast.NewStrikeThroughNode(current, end, parent, items)
-				})
-		} else if tokens.IsUnderline(items[current:]) {
-			appendCurrentItemsToParent(start, current, parent, items[start:current])
-			current, start = p.appendToParent(start, current, parent, items,
-				tokens.FindUnderline,
-				func(current, end int, parent ast.Node, items []lex.Item) ast.Node {
-					return ast.NewUnderlineNode(current, end, parent, items)
-				})
-		} else if tokens.IsCode(items[current:]) {
-			appendCurrentItemsToParent(start, current, parent, items[start:current])
-			current, start = p.appendToParent(start, current, parent, items,
-				tokens.FindCode,
-				func(current, end int, parent ast.Node, items []lex.Item) ast.Node {
-					return ast.NewCodeNode(current, end, parent, items)
-				})
+		} else if isBold(items[current:]) {
+			appendCurrentItemsToParent(start, current, parent, items)
+
+			end := current + p.newBold(parent, items[current:])
+			current = end + 1
+			start = current
+
+		} else if isVerbatim(items[current:]) {
+			appendCurrentItemsToParent(start, current, parent, items)
+
+			end := current + p.newVerbatim(parent, items[current:])
+			current = end + 1
+			start = current
+
+		} else if isItalic(items[current:]) {
+			appendCurrentItemsToParent(start, current, parent, items)
+
+			end := current + p.newItalic(parent, items[current:])
+			current = end + 1
+			start = current
+
+		} else if isStrikeThrough(items[current:]) {
+			appendCurrentItemsToParent(start, current, parent, items)
+
+			end := current + p.newStrikeThrough(parent, items[current:])
+			current = end + 1
+			start = current
+
+		} else if isUnderline(items[current:]) {
+			appendCurrentItemsToParent(start, current, parent, items)
+
+			end := current + p.newUnderline(parent, items[current:])
+			current = end + 1
+			start = current
+
+		} else if isCode(items[current:]) {
+			appendCurrentItemsToParent(start, current, parent, items)
+
+			end := current + p.newCode(parent, items[current:])
+			current = end + 1
+			start = current
+
 		} else {
 			prevText = append(prevText, items[current])
 			current++
 		}
 	}
 
-	appendCurrentItemsToParent(start, itemsLength, parent, items[start:current])
+	appendCurrentItemsToParent(start, itemsLength, parent, items)
 
 }
 

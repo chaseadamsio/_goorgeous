@@ -5,8 +5,8 @@ import (
 	"github.com/chaseadamsio/goorgeous/lex"
 )
 
-func (p *parser) newLink(parent ast.Node, items []lex.Item) (newEnd int) {
-	end := findLink(items)
+func (p *parser) newLink(parent ast.Node, items []lex.Item) (end int) {
+	end = findLink(items)
 	node := ast.NewLinkNode(parent, items)
 	parent.Append(node)
 	textCurrent, textEnd := findLinkText(items)

@@ -1,6 +1,9 @@
-package tokens
+package parse
 
-import "github.com/chaseadamsio/goorgeous/lex"
+import (
+	"github.com/chaseadamsio/goorgeous/ast"
+	"github.com/chaseadamsio/goorgeous/lex"
+)
 
 func isElementMarkup(items []lex.Item, expectedTypeFunc func(lex.Item) bool) bool {
 	foundOpeningChar := false
@@ -57,85 +60,139 @@ func findElementMarkup(items []lex.Item, expectedTypeFunc func(lex.Item) bool) i
 	return -1
 }
 
-// IsBold returns true if a collection of items matches bold markup
-func IsBold(items []lex.Item) bool {
+func (p *parser) newBold(parent ast.Node, items []lex.Item) (end int) {
+	current := 0
+	end = findBold(items)
+	node := ast.NewBoldNode(parent, items)
+	parent.Append(node)
+	p.walkElements(node, items[current+1:end])
+	return end
+}
+
+// isBold returns true if a collection of items matches bold markup
+func isBold(items []lex.Item) bool {
 	return isElementMarkup(items, func(currToken lex.Item) bool {
 		return currToken.IsAsterisk()
 	})
 }
 
-// FindBold finds the end item of a bold collection
-func FindBold(items []lex.Item) int {
+// findBold finds the end item of a bold collection
+func findBold(items []lex.Item) int {
 	return findElementMarkup(items, func(currToken lex.Item) bool {
 		return currToken.IsAsterisk()
 	})
 }
 
-// IsItalic returns true if a collection of items matches italic markup
-func IsItalic(items []lex.Item) bool {
+func (p *parser) newItalic(parent ast.Node, items []lex.Item) (end int) {
+	current := 0
+	end = findItalic(items)
+	node := ast.NewItalicNode(parent, items)
+	parent.Append(node)
+	p.walkElements(node, items[current+1:end])
+	return end
+}
+
+// isItalic returns true if a collection of items matches italic markup
+func isItalic(items []lex.Item) bool {
 	return isElementMarkup(items, func(currToken lex.Item) bool {
 		return currToken.IsForwardSlash()
 	})
 }
 
-// FindItalic finds the end item of a italic collection
-func FindItalic(items []lex.Item) int {
+// findItalic finds the end item of a italic collection
+func findItalic(items []lex.Item) int {
 	return findElementMarkup(items, func(currToken lex.Item) bool {
 		return currToken.IsForwardSlash()
 	})
 }
 
-// IsVerbatim returns true if a collection of items matches verbatim markup
-func IsVerbatim(items []lex.Item) bool {
+func (p *parser) newVerbatim(parent ast.Node, items []lex.Item) (end int) {
+	current := 0
+	end = findVerbatim(items)
+	node := ast.NewVerbatimNode(parent, items)
+	parent.Append(node)
+	p.walkElements(node, items[current+1:end])
+	return end
+}
+
+// isVerbatim returns true if a collection of items matches verbatim markup
+func isVerbatim(items []lex.Item) bool {
 	return isElementMarkup(items, func(currToken lex.Item) bool {
 		return currToken.IsEqual()
 	})
 }
 
-// FindVerbatim end item of a verbatim collection
-func FindVerbatim(items []lex.Item) int {
+// findVerbatim end item of a verbatim collection
+func findVerbatim(items []lex.Item) int {
 	return findElementMarkup(items, func(currToken lex.Item) bool {
 		return currToken.IsEqual()
 	})
 }
 
-// IsStrikeThrough returns true if a collection of items matches strike through markup
-func IsStrikeThrough(items []lex.Item) bool {
+func (p *parser) newStrikeThrough(parent ast.Node, items []lex.Item) (end int) {
+	current := 0
+	end = findStrikeThrough(items)
+	node := ast.NewStrikeThroughNode(parent, items)
+	parent.Append(node)
+	p.walkElements(node, items[current+1:end])
+	return end
+}
+
+// isStrikeThrough returns true if a collection of items matches strike through markup
+func isStrikeThrough(items []lex.Item) bool {
 	return isElementMarkup(items, func(currToken lex.Item) bool {
 		return currToken.IsPlus()
 	})
 }
 
-// FindStrikeThrough end item of a strike through collection
-func FindStrikeThrough(items []lex.Item) int {
+// findStrikeThrough end item of a strike through collection
+func findStrikeThrough(items []lex.Item) int {
 	return findElementMarkup(items, func(currToken lex.Item) bool {
 		return currToken.IsPlus()
 	})
 }
 
-// IsUnderline returns true if a collection of items matches underline markup
-func IsUnderline(items []lex.Item) bool {
+func (p *parser) newUnderline(parent ast.Node, items []lex.Item) (end int) {
+	current := 0
+	end = findUnderline(items)
+	node := ast.NewUnderlineNode(parent, items)
+	parent.Append(node)
+	p.walkElements(node, items[current+1:end])
+	return end
+}
+
+// isUnderline returns true if a collection of items matches underline markup
+func isUnderline(items []lex.Item) bool {
 	return isElementMarkup(items, func(currToken lex.Item) bool {
 		return currToken.IsUnderscore()
 	})
 }
 
-// FindUnderline end item of a underline collection
-func FindUnderline(items []lex.Item) int {
+// findUnderline end item of a underline collection
+func findUnderline(items []lex.Item) int {
 	return findElementMarkup(items, func(currToken lex.Item) bool {
 		return currToken.IsUnderscore()
 	})
 }
 
-// IsCode returns true if a collection of items matches code markup
-func IsCode(items []lex.Item) bool {
+func (p *parser) newCode(parent ast.Node, items []lex.Item) (end int) {
+	current := 0
+	end = findCode(items)
+	node := ast.NewCodeNode(parent, items)
+	parent.Append(node)
+	p.walkElements(node, items[current+1:end])
+	return end
+}
+
+// isCode returns true if a collection of items matches code markup
+func isCode(items []lex.Item) bool {
 	return isElementMarkup(items, func(currToken lex.Item) bool {
 		return currToken.IsTilde()
 	})
 }
 
-// FindCode end item of a code collection
-func FindCode(items []lex.Item) int {
+// findCode end item of a code collection
+func findCode(items []lex.Item) int {
 	return findElementMarkup(items, func(currToken lex.Item) bool {
 		return currToken.IsTilde()
 	})

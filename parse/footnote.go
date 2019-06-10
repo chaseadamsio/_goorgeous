@@ -5,8 +5,8 @@ import (
 	"github.com/chaseadamsio/goorgeous/lex"
 )
 
-func (p *parser) newFootnoteDefinition(parent ast.Node, items []lex.Item) (newEnd int) {
-	end := findLink(items)
+func (p *parser) newFootnoteDefinition(parent ast.Node, items []lex.Item) (end int) {
+	end = findLink(items)
 	node := ast.NewFootnoteDefinitionNode(parent, items)
 	parent.Append(node)
 	p.walkElements(node, items)

@@ -1,4 +1,4 @@
-package tokens
+package parse
 
 import (
 	"testing"
@@ -25,7 +25,7 @@ func TestIsLink(t *testing.T) {
 		for item := range lexedItems {
 			items = append(items, item)
 		}
-		if IsLink(items) != tc.expected {
+		if isLink(items) != tc.expected {
 			t.Errorf("expected \"%s\" to be %t", tc.value, tc.expected)
 		}
 	}

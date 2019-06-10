@@ -1,4 +1,4 @@
-package tokens
+package parse
 
 import (
 	"testing"
@@ -16,8 +16,8 @@ func TestIsFootnoteDefinition(t *testing.T) {
 		{"[fn::This is the inline definition of this footnote]", 0, true},
 		{"foo\n[fn::This is the inline definition of this footnote]", 2, true},
 		{"[fn:name:a definition]", 0, true},
+		{"foo[fn::This is the inline definition of this footnote]", 1, true},
 		{"foo[fn::This is the inline definition of this footnote]", 0, false},
-		{"foo[fn::This is the inline definition of this footnote]", 1, false},
 	}
 	for _, tc := range testCases {
 		var items []lex.Item
@@ -25,9 +25,8 @@ func TestIsFootnoteDefinition(t *testing.T) {
 		for item := range itemsChan {
 			items = append(items, item)
 		}
-		if IsFootnoteDefinition(items[tc.start], items, tc.start) != tc.expected {
+		if isFootnoteDefinition(items[tc.start:]) != tc.expected {
 			t.Errorf("Expected %s to be %t", tc.input, tc.expected)
 		}
-
 	}
 }

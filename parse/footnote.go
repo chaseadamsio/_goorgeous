@@ -1,12 +1,22 @@
-package tokens
+package parse
 
-import "github.com/chaseadamsio/goorgeous/lex"
+import (
+	"github.com/chaseadamsio/goorgeous/ast"
+	"github.com/chaseadamsio/goorgeous/lex"
+)
 
-func IsFootnoteDefinition(token lex.Item, items []lex.Item, current int) bool {
+func (p *parser) newFootnoteDefinition(parent ast.Node, items []lex.Item) (newEnd int) {
+	end := findLink(items)
+	node := ast.NewFootnoteDefinitionNode(parent, items)
+	parent.Append(node)
+	p.walkElements(node, items)
+	return end
+}
+
+func isFootnoteDefinition(items []lex.Item) bool {
 	itemsLength := len(items)
-	// if current > 0 && !items[current-1].IsNewline() {
-	// 	return false
-	// }
+	current := 0
+	token := items[current]
 
 	if !(token.IsBracket() && token.Value() == "[") {
 		return false

@@ -16,12 +16,12 @@ type FootnoteDefinitionNode struct {
 	children []Node
 }
 
-func NewFootnoteDefinitionNode(start, end int, parent Node, items []lex.Item) *FootnoteDefinitionNode {
+func NewFootnoteDefinitionNode(parent Node, items []lex.Item) *FootnoteDefinitionNode {
 	node := &FootnoteDefinitionNode{
 		NodeType: "FootnoteDefinition",
 		parent:   parent,
-		start:    start,
-		end:      end,
+		start:    items[0].Offset(),
+		end:      items[len(items)-1].Offset(),
 	}
 
 	node.parse(items)

@@ -1,5 +1,7 @@
 package lex
 
+import "regexp"
+
 // Item represents a parsed token
 type Item interface {
 	checker
@@ -29,6 +31,7 @@ type checker interface {
 	hashChecker
 	eofChecker
 	whitespaceChecker
+	wordChecker
 }
 
 type newlineChecker interface {
@@ -46,36 +49,47 @@ type tildeChecker interface {
 type underscoreChecker interface {
 	IsUnderscore() bool
 }
+
 type plusChecker interface {
 	IsPlus() bool
 }
+
 type colonChecker interface {
 	IsColon() bool
 }
+
 type spaceChecker interface {
 	IsSpace() bool
 }
+
 type bracketChecker interface {
 	IsBracket() bool
 }
+
 type backtickChecker interface {
 	IsBacktick() bool
 }
+
 type parenthesisChecker interface {
 	IsParenthesis() bool
 }
+
 type equalChecker interface {
 	IsEqual() bool
 }
+
 type pipeChecker interface {
 	IsPipe() bool
 }
+
 type dashChecker interface {
 	IsDash() bool
 }
+
 type hashChecker interface {
 	IsHash() bool
 }
+
 type textChecker interface {
 	IsText() bool
 }
@@ -90,6 +104,10 @@ type eofChecker interface {
 
 type whitespaceChecker interface {
 	IsWhitespace() bool
+}
+
+type wordChecker interface {
+	IsWord() bool
 }
 
 type itemType int
@@ -288,4 +306,12 @@ func (i item) IsEOF() bool {
 
 func (i item) IsWhitespace() bool {
 	return i.typ == ItemSpace
+}
+
+func (i item) IsWord() bool {
+	matched, err := regexp.Match(`\w`, []byte(i.Value()))
+	if err != nil {
+		panic(err) // TODO ¯\_(ツ)_/¯ handle this better?
+	}
+	return matched
 }

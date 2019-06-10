@@ -1,10 +1,15 @@
 package ast
 
-import "github.com/chaseadamsio/goorgeous/lex"
+import (
+	"strings"
+
+	"github.com/chaseadamsio/goorgeous/lex"
+)
 
 type ParagraphNode struct {
 	NodeType
 	parent   Node
+	rawvalue string
 	start    int
 	end      int
 	children []Node
@@ -18,8 +23,11 @@ func NewParagraphNode(start, end int, parent Node, items []lex.Item) *ParagraphN
 		end:      end,
 	}
 
-	child := NewTextNode(start, end, node, items)
-	node.Append(child)
+	var rawvalueStrs []string
+	for _, item := range items {
+		rawvalueStrs = append(rawvalueStrs, item.Value())
+	}
+	node.rawvalue = strings.Join(rawvalueStrs, "")
 
 	return node
 }
@@ -31,7 +39,7 @@ func (n *ParagraphNode) Type() NodeType {
 
 // Type returns the type of node this is
 func (n *ParagraphNode) String() string {
-	return ""
+	return n.rawvalue
 }
 
 func (n ParagraphNode) Children() []Node {

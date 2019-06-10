@@ -65,6 +65,102 @@ func findClosestSectionNode(parent ast.Node) ast.Node {
 	return node
 }
 
+func appendCurrentItemsToParent(start, current int, parent ast.Node, items []lex.Item) {
+	if start < current {
+		child := ast.NewTextNode(start, current, parent, items)
+		parent.Append(child)
+	}
+}
+
+func (p *parser) appendToParent(start, current int, parent ast.Node, items []lex.Item,
+	findFunc func([]lex.Item) int,
+	newNodeFunc func(int, int, ast.Node, []lex.Item) ast.Node) (newCurrent, newStart int) {
+
+	end := current + findFunc(items[current:])
+	node := newNodeFunc(current, end, parent, items)
+	parent.Append(node)
+	p.walkElements(node, items[current+1:end])
+	current = end + 1
+	start = current
+	newCurrent, newStart = current, start
+	return newCurrent, newStart
+}
+
+func (p *parser) walkElements(parent ast.Node, items []lex.Item) {
+	start := 0
+	current := 0
+	itemsLength := len(items)
+	var prevText []lex.Item
+
+	for current < itemsLength {
+		if isLink(items[current:]) {
+
+			appendCurrentItemsToParent(start, current, parent, items[start:current])
+
+			end := p.newLink(parent, items[current:])
+			current = end + 1
+			start = current
+
+		} else if isFootnoteDefinition(items[current:]) {
+
+			appendCurrentItemsToParent(start, current, parent, items[start:current])
+
+			end := p.newFootnoteDefinition(parent, items[current:])
+			current = end + 1
+			start = current
+
+		} else if tokens.IsBold(items[current:]) {
+			appendCurrentItemsToParent(start, current, parent, items[start:current])
+			current, start = p.appendToParent(start, current, parent, items,
+				tokens.FindBold,
+				func(current, end int, parent ast.Node, items []lex.Item) ast.Node {
+					return ast.NewBoldNode(current, end, parent, items)
+				})
+		} else if tokens.IsVerbatim(items[current:]) {
+			appendCurrentItemsToParent(start, current, parent, items[start:current])
+			current, start = p.appendToParent(start, current, parent, items,
+				tokens.FindVerbatim,
+				func(current, end int, parent ast.Node, items []lex.Item) ast.Node {
+					return ast.NewVerbatimNode(current, end, parent, items)
+				})
+		} else if tokens.IsItalic(items[current:]) {
+			appendCurrentItemsToParent(start, current, parent, items[start:current])
+			current, start = p.appendToParent(start, current, parent, items,
+				tokens.FindItalic,
+				func(current, end int, parent ast.Node, items []lex.Item) ast.Node {
+					return ast.NewItalicNode(current, end, parent, items)
+				})
+		} else if tokens.IsStrikeThrough(items[current:]) {
+			appendCurrentItemsToParent(start, current, parent, items[start:current])
+			current, start = p.appendToParent(start, current, parent, items,
+				tokens.FindStrikeThrough,
+				func(current, end int, parent ast.Node, items []lex.Item) ast.Node {
+					return ast.NewStrikeThroughNode(current, end, parent, items)
+				})
+		} else if tokens.IsUnderline(items[current:]) {
+			appendCurrentItemsToParent(start, current, parent, items[start:current])
+			current, start = p.appendToParent(start, current, parent, items,
+				tokens.FindUnderline,
+				func(current, end int, parent ast.Node, items []lex.Item) ast.Node {
+					return ast.NewUnderlineNode(current, end, parent, items)
+				})
+		} else if tokens.IsCode(items[current:]) {
+			appendCurrentItemsToParent(start, current, parent, items[start:current])
+			current, start = p.appendToParent(start, current, parent, items,
+				tokens.FindCode,
+				func(current, end int, parent ast.Node, items []lex.Item) ast.Node {
+					return ast.NewCodeNode(current, end, parent, items)
+				})
+		} else {
+			prevText = append(prevText, items[current])
+			current++
+		}
+	}
+
+	appendCurrentItemsToParent(start, itemsLength, parent, items[start:current])
+
+}
+
 // recursively walk through each token
 func (p *parser) walk(parent ast.Node, items []lex.Item) {
 	// create top-level paragraph nodes by creating nodes
@@ -118,6 +214,8 @@ func (p *parser) walk(parent ast.Node, items []lex.Item) {
 					parent = findClosestSectionNode(parent)
 				}
 				node := ast.NewParagraphNode(start, current, parent, items[start:current])
+				p.walkElements(node, items[start:current])
+
 				parent.Append(node)
 				current++
 				start = current
@@ -171,18 +269,19 @@ func (p *parser) walk(parent ast.Node, items []lex.Item) {
 			parent.Append(node)
 			current = keywordEnd
 			start = current
-		} else if tokens.IsFootnoteDefinition(token, items, current) {
+		} else if isFootnoteDefinition(items[current:]) {
 			if start < current {
 				if parent.Type() != "Section" {
 					parent = findClosestSectionNode(parent)
 				}
 				node := ast.NewParagraphNode(start, current-1, parent, items[start:current-1])
+				p.walkElements(node, items[start:current])
 				parent.Append(node)
 			}
 			peekStart := current
 			end := peekStart + p.peekToNewLine(items[peekStart:])
 
-			node := ast.NewFootnoteDefinitionNode(start, current, parent, items[current:end])
+			node := ast.NewFootnoteDefinitionNode(parent, items[current:end])
 			parent.Append(node)
 			current = end
 			start = current
@@ -192,6 +291,7 @@ func (p *parser) walk(parent ast.Node, items []lex.Item) {
 					parent = findClosestSectionNode(parent)
 				}
 				node := ast.NewParagraphNode(start, current, parent, items[start:current])
+				p.walkElements(node, items[start:current])
 				parent.Append(node)
 			}
 			current++

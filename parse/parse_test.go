@@ -1,21 +1,22 @@
 package parse
 
 import (
-	"fmt"
+	"strings"
 	"testing"
+
+	"github.com/chaseadamsio/goorgeous/ast"
 )
 
 func TestParse(t *testing.T) {
 	for _, tc := range tests {
-		// if !strings.HasSuffix(tc.name, "footnote-number") {
-		// 	continue
-		// }
+		if !strings.HasPrefix(tc.name, "link") {
+			continue
+		}
 		t.Run(tc.name, func(t *testing.T) {
 			ast := Parse(tc.input)
-			fmt.Printf("%v", ast)
-			// if true {
-			// 	t.Errorf("%s\n\t%v", tc.input, ast)
-			// }
+			if true {
+				t.Errorf("\nname: %s\n\tinput: %s\n\t%v", tc.name, tc.input, ast)
+			}
 		})
 	}
 }
@@ -27,11 +28,32 @@ type testCase struct {
 }
 
 type testNode struct {
-	NodeType string
+	ast.NodeType
+	// value    string
 	children childrenTestNodes
 }
 
 type childrenTestNodes []testNode
+
+func (n *testNode) Type() ast.NodeType {
+	return n.NodeType
+}
+
+// func (n *testNode) Parent() ast.Node {
+// 	return n.parent
+// }
+
+// func (n *testNode) String() string {
+// 	return n.value
+// }
+
+// func (n *testNode) Children() []ast.Node {
+// 	return n.children
+// }
+
+// func (n *testNode) Append(child ast.Node) {
+// 	n.children = append(n.children, child)
+// }
 
 var tests = []testCase{
 	{
@@ -207,7 +229,7 @@ var tests = []testCase{
 	},
 	{
 		"link",
-		"[this is a link](https://github.com)",
+		"[[https://github.com][this is a link with *some bold text*.]]",
 		[]testNode{{
 			"Root",
 			[]testNode{{
@@ -224,7 +246,24 @@ var tests = []testCase{
 	},
 	{
 		"link w/ newline",
-		"[this is a link](https://github.com)\n",
+		"[[https://github.com][this is a link]]\n",
+		[]testNode{{
+			"Root",
+			[]testNode{{
+				"Headline",
+				[]testNode{{
+					"Headline",
+					[]testNode{{
+						"Headline",
+						nil,
+					}},
+				}},
+			}},
+		}},
+	},
+	{
+		"link-self-describing",
+		"[[https://github.com]]\n",
 		[]testNode{{
 			"Root",
 			[]testNode{{
@@ -361,6 +400,40 @@ var tests = []testCase{
 	{
 		"footnote-inline-description",
 		"The Org homepage[fn:name:a definition]	now looks a lot better than it used to.\n",
+		[]testNode{{
+			"Root",
+			[]testNode{{
+				"Headline",
+				[]testNode{{
+					"Headline",
+					[]testNode{{
+						"Headline",
+						nil,
+					}},
+				}},
+			}},
+		}},
+	},
+	{
+		"bold-with-italic-child",
+		" *this is some /italic text/ in a bold element.*\n",
+		[]testNode{{
+			"Root",
+			[]testNode{{
+				"Headline",
+				[]testNode{{
+					"Headline",
+					[]testNode{{
+						"Headline",
+						nil,
+					}},
+				}},
+			}},
+		}},
+	},
+	{
+		"bold-with-italic-child-with-verbatim-child",
+		" *this is some /italic text with =a verbatim child=/ in a bold element.*\n",
 		[]testNode{{
 			"Root",
 			[]testNode{{

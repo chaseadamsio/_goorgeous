@@ -1,4 +1,4 @@
-package tokens
+package parse
 
 import (
 	"testing"
@@ -28,7 +28,7 @@ func TestIsHeadline(t *testing.T) {
 		for item := range lexedItems {
 			items = append(items, item)
 		}
-		if IsHeadline(items) != tc.expected {
+		if isHeadline(items) != tc.expected {
 			t.Errorf("expected \"%s\" to be %t", tc.value, tc.expected)
 		}
 	}
@@ -55,7 +55,7 @@ func TestHeadlineDepth(t *testing.T) {
 			items = append(items, item)
 		}
 
-		depth := HeadlineDepth(items)
+		depth := headlineDepth(items)
 		if depth != tc.expected {
 			t.Errorf("expected depth of \"%s\" to be %d. Instead, got %d", tc.value, tc.expected, depth)
 		}

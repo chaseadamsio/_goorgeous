@@ -1,8 +1,8 @@
-package tokens
+package parse
 
 import "github.com/chaseadamsio/goorgeous/lex"
 
-func IsUnorderedList(token lex.Item, items []lex.Item, current int) bool {
+func isUnorderedList(token lex.Item, items []lex.Item, current int) bool {
 	itemsLength := len(items)
 	if token.Type() == lex.ItemDash {
 
@@ -28,13 +28,13 @@ func IsUnorderedList(token lex.Item, items []lex.Item, current int) bool {
 	return false
 }
 
-func FindUnorderedList(items []lex.Item) int {
+func findUnorderedList(items []lex.Item) int {
 	current := 0
 	itemsLength := len(items)
 	for current < itemsLength {
 		token := items[current]
 		if token.IsNewline() {
-			if !IsUnorderedList(items[current+1], items, current+1) {
+			if !isUnorderedList(items[current+1], items, current+1) {
 				return current
 			}
 		}
@@ -43,10 +43,10 @@ func FindUnorderedList(items []lex.Item) int {
 	return itemsLength
 }
 
-func IsOrderedList(token lex.Item, items []lex.Item, current int) bool {
+func isOrderedList(token lex.Item, items []lex.Item, current int) bool {
 	return false
 }
 
-func FindOrderedList(items []lex.Item) int {
+func findOrderedList(items []lex.Item) int {
 	return 0
 }

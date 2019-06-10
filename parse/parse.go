@@ -3,7 +3,6 @@ package parse
 import (
 	"github.com/chaseadamsio/goorgeous/ast"
 	"github.com/chaseadamsio/goorgeous/lex"
-	"github.com/chaseadamsio/goorgeous/tokens"
 )
 
 type parser struct {
@@ -35,8 +34,8 @@ func (p *parser) peekToNextBlock(items []lex.Item) (end int) {
 		if currItem.IsEOF() {
 			return end
 		}
-		if prevIsNewline && tokens.IsHeadline(items[end:]) {
-			depth := tokens.HeadlineDepth(items[end:])
+		if prevIsNewline && isHeadline(items[end:]) {
+			depth := headlineDepth(items[end:])
 			if p.depth < depth {
 				end++
 				continue
@@ -110,6 +109,7 @@ func (p *parser) walkElements(parent ast.Node, items []lex.Item) {
 			start = current
 
 		} else if isBold(items[current:]) {
+
 			appendCurrentItemsToParent(start, current, parent, items)
 
 			end := current + p.newBold(parent, items[current:])
@@ -117,6 +117,7 @@ func (p *parser) walkElements(parent ast.Node, items []lex.Item) {
 			start = current
 
 		} else if isVerbatim(items[current:]) {
+
 			appendCurrentItemsToParent(start, current, parent, items)
 
 			end := current + p.newVerbatim(parent, items[current:])
@@ -124,6 +125,7 @@ func (p *parser) walkElements(parent ast.Node, items []lex.Item) {
 			start = current
 
 		} else if isItalic(items[current:]) {
+
 			appendCurrentItemsToParent(start, current, parent, items)
 
 			end := current + p.newItalic(parent, items[current:])
@@ -131,6 +133,7 @@ func (p *parser) walkElements(parent ast.Node, items []lex.Item) {
 			start = current
 
 		} else if isStrikeThrough(items[current:]) {
+
 			appendCurrentItemsToParent(start, current, parent, items)
 
 			end := current + p.newStrikeThrough(parent, items[current:])
@@ -138,6 +141,7 @@ func (p *parser) walkElements(parent ast.Node, items []lex.Item) {
 			start = current
 
 		} else if isUnderline(items[current:]) {
+
 			appendCurrentItemsToParent(start, current, parent, items)
 
 			end := current + p.newUnderline(parent, items[current:])
@@ -145,6 +149,7 @@ func (p *parser) walkElements(parent ast.Node, items []lex.Item) {
 			start = current
 
 		} else if isCode(items[current:]) {
+
 			appendCurrentItemsToParent(start, current, parent, items)
 
 			end := current + p.newCode(parent, items[current:])
@@ -158,7 +163,6 @@ func (p *parser) walkElements(parent ast.Node, items []lex.Item) {
 	}
 
 	appendCurrentItemsToParent(start, itemsLength, parent, items)
-
 }
 
 // recursively walk through each token
@@ -171,8 +175,8 @@ func (p *parser) walk(parent ast.Node, items []lex.Item) {
 	for current < itemsLength {
 		token := items[current]
 
-		if token.Type() == lex.ItemAsterisk && tokens.IsHeadline(items[current:]) {
-			depth := tokens.HeadlineDepth(items[current:])
+		if token.Type() == lex.ItemAsterisk && isHeadline(items[current:]) {
+			depth := headlineDepth(items[current:])
 
 			if p.depth < depth {
 				// There will always be the chance that content occurs
@@ -221,14 +225,14 @@ func (p *parser) walk(parent ast.Node, items []lex.Item) {
 				start = current
 			}
 			current++
-		} else if tokens.IsOrderedList(token, items, current) {
-			// orderedListEnd := tokens.FindOrderedList(items[current:])
+		} else if isOrderedList(token, items, current) {
+			// orderedListEnd := findOrderedList(items[current:])
 			// node := ast.NewOrderedListNode(current, orderedListEnd, parent, items[current:current+orderedListEnd])
 			// parent.Append(node)
 			// current = current + orderedListEnd
 			current++
-		} else if tokens.IsUnorderedList(token, items, current) {
-			unorderedListEnd := tokens.FindUnorderedList(items[current:])
+		} else if isUnorderedList(token, items, current) {
+			unorderedListEnd := findUnorderedList(items[current:])
 			if parent.Type() != "Section" {
 				parent = findClosestSectionNode(parent)
 			}
@@ -236,8 +240,8 @@ func (p *parser) walk(parent ast.Node, items []lex.Item) {
 			parent.Append(node)
 			current = current + unorderedListEnd
 			start = current
-		} else if tokens.IsTable(token, items, current) {
-			tableEnd := tokens.FindTable(items[current:])
+		} else if isTable(token, items, current) {
+			tableEnd := findTable(items[current:])
 			if parent.Type() != "Section" {
 				parent = findClosestSectionNode(parent)
 			}
@@ -245,8 +249,8 @@ func (p *parser) walk(parent ast.Node, items []lex.Item) {
 			parent.Append(node)
 			current = current + tableEnd
 			start = current
-		} else if tokens.IsKeyword(token, items[current:]) {
-			foundGreaterBlock, end := tokens.FindGreaterBlock(items[current:])
+		} else if isKeyword(token, items[current:]) {
+			foundGreaterBlock, end := findGreaterBlock(items[current:])
 			if foundGreaterBlock {
 				if parent.Type() != "Section" {
 					parent = findClosestSectionNode(parent)

@@ -1,8 +1,8 @@
-package tokens
+package parse
 
 import "github.com/chaseadamsio/goorgeous/lex"
 
-func IsTable(token lex.Item, items []lex.Item, current int) bool {
+func isTable(token lex.Item, items []lex.Item, current int) bool {
 	itemsLength := len(items)
 
 	if !token.IsPipe() {
@@ -14,7 +14,7 @@ func IsTable(token lex.Item, items []lex.Item, current int) bool {
 	return false
 }
 
-func FindTable(items []lex.Item) int {
+func findTable(items []lex.Item) int {
 	current := 0
 	itemsLength := len(items)
 	for current < itemsLength {

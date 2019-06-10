@@ -1,8 +1,8 @@
-package tokens
+package parse
 
 import "github.com/chaseadamsio/goorgeous/lex"
 
-func IsKeyword(token lex.Item, items []lex.Item) bool {
+func isKeyword(token lex.Item, items []lex.Item) bool {
 	current := 0
 	itemsLength := len(items)
 
@@ -18,7 +18,7 @@ func IsKeyword(token lex.Item, items []lex.Item) bool {
 	return false
 }
 
-func FindGreaterBlock(items []lex.Item) (found bool, end int) {
+func findGreaterBlock(items []lex.Item) (found bool, end int) {
 	current := 0
 	itemsLength := len(items)
 	foundEnd := false

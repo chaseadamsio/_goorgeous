@@ -1,11 +1,11 @@
-package tokens
+package parse
 
 import "github.com/chaseadamsio/goorgeous/lex"
 
 const maxHeadlineDepth = 6
 
 // IsHeadline determines inf a collection of items is a headline
-func IsHeadline(items []lex.Item) bool {
+func isHeadline(items []lex.Item) bool {
 	current := 0
 	itemsLength := len(items)
 	token := items[0]
@@ -30,7 +30,7 @@ func IsHeadline(items []lex.Item) bool {
 }
 
 // HeadlineDepth determines the depth of a headline
-func HeadlineDepth(items []lex.Item) int {
+func headlineDepth(items []lex.Item) int {
 	depth := 0
 	itemsLength := len(items)
 	for depth <= maxHeadlineDepth {

@@ -29,6 +29,6 @@ func TestTransform(t *testing.T) {
 		for _, node := range out {
 			flatOut = append(flatOut, "type: "+string(node.Type)+"\n\t"+node.Value+"\n")
 		}
-		// t.Errorf(strings.Join(flatOut, ""))
+		// fmt.Println(strings.Join(flatOut, ""))
 	}
 }

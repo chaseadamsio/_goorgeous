@@ -1,6 +1,7 @@
 package parse
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/chaseadamsio/goorgeous/ast"
@@ -13,9 +14,7 @@ func TestParse(t *testing.T) {
 		// }
 		t.Run(tc.name, func(t *testing.T) {
 			ast := Parse(tc.input)
-			if true {
-				t.Errorf("\nname: %s\n\tinput: %s\n\t%v", tc.name, tc.input, ast)
-			}
+			fmt.Printf("\nname: %s\n\tinput: %s\n\t%v", tc.name, tc.input, ast)
 		})
 	}
 }

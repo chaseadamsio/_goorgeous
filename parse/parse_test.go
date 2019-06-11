@@ -1,23 +1,22 @@
 package parse
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/chaseadamsio/goorgeous/ast"
 )
 
 func TestParse(t *testing.T) {
-	for _, tc := range tests {
-		// if !strings.HasPrefix(tc.name, "unordered-list-with-child-ordered-list") {
-		// 	continue
-		// }
-		t.Run(tc.name, func(t *testing.T) {
-			// _ = Parse(tc.input)
-			ast := Parse(tc.input)
-			fmt.Printf("\nname: %s\n\tinput: \n%s\n\t%v", tc.name, tc.input, ast)
-		})
-	}
+	// for _, tc := range tests {
+	// if !strings.HasPrefix(tc.name, "unordered-list-with-child-ordered-list") {
+	// 	continue
+	// }
+	// t.Run(tc.name, func(t *testing.T) {
+	// 	// _ = Parse(tc.input)
+	// 	ast := Parse(tc.input)
+	// 	fmt.Printf("\nname: %s\n\tinput: \n%s\n\t%v", tc.name, tc.input, ast)
+	// })
+	// }
 }
 
 type testCase struct {

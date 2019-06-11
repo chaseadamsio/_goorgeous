@@ -58,7 +58,7 @@ func findList(items []lex.Item, isListFunc func(items []lex.Item) bool) int {
 		}
 		current++
 	}
-	return current
+	return current - 1
 }
 
 func findUnorderedList(items []lex.Item) int {
@@ -110,14 +110,17 @@ func foundTerminatingNewline(items []lex.Item,
 	itemsLength := len(items)
 	if items[0].IsNewline() { // found the first new line in example
 
-		if 1 < itemsLength && items[1].IsWord() {
-			return true
-		}
-
 		if 1 < itemsLength && foundMatchFunc(items[1:]) {
 			return false
 		}
 
+		if 1 < itemsLength && items[1].IsWord() || 1 < itemsLength && items[1].IsNonWord() {
+			return true
+		}
+
+		if 1 < itemsLength && items[1].IsWord() {
+			return true
+		}
 		if 1 < itemsLength && (items[1].IsTab()) {
 			return false
 		}

@@ -33,6 +33,7 @@ type checker interface {
 	eofChecker
 	whitespaceChecker
 	wordChecker
+	nonwordChecker
 }
 
 type newlineChecker interface {
@@ -113,6 +114,10 @@ type whitespaceChecker interface {
 
 type wordChecker interface {
 	IsWord() bool
+}
+
+type nonwordChecker interface {
+	IsNonWord() bool
 }
 
 type itemType int
@@ -324,6 +329,14 @@ func (i item) IsWhitespace() bool {
 
 func (i item) IsWord() bool {
 	matched, err := regexp.Match(`\w`, []byte(i.Value()))
+	if err != nil {
+		panic(err) // TODO ¯\_(ツ)_/¯ handle this better?
+	}
+	return matched
+}
+
+func (i item) IsNonWord() bool {
+	matched, err := regexp.Match(`\W`, []byte(i.Value()))
 	if err != nil {
 		panic(err) // TODO ¯\_(ツ)_/¯ handle this better?
 	}

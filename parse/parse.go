@@ -78,11 +78,12 @@ func (p *parser) appendToParent(start, current int, parent ast.Node, items []lex
 	end := current + findFunc(items[current:])
 	node := newNodeFunc(current, end, parent, items)
 	parent.Append(node)
+
 	p.walkElements(node, items[current+1:end])
+
 	current = end + 1
 	start = current
-	newCurrent, newStart = current, start
-	return newCurrent, newStart
+	return current, start
 }
 
 func (p *parser) walkElements(parent ast.Node, items []lex.Item) {
@@ -211,32 +212,25 @@ func (p *parser) walk(parent ast.Node, items []lex.Item) {
 				current = end + 1
 				start = current
 			}
-
-		} else if token.IsNewline() {
-			if start < current && items[current-1].IsNewline() {
-				if parent.Type() != "Section" {
-					parent = findClosestSectionNode(parent)
-				}
-				node := ast.NewParagraphNode(start, current, parent, items[start:current])
-				p.walkElements(node, items[start:current])
-
-				parent.Append(node)
-				current++
-				start = current
-			}
-			current++
-		} else if isOrderedList(token, items, current) {
-			// orderedListEnd := findOrderedList(items[current:])
-			// node := ast.NewOrderedListNode(current, orderedListEnd, parent, items[current:current+orderedListEnd])
-			// parent.Append(node)
-			// current = current + orderedListEnd
-			current++
-		} else if isUnorderedList(token, items, current) {
-			unorderedListEnd := findUnorderedList(items[current:])
-			if parent.Type() != "Section" {
-				parent = findClosestSectionNode(parent)
-			}
-			node := ast.NewUnorderedListNode(current, unorderedListEnd, parent, items[current:current+unorderedListEnd])
+		} else if isOrderedList(items[current:]) {
+			// TODO fix this section node logic
+			// if parent.Type() != "Section" {
+			// 	parent = findClosestSectionNode(parent)
+			// }
+			node := ast.NewOrderedListNode(parent, items[current:])
+			end := findOrderedList(items)
+			orderedListEnd := p.makeOrderedListItems(node, items[current:end])
+			parent.Append(node)
+			current = current + orderedListEnd
+			start = current
+		} else if isUnorderedList(items[current:]) {
+			// TODO fix this section node logic
+			// if parent.Type() != "Section" {
+			// 	parent = findClosestSectionNode(parent)
+			// }
+			node := ast.NewUnorderedListNode(parent, items[current:])
+			end := findUnorderedList(items)
+			unorderedListEnd := p.makeUnorderedListItems(node, items[current:end])
 			parent.Append(node)
 			current = current + unorderedListEnd
 			start = current
@@ -300,6 +294,19 @@ func (p *parser) walk(parent ast.Node, items []lex.Item) {
 			}
 			current++
 			start = current
+		} else if token.IsNewline() {
+			if start < current && items[current-1].IsNewline() {
+				if parent.Type() != "Section" {
+					parent = findClosestSectionNode(parent)
+				}
+				node := ast.NewParagraphNode(start, current, parent, items[start:current])
+				p.walkElements(node, items[start:current])
+
+				parent.Append(node)
+				current++
+				start = current
+			}
+			current++
 		} else {
 			current++
 		}

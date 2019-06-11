@@ -1,6 +1,10 @@
 package ast
 
-import "github.com/chaseadamsio/goorgeous/lex"
+import (
+	"strings"
+
+	"github.com/chaseadamsio/goorgeous/lex"
+)
 
 type ListItemNode struct {
 	NodeType
@@ -11,13 +15,20 @@ type ListItemNode struct {
 	children []Node
 }
 
-func NewListItemNode(start, end int, parent Node, items []lex.Item) *ListItemNode {
+func NewListItemNode(parent Node, items []lex.Item) *ListItemNode {
 	node := &ListItemNode{
 		NodeType: "ListItem",
 		parent:   parent,
-		start:    start,
-		end:      end,
+		start:    items[0].Offset(),
+		end:      items[len(items)-1].Offset(),
 	}
+
+	var valStrs []string
+	for _, item := range items {
+		valStrs = append(valStrs, item.Value())
+	}
+
+	node.value = strings.Join(valStrs, "")
 
 	return node
 }

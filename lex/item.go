@@ -29,6 +29,7 @@ type checker interface {
 	dashChecker
 	textChecker
 	hashChecker
+	tabChecker
 	eofChecker
 	whitespaceChecker
 	wordChecker
@@ -98,6 +99,10 @@ type forwardSlashChecker interface {
 	IsForwardSlash() bool
 }
 
+type tabChecker interface {
+	IsTab() bool
+}
+
 type eofChecker interface {
 	IsEOF() bool
 }
@@ -145,6 +150,8 @@ func (i itemType) String() string {
 		val = "Dash"
 	case ItemHash:
 		val = "Hash"
+	case ItemTab:
+		val = "Tab"
 	case ItemEOF:
 		val = "EOF"
 	}
@@ -184,6 +191,8 @@ const (
 	ItemHash
 	// ItemText is a Text Item
 	ItemText
+	// ItemTab is a Tab Item
+	ItemTab
 	// ItemEOF is a EOF Item
 	ItemEOF
 )
@@ -197,15 +206,16 @@ var charToItem = map[rune]itemType{
 	'+':  ItemPlus,
 	':':  ItemColon,
 	' ':  ItemSpace,
-	'`':  ItemBacktick,
-	'[':  ItemBracket,
-	']':  ItemBracket,
-	'(':  ItemParenthesis,
-	')':  ItemParenthesis,
-	'=':  ItemEqual,
-	'|':  ItemPipe,
-	'-':  ItemDash,
-	'#':  ItemHash,
+	'	': ItemTab,
+	'`': ItemBacktick,
+	'[': ItemBracket,
+	']': ItemBracket,
+	'(': ItemParenthesis,
+	')': ItemParenthesis,
+	'=': ItemEqual,
+	'|': ItemPipe,
+	'-': ItemDash,
+	'#': ItemHash,
 }
 
 type item struct {
@@ -298,6 +308,10 @@ func (i item) IsHash() bool {
 
 func (i item) IsText() bool {
 	return i.typ == ItemText
+}
+
+func (i item) IsTab() bool {
+	return i.typ == ItemTab
 }
 
 func (i item) IsEOF() bool {

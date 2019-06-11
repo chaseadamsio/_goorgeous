@@ -83,6 +83,10 @@ func mkText(val string, pos, offset, line int) item {
 	return mkItem(ItemText, val, pos, offset, line)
 }
 
+func mkTab(pos, offset, line int) item {
+	return mkItem(ItemTab, "	", pos, offset, line)
+}
+
 func mkEOF(pos, offset, line int) item {
 	return mkItem(ItemEOF, "", pos, offset, line)
 }
@@ -687,7 +691,7 @@ var lexTests = []testCase{
 		},
 	},
 	{
-		"list",
+		"unordered-list",
 		"- apples\n- oranges\n- bananas\nsomething else",
 		[]Item{
 			mkDash(1, 0, 1),
@@ -706,6 +710,55 @@ var lexTests = []testCase{
 			mkSpace(10, 38, 4),
 			mkText("else", 11, 39, 4),
 			mkEOF(43, 43, 4),
+		},
+	},
+	{
+		"unordered-list-with-child-ordered-list",
+		"- apples\n\t1. in apples 1\n\t2. in apples 2\n\t3. in apples 3\n- oranges\n- bananas\nsomething else",
+		[]Item{
+			mkDash(1, 0, 1),
+			mkSpace(2, 1, 1),
+			mkText("apples", 3, 2, 1),
+			mkNewLine(9, 8, 1),
+			mkTab(1, 9, 2),
+			mkText("1.", 2, 10, 2),
+			mkSpace(4, 12, 2),
+			mkText("in", 5, 13, 2),
+			mkSpace(7, 15, 2),
+			mkText("apples", 8, 16, 2),
+			mkSpace(14, 22, 2),
+			mkText("1", 15, 23, 2),
+			mkNewLine(16, 24, 2),
+			mkTab(1, 25, 3),
+			mkText("2.", 2, 26, 3),
+			mkSpace(4, 28, 3),
+			mkText("in", 5, 29, 3),
+			mkSpace(7, 31, 3),
+			mkText("apples", 8, 32, 3),
+			mkSpace(14, 38, 3),
+			mkText("2", 15, 39, 3),
+			mkNewLine(16, 40, 3),
+			mkTab(1, 41, 4),
+			mkText("3.", 2, 42, 4),
+			mkSpace(4, 44, 4),
+			mkText("in", 5, 45, 4),
+			mkSpace(7, 47, 4),
+			mkText("apples", 8, 48, 4),
+			mkSpace(14, 54, 4),
+			mkText("3", 15, 55, 4),
+			mkNewLine(16, 56, 4),
+			mkDash(1, 57, 5),
+			mkSpace(2, 58, 5),
+			mkText("oranges", 3, 59, 5),
+			mkNewLine(10, 66, 5),
+			mkDash(1, 67, 6),
+			mkSpace(2, 68, 6),
+			mkText("bananas", 3, 69, 6),
+			mkNewLine(10, 76, 6),
+			mkText("something", 1, 77, 7),
+			mkSpace(10, 86, 7),
+			mkText("else", 11, 87, 7),
+			mkEOF(91, 91, 7),
 		},
 	},
 	{

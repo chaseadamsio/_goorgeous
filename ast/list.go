@@ -16,21 +16,21 @@ type ListNode struct {
 	children []Node
 }
 
-func NewUnorderedListNode(start, end int, parent Node, items []lex.Item) *ListNode {
-	return newListNode("UNORDERED", start, end, parent, items)
+func NewUnorderedListNode(parent Node, items []lex.Item) *ListNode {
+	return newListNode("UNORDERED", parent, items)
 }
 
-func NewOrderedListNode(start, end int, parent Node, items []lex.Item) *ListNode {
-	return newListNode("ORDERED", start, end, parent, items)
+func NewOrderedListNode(parent Node, items []lex.Item) *ListNode {
+	return newListNode("ORDERED", parent, items)
 }
 
-func newListNode(listType string, start, end int, parent Node, items []lex.Item) *ListNode {
+func newListNode(listType string, parent Node, items []lex.Item) *ListNode {
 	node := &ListNode{
 		NodeType: "List",
 		listType: listType,
 		parent:   parent,
-		start:    start,
-		end:      end,
+		start:    items[0].Offset(),
+		end:      items[len(items)-1].Offset(),
 	}
 
 	var valStrs []string
@@ -39,21 +39,7 @@ func newListNode(listType string, start, end int, parent Node, items []lex.Item)
 	}
 
 	node.value = strings.Join(valStrs, "")
-	node.parse(items)
 	return node
-}
-
-func (n *ListNode) parse(items []lex.Item) {
-	start, end := 0, 0
-	itemsLength := len(items)
-	for end < itemsLength {
-		nextStart, nextEnd := findListItem(items[start:itemsLength])
-		start = nextStart + start
-		end = nextEnd + end
-		node := NewListItemNode(start, end, n, items[start:end])
-		n.Append(node)
-		start = end
-	}
 }
 
 func findListItem(items []lex.Item) (start, end int) {

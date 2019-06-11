@@ -64,15 +64,9 @@ func TestFindIsUnorderedList(t *testing.T) {
 		expected int
 	}{
 		{"- apples\n- bananas\n- oranges", 11},
-		// {"- apples\n- bananas\n- oranges\n\tsome text", 17},
 		{"- apples\n- bananas\n- oranges\nsome text", 11},
 		{"- apples\n- bananas\n- oranges\n* test", 11},
 		{"- apples\n- bananas\n- oranges\n1. test", 11},
-		// {"\n- apples\n- bananas\n- oranges", 1},
-		// {"\n- apples\n- bananas\n- oranges", 0},
-		// {"beforedash- apples\n- bananas\n- oranges", 0},
-		// {"\n-apples\n-bananas\n-oranges", 0},
-		// {"\n-apples\n-bananas\n-oranges", 1},
 	}
 
 	for _, tc := range testCases {
@@ -94,15 +88,9 @@ func TestFindIsOrderedList(t *testing.T) {
 		expected int
 	}{
 		{"1. apples\n2. bananas\n3. oranges", 11},
-		// {"- apples\n- bananas\n- oranges\n\tsome text", 17},
 		{"1. apples\n2. bananas\n3. oranges\nsome text", 11},
 		{"1. apples\n2. bananas\n3. oranges\n* test", 11},
 		{"1. apples\n2. bananas\n3. oranges\n- test", 11},
-		// {"\n- apples\n- bananas\n- oranges", 1},
-		// {"\n- apples\n- bananas\n- oranges", 0},
-		// {"beforedash- apples\n- bananas\n- oranges", 0},
-		// {"\n-apples\n-bananas\n-oranges", 0},
-		// {"\n-apples\n-bananas\n-oranges", 1},
 	}
 
 	for _, tc := range testCases {

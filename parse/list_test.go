@@ -65,6 +65,7 @@ func TestFindIsUnorderedList(t *testing.T) {
 	}{
 		{"- apples\n- bananas\n- oranges", 11},
 		{"- apples\n- bananas\n- oranges\nsome text", 11},
+		{"- apples\n- bananas\n- oranges\n-test", 11},
 		{"- apples\n- bananas\n- oranges\n* test", 11},
 		{"- apples\n- bananas\n- oranges\n1. test", 11},
 	}
@@ -89,6 +90,7 @@ func TestFindIsOrderedList(t *testing.T) {
 	}{
 		{"1. apples\n2. bananas\n3. oranges", 11},
 		{"1. apples\n2. bananas\n3. oranges\nsome text", 11},
+		{"1. apples\n2. bananas\n3. oranges\n4.test", 11},
 		{"1. apples\n2. bananas\n3. oranges\n* test", 11},
 		{"1. apples\n2. bananas\n3. oranges\n- test", 11},
 	}

@@ -2,7 +2,6 @@ package parse
 
 import (
 	"fmt"
-	"strings"
 	"testing"
 
 	"github.com/chaseadamsio/goorgeous/ast"
@@ -10,10 +9,11 @@ import (
 
 func TestParse(t *testing.T) {
 	for _, tc := range tests {
-		if !strings.HasPrefix(tc.name, "unordered-list-with-child-ordered-list") {
-			continue
-		}
+		// if !strings.HasPrefix(tc.name, "unordered-list-with-child-ordered-list") {
+		// 	continue
+		// }
 		t.Run(tc.name, func(t *testing.T) {
+			// _ = Parse(tc.input)
 			ast := Parse(tc.input)
 			fmt.Printf("\nname: %s\n\tinput: \n%s\n\t%v", tc.name, tc.input, ast)
 		})
@@ -379,9 +379,43 @@ var tests = []testCase{
 			}},
 		}},
 	},
+	// {
+	// 	"unordered-list-with-child-ordered-list-with-ordered-list-child",
+	// 	"- apples\n\t1. in apples 1\n\t2. in apples 2\n\t\t1. in apples 1\n\t\t2. in apples 2\n\t\t3. in apples 3\n\t3. in apples 3\n- oranges\n- bananas\nsomething else",
+	// 	[]testNode{{
+	// 		"Root",
+	// 		[]testNode{{
+	// 			"Headline",
+	// 			[]testNode{{
+	// 				"Headline",
+	// 				[]testNode{{
+	// 					"Headline",
+	// 					nil,
+	// 				}},
+	// 			}},
+	// 		}},
+	// 	}},
+	// },
+	// {
+	// 	"unordered-list-with-child-ordered-list-with-unordered-list-child",
+	// 	"- apples\n\t1. in apples 1\n\t2. in apples 2\n\t\t- in apples 1\n\t\t- in apples 2\n\t\t- in apples 3\n\t3. in apples 3\n- oranges\n- bananas\nsomething else",
+	// 	[]testNode{{
+	// 		"Root",
+	// 		[]testNode{{
+	// 			"Headline",
+	// 			[]testNode{{
+	// 				"Headline",
+	// 				[]testNode{{
+	// 					"Headline",
+	// 					nil,
+	// 				}},
+	// 			}},
+	// 		}},
+	// 	}},
+	// },
 	{
-		"ordered-list",
-		"1. apples\n2. oranges\n3. bananas\nsomething else",
+		"ordered-list-with-unordered-list-child",
+		"1. apples\n2. oranges\n\t- apples\n\t- oranges\n\t- bananas\n\t\tsomething else\n3. bananas\nsomething else",
 		[]testNode{{
 			"Root",
 			[]testNode{{

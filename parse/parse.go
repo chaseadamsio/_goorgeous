@@ -217,8 +217,8 @@ func (p *parser) walk(parent ast.Node, items []lex.Item) {
 			// if parent.Type() != "Section" {
 			// 	parent = findClosestSectionNode(parent)
 			// }
-			node := ast.NewOrderedListNode(parent, items[current:])
-			end := findOrderedList(items)
+			end := current + findOrderedList(items[current:])
+			node := ast.NewOrderedListNode(parent, items[current:end])
 			orderedListEnd := p.makeOrderedListItems(node, items[current:end])
 			parent.Append(node)
 			current = current + orderedListEnd
@@ -228,8 +228,8 @@ func (p *parser) walk(parent ast.Node, items []lex.Item) {
 			// if parent.Type() != "Section" {
 			// 	parent = findClosestSectionNode(parent)
 			// }
-			node := ast.NewUnorderedListNode(parent, items[current:])
-			end := findUnorderedList(items)
+			end := current + findUnorderedList(items[current:])
+			node := ast.NewUnorderedListNode(parent, items[current:end])
 			unorderedListEnd := p.makeUnorderedListItems(node, items[current:end])
 			parent.Append(node)
 			current = current + unorderedListEnd

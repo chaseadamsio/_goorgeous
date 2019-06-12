@@ -212,28 +212,12 @@ func (p *parser) walk(parent ast.Node, items []lex.Item) {
 				current = end + 1
 				start = current
 			}
-		} else if isOrderedList(items[current:]) {
-			// TODO fix this section node logic
-			// if parent.Type() != "Section" {
-			// 	parent = findClosestSectionNode(parent)
-			// }
-			end := current + findOrderedList(items[current:])
-			node := ast.NewOrderedListNode(parent, items[current:end])
-			orderedListEnd := p.makeOrderedListItems(node, items[current:end])
-			parent.Append(node)
-			current = current + orderedListEnd
+		} else if listTyp, listStart, listEnd, found := maybeList(items[current:]); found {
+
+			p.makeList(listTyp, parent, items[listStart:listEnd])
+			current = listEnd
 			start = current
-		} else if isUnorderedList(items[current:]) {
-			// TODO fix this section node logic
-			// if parent.Type() != "Section" {
-			// 	parent = findClosestSectionNode(parent)
-			// }
-			end := current + findUnorderedList(items[current:])
-			node := ast.NewUnorderedListNode(parent, items[current:end])
-			unorderedListEnd := p.makeUnorderedListItems(node, items[current:end])
-			parent.Append(node)
-			current = current + unorderedListEnd
-			start = current
+
 		} else if isTable(token, items, current) {
 			tableEnd := findTable(items[current:])
 			if parent.Type() != "Section" {

@@ -8,16 +8,15 @@ import (
 )
 
 func TestIsUnorderedList(t *testing.T) {
-
 	var testCases = []struct {
-		source    string
-		startItem int
-		expected  bool
+		source string
+		start  int
+		found  bool
 	}{
 		{testdata.UnorderedListBasic, 0, true},
-		{testdata.UnorderedListNotAList, 0, false},
-		{testdata.UnorderedListWithStartingNewline, 1, true},
-		{testdata.UnorderedListWithStartingNewline, 0, false},
+		{testdata.UnorderedListNotAList, -1, false},
+		{testdata.UnorderedListWithStartingNewline, -1, false},
+		{testdata.Headline1, -1, false},
 	}
 
 	for _, tc := range testCases {
@@ -29,9 +28,15 @@ func TestIsUnorderedList(t *testing.T) {
 			for item := range lexedItems {
 				items = append(items, item)
 			}
-			if isUnorderedList(items[tc.startItem:]) != tc.expected {
-				t.Errorf("expected \"%s\" to be %t", value, tc.expected)
+
+			start, found := isUnorderedList(items)
+			if tc.start != start {
+				t.Errorf("expected %s start to be %d. got %d", tc.source, tc.start, start)
 			}
+			if tc.found != found {
+				t.Errorf("expected %s found to be %t", tc.source, tc.found)
+			}
+
 		})
 	}
 }
@@ -39,14 +44,14 @@ func TestIsUnorderedList(t *testing.T) {
 func TestIsOrderedList(t *testing.T) {
 
 	testCases := []struct {
-		source    string
-		startItem int
-		expected  bool
+		source string
+		start  int
+		found  bool
 	}{
 		{testdata.OrderedListBasic, 0, true},
-		{testdata.OrderedListNotAList, 0, false},
-		{testdata.OrderedListWithStartingNewline, 1, true},
-		{testdata.OrderedListWithStartingNewline, 0, false},
+		{testdata.OrderedListNotAList, -1, false},
+		{testdata.OrderedListWithStartingNewline, -1, false},
+		{testdata.Headline1, -1, false},
 	}
 
 	for _, tc := range testCases {
@@ -57,25 +62,30 @@ func TestIsOrderedList(t *testing.T) {
 		for item := range lexedItems {
 			items = append(items, item)
 		}
-		if isOrderedList(items[tc.startItem:]) != tc.expected {
-			t.Errorf("expected \"%s\" to be %t", value, tc.expected)
+
+		start, found := isOrderedList(items)
+		if tc.start != start {
+			t.Errorf("expected %s start to be %d. got %d", tc.source, tc.start, start)
+		}
+		if tc.found != found {
+			t.Errorf("expected %s found to be %t", tc.source, tc.found)
 		}
 	}
 }
 
-func TestFindIsUnorderedList(t *testing.T) {
+func TestFindUnorderedListBoundaries(t *testing.T) {
 	testCases := []struct {
-		source   string
-		expected int
+		source     string
+		start, end int
 	}{
-		{testdata.UnorderedListBasic, 15},
-		{testdata.UnorderedListFollowParagraph, 15},
-		{testdata.UnorderedListFollowDashNotList, 11},
-		{testdata.UnorderedListFollowAsteriskHeading, 11},
-		{testdata.UnorderedListWithFollowOrderedList, 15},
-		{testdata.UnorderedListWithNestedOrderedList, 55},
-		{testdata.UnorderedListWithNestedContent, 29},
-		{testdata.UnorderedListWithDeepNestedChildren, 77},
+		{testdata.UnorderedListBasic, 0, 16},
+		{testdata.UnorderedListFollowParagraph, 0, 16},
+		{testdata.UnorderedListFollowDashNotList, 0, 12},
+		{testdata.UnorderedListFollowAsteriskHeading, 0, 12},
+		{testdata.UnorderedListWithFollowOrderedList, 0, 16},
+		{testdata.UnorderedListWithNestedOrderedList, 0, 56},
+		{testdata.UnorderedListWithNestedContent, 0, 30},
+		{testdata.UnorderedListWithDeepNestedChildren, 0, 78},
 	}
 
 	for _, tc := range testCases {
@@ -86,25 +96,28 @@ func TestFindIsUnorderedList(t *testing.T) {
 		for item := range lexedItems {
 			items = append(items, item)
 		}
-		found := findUnorderedList(items)
-		if found != tc.expected {
-			t.Errorf("expected \"%s\" to be %d. got %d", tc.source, tc.expected, found)
+		start, end := findUnorderedListBoundaries(items)
+		if tc.start != start {
+			t.Errorf("expected \"%s\" start to be %d. got %d", tc.source, tc.start, start)
+		}
+		if tc.end != end {
+			t.Errorf("expected \"%s\" end to be %d. got %d", tc.source, tc.end, end)
 		}
 	}
 }
 
 func TestFindOrderedList(t *testing.T) {
 	testCases := []struct {
-		source   string
-		expected int
+		source     string
+		start, end int
 	}{
-		{testdata.OrderedListBasic, 15},
-		{testdata.OrderedListFollowParagraph, 15},
-		{testdata.OrderedListFollowAsteriskHeading, 15},
-		{testdata.OrderedListFollowNumberNotList, 15},
-		{testdata.OrderedListWithFollowUnOrderedList, 15},
-		{testdata.OrderedListWithNestedOrderedList, 55},
-		{testdata.OrderedListWithNestedContent, 29},
+		{testdata.OrderedListBasic, 0, 16},
+		{testdata.OrderedListFollowParagraph, 0, 16},
+		{testdata.OrderedListFollowAsteriskHeading, 0, 16},
+		{testdata.OrderedListFollowNumberNotList, 0, 16},
+		{testdata.OrderedListWithFollowUnOrderedList, 0, 16},
+		{testdata.OrderedListWithNestedOrderedList, 0, 56},
+		{testdata.OrderedListWithNestedContent, 0, 30},
 	}
 
 	for _, tc := range testCases {
@@ -115,9 +128,13 @@ func TestFindOrderedList(t *testing.T) {
 		for item := range lexedItems {
 			items = append(items, item)
 		}
-		found := findOrderedList(items)
-		if found != tc.expected {
-			t.Errorf("expected \"%s\" to be %d. got %d", tc.source, tc.expected, found)
+
+		start, end := findOrderedListBoundaries(items)
+		if tc.start != start {
+			t.Errorf("expected \"%s\" start to be %d. got %d", tc.source, tc.start, start)
+		}
+		if tc.end != end {
+			t.Errorf("expected \"%s\" end to be %d. got %d", tc.source, tc.end, end)
 		}
 	}
 }

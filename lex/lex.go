@@ -50,6 +50,7 @@ func (l *lexer) run() {
 		l.pos = idx
 		if idx != len(l.input) {
 			char = rune(l.input[idx])
+
 			if val, found := charToItem[char]; found {
 				if val == ItemNewLine {
 					if inTextBlock {

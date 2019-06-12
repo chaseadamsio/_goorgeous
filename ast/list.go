@@ -16,15 +16,7 @@ type ListNode struct {
 	children []Node
 }
 
-func NewUnorderedListNode(parent Node, items []lex.Item) *ListNode {
-	return newListNode("UNORDERED", parent, items)
-}
-
-func NewOrderedListNode(parent Node, items []lex.Item) *ListNode {
-	return newListNode("ORDERED", parent, items)
-}
-
-func newListNode(listType string, parent Node, items []lex.Item) *ListNode {
+func NewListNode(listType string, parent Node, items []lex.Item) *ListNode {
 	node := &ListNode{
 		NodeType: "List",
 		listType: listType,

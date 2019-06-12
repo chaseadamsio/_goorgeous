@@ -1,7 +1,8 @@
 package parse
 
 import (
-	"fmt"
+	"encoding/json"
+	"reflect"
 	"testing"
 
 	"github.com/chaseadamsio/goorgeous/ast"
@@ -11,10 +12,23 @@ import (
 func TestParse(t *testing.T) {
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
+			// if !strings.HasPrefix(tc.name, "unordered-list-with-child-ordered-list-with-unordered-list-child") {
+			// 	return
+			// }
 			value := testdata.GetOrgStr(tc.source)
 			// _ = Parse(value)
 			ast := Parse(value)
-			fmt.Printf("\nname: %s\n\tinput: \n%s\n\t%v", tc.name, value, ast)
+			var expected []interface{}
+			err := json.Unmarshal([]byte(tc.expected), &expected)
+			if err != nil {
+				t.Errorf("failed to unmarshal expected string: %s", err)
+				// use an empty string to get a view of the world and uncomment this next line...
+				// fmt.Printf("\nexpected:\n\t%v\nactual:\n\t%v", expected, ast)
+			}
+
+			if reflect.DeepEqual(ast, expected) {
+				t.Errorf("expected %s AST shape to match expected.", tc.name)
+			}
 		})
 	}
 
@@ -23,7 +37,7 @@ func TestParse(t *testing.T) {
 type testCase struct {
 	name     string
 	source   string
-	expected []testNode
+	expected string
 }
 
 type testNode struct {
@@ -331,37 +345,123 @@ var tests = []testCase{
 	{
 		"unordered-list",
 		testdata.UnorderedListBasic,
-		[]testNode{{
-			"Root",
-			[]testNode{{
-				"Headline",
-				[]testNode{{
-					"Headline",
-					[]testNode{{
-						"Headline",
-						nil,
-					}},
-				}},
-			}},
-		}},
+		` [
+			{
+			  "NodeType": "Root",
+			  "Children": [
+				{
+				  "NodeType": "List",
+				  "Children": [
+					{
+					  "NodeType": "ListItem",
+					  "Children": null,
+					  "Value": "- apples"
+					},
+					{
+					  "NodeType": "ListItem",
+					  "Children": null,
+					  "Value": "- bananas"
+					},
+					{
+					  "NodeType": "ListItem",
+					  "Children": null,
+					  "Value": "- oranges"
+					},
+					{
+					  "NodeType": "ListItem",
+					  "Children": null,
+					  "Value": "- pears"
+					}
+				  ],
+				  "Value": "- apples\n- bananas\n- oranges\n- pears\n"
+				}
+			  ],
+			  "Value": ""
+			}
+		  ]`,
 	},
-	// {
-	// 	"unordered-list-with-child-ordered-list",
-	// 	testdata.UnorderedListWithNestedOrderedList,
-	// 	[]testNode{{
-	// 		"Root",
-	// 		[]testNode{{
-	// 			"Headline",
-	// 			[]testNode{{
-	// 				"Headline",
-	// 				[]testNode{{
-	// 					"Headline",
-	// 					nil,
-	// 				}},
-	// 			}},
-	// 		}},
-	// 	}},
-	// },
+	{
+		"unordered-list-with-child-ordered-list",
+		testdata.UnorderedListWithNestedOrderedList,
+		`[
+			{
+			  "NodeType": "Root",
+			  "Children": [
+				{
+				  "NodeType": "List",
+				  "Children": [
+					{
+					  "NodeType": "ListItem",
+					  "Children": null,
+					  "Value": "- apples"
+					},
+					{
+					  "NodeType": "ListItem",
+					  "Children": [
+						{
+						  "NodeType": "List",
+						  "Children": [
+							{
+							  "NodeType": "ListItem",
+							  "Children": null,
+							  "Value": "1. more apples"
+							},
+							{
+							  "NodeType": "ListItem",
+							  "Children": null,
+							  "Value": "2. more bananas"
+							},
+							{
+							  "NodeType": "ListItem",
+							  "Children": null,
+							  "Value": "3. more oranges"
+							},
+							{
+							  "NodeType": "ListItem",
+							  "Children": null,
+							  "Value": "4. more pears"
+							}
+						  ],
+						  "Value": "    1. more apples\n    2. more bananas\n    3. more oranges\n    4. more pears\n"
+						}
+					  ],
+					  "Value": "- bananas"
+					},
+					{
+					  "NodeType": "ListItem",
+					  "Children": null,
+					  "Value": "- oranges"
+					},
+					{
+					  "NodeType": "ListItem",
+					  "Children": null,
+					  "Value": "- pears"
+					}
+				  ],
+				  "Value": "- apples\n- bananas\n    1. more apples\n    2. more bananas\n    3. more oranges\n    4. more pears\n- oranges\n- pears\n"
+				},
+				{
+				  "NodeType": "Section",
+				  "Children": [
+					{
+					  "NodeType": "Paragraph",
+					  "Children": [
+						{
+						  "NodeType": "Text",
+						  "Children": null,
+						  "Value": "with an extra paragraph\n"
+						}
+					  ],
+					  "Value": "with an extra paragraph\n"
+					}
+				  ],
+				  "Value": ""
+				}
+			  ],
+			  "Value": ""
+			}
+		  ]`,
+	},
 	// {
 	// 	"unordered-list-with-child-ordered-list-with-ordered-list-child",
 	// 	"- apples\n\t1. in apples 1\n\t2. in apples 2\n\t\t1. in apples 1\n\t\t2. in apples 2\n\t\t3. in apples 3\n\t3. in apples 3\n- oranges\n- bananas\nsomething else",
@@ -382,19 +482,96 @@ var tests = []testCase{
 	{
 		"unordered-list-with-child-ordered-list-with-unordered-list-child",
 		testdata.UnorderedListWithDeepNestedChildren,
-		[]testNode{{
-			"Root",
-			[]testNode{{
-				"Headline",
-				[]testNode{{
-					"Headline",
-					[]testNode{{
-						"Headline",
-						nil,
-					}},
-				}},
-			}},
-		}},
+		`[
+			{
+			  "NodeType": "Root",
+			  "Children": [
+				{
+				  "NodeType": "List",
+				  "Children": [
+					{
+					  "NodeType": "ListItem",
+					  "Children": [
+						{
+						  "NodeType": "List",
+						  "Children": [
+							{
+							  "NodeType": "ListItem",
+							  "Children": null,
+							  "Value": "1. in apples 1"
+							},
+							{
+							  "NodeType": "ListItem",
+							  "Children": [
+								{
+								  "NodeType": "List",
+								  "Children": [
+									{
+									  "NodeType": "ListItem",
+									  "Children": null,
+									  "Value": "- in apples 1"
+									},
+									{
+									  "NodeType": "ListItem",
+									  "Children": null,
+									  "Value": "- in apples 2"
+									},
+									{
+									  "NodeType": "ListItem",
+									  "Children": null,
+									  "Value": "- in apples 3"
+									}
+								  ],
+								  "Value": "    - in apples 1\n    - in apples 2\n    - in apples 3\n"
+								}
+							  ],
+							  "Value": "2. in apples 2"
+							},
+							{
+							  "NodeType": "ListItem",
+							  "Children": null,
+							  "Value": "3. in apples 3"
+							}
+						  ],
+						  "Value": "  1. in apples 1\n  2. in apples 2\n    - in apples 1\n    - in apples 2\n    - in apples 3\n  3. in apples 3\n"
+						}
+					  ],
+					  "Value": "- apples"
+					},
+					{
+					  "NodeType": "ListItem",
+					  "Children": null,
+					  "Value": "- oranges"
+					},
+					{
+					  "NodeType": "ListItem",
+					  "Children": null,
+					  "Value": "- bananas"
+					}
+				  ],
+				  "Value": "- apples\n  1. in apples 1\n  2. in apples 2\n    - in apples 1\n    - in apples 2\n    - in apples 3\n  3. in apples 3\n- oranges\n- bananas\n"
+				},
+				{
+				  "NodeType": "Section",
+				  "Children": [
+					{
+					  "NodeType": "Paragraph",
+					  "Children": [
+						{
+						  "NodeType": "Text",
+						  "Children": null,
+						  "Value": "something else\n"
+						}
+					  ],
+					  "Value": "something else\n"
+					}
+				  ],
+				  "Value": ""
+				}
+			  ],
+			  "Value": ""
+			}
+		  ]`,
 	},
 	// {
 	// 	"ordered-list-with-unordered-list-child",

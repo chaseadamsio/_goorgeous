@@ -20,7 +20,7 @@ func GetOrgStr(filename string) (content string) {
 		panic("Unable to determine runtime caller.")
 	}
 
-	filepath := path.Join(path.Dir(callerFilename), "in", filename)
+	filepath := path.Join(path.Dir(callerFilename), filename)
 	if found, ok := files[filepath]; ok {
 		content = found
 	} else {
@@ -36,24 +36,26 @@ func GetOrgStr(filename string) (content string) {
 }
 
 const (
-	OrderedListBasic                   = "ordered-list/basic.org"
-	OrderedListNotAList                = "ordered-list/not-a-list.org"
-	OrderedListWithStartingNewline     = "ordered-list/with-starting-newline.org"
-	OrderedListFollowParagraph         = "ordered-list/with-follow-paragraph.org"
-	OrderedListFollowNumberNotList     = "ordered-list/with-follow-number-not-list.org"
-	OrderedListFollowAsteriskHeading   = "ordered-list/with-follow-asterisk-heading.org"
-	OrderedListWithFollowUnOrderedList = "ordered-list/with-follow-unordered-list.org"
-	OrderedListWithNestedOrderedList   = "ordered-list/with-nested-ordered-list.org"
-	OrderedListWithNestedContent       = "ordered-list/with-nested-content.org"
+	Headline1 = "in/headline/headline-1.org"
 
-	UnorderedListBasic                  = "unordered-list/basic.org"
-	UnorderedListNotAList               = "unordered-list/not-a-list.org"
-	UnorderedListWithStartingNewline    = "unordered-list/with-starting-newline.org"
-	UnorderedListFollowParagraph        = "unordered-list/with-follow-paragraph.org"
-	UnorderedListFollowDashNotList      = "unordered-list/with-follow-dash-not-list.org"
-	UnorderedListFollowAsteriskHeading  = "unordered-list/with-follow-asterisk-heading.org"
-	UnorderedListWithFollowOrderedList  = "unordered-list/with-follow-ordered-list.org"
-	UnorderedListWithNestedOrderedList  = "unordered-list/with-nested-ordered-list.org"
-	UnorderedListWithDeepNestedChildren = "unordered-list/with-2-deep-nested-children-list.org"
-	UnorderedListWithNestedContent      = "unordered-list/with-nested-content.org"
+	OrderedListBasic                   = "in/ordered-list/basic.org"
+	OrderedListNotAList                = "in/ordered-list/not-a-list.org"
+	OrderedListWithStartingNewline     = "in/ordered-list/with-starting-newline.org"
+	OrderedListFollowParagraph         = "in/ordered-list/with-follow-paragraph.org"
+	OrderedListFollowNumberNotList     = "in/ordered-list/with-follow-number-not-list.org"
+	OrderedListFollowAsteriskHeading   = "in/ordered-list/with-follow-asterisk-heading.org"
+	OrderedListWithFollowUnOrderedList = "in/ordered-list/with-follow-unordered-list.org"
+	OrderedListWithNestedOrderedList   = "in/ordered-list/with-nested-ordered-list.org"
+	OrderedListWithNestedContent       = "in/ordered-list/with-nested-content.org"
+
+	UnorderedListBasic                  = "in/unordered-list/basic.org"
+	UnorderedListNotAList               = "in/unordered-list/not-a-list.org"
+	UnorderedListWithStartingNewline    = "in/unordered-list/with-starting-newline.org"
+	UnorderedListFollowParagraph        = "in/unordered-list/with-follow-paragraph.org"
+	UnorderedListFollowDashNotList      = "in/unordered-list/with-follow-dash-not-list.org"
+	UnorderedListFollowAsteriskHeading  = "in/unordered-list/with-follow-asterisk-heading.org"
+	UnorderedListWithFollowOrderedList  = "in/unordered-list/with-follow-ordered-list.org"
+	UnorderedListWithNestedOrderedList  = "in/unordered-list/with-nested-ordered-list.org"
+	UnorderedListWithDeepNestedChildren = "in/unordered-list/with-2-deep-nested-children-list.org"
+	UnorderedListWithNestedContent      = "in/unordered-list/with-nested-content.org"
 )

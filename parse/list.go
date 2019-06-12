@@ -58,7 +58,7 @@ func findList(items []lex.Item, isListFunc func(items []lex.Item) bool) int {
 		}
 		current++
 	}
-	return current - 1
+	return current
 }
 
 func findUnorderedList(items []lex.Item) int {
@@ -114,15 +114,12 @@ func foundTerminatingNewline(items []lex.Item,
 			return false
 		}
 
-		if 1 < itemsLength && items[1].IsWord() || 1 < itemsLength && items[1].IsNonWord() {
-			return true
+		if (1 < itemsLength && items[1].IsTab()) || (1 < itemsLength && items[1].IsSpace()) {
+			return false
 		}
 
-		if 1 < itemsLength && items[1].IsWord() {
+		if 1 < itemsLength && items[1].IsWord() || 1 < itemsLength && items[1].IsNonWord() {
 			return true
-		}
-		if 1 < itemsLength && (items[1].IsTab()) {
-			return false
 		}
 
 		if itemsLength == 1 {
@@ -154,15 +151,15 @@ func foundListItemTerminatingNewline(items []lex.Item,
 			return true
 		}
 
-		if current < itemsLength && (items[current].IsTab()) {
+		if current < itemsLength && (items[current].IsTab() || items[current].IsSpace()) {
 			for current < itemsLength {
-				if !items[current].IsTab() {
+				if !(items[current].IsTab() || items[current].IsSpace()) {
 					break
 				}
 				current++
 			}
-			if current < itemsLength && foundMatchFunc(items[current:]) {
-				return true
+			if current < itemsLength && (foundOrderedListItem(items[current:]) || foundUnorderedListItem(items[current:])) {
+				return false
 			}
 			return false
 		}
@@ -172,16 +169,16 @@ func foundListItemTerminatingNewline(items []lex.Item,
 
 }
 
-func isDeeperThanCurrentIndent(currIndentLevel int, items []lex.Item) bool {
+func getIndentLevel(items []lex.Item) int {
 	itemsLength := len(items)
 	foundIndentLevel := 0
 	for foundIndentLevel < itemsLength {
-		if items[foundIndentLevel].Type() != lex.ItemTab {
+		if !(items[foundIndentLevel].IsTab() || items[foundIndentLevel].IsSpace()) {
 			break
 		}
 		foundIndentLevel++
 	}
-	return currIndentLevel < foundIndentLevel
+	return foundIndentLevel
 }
 
 func findListItem(items []lex.Item,
@@ -193,34 +190,28 @@ func findListItem(items []lex.Item,
 	indentLevel := 0
 	foundNestedListStart = 0
 
-	if items[current].IsTab() {
-		indentBaseLevel = 1
-		current = current + 1
+	if items[current].IsTab() || items[current].IsSpace() {
+		indentBaseLevel = getIndentLevel(items[current:])
 		indentLevel = indentBaseLevel
-		for current < itemsLength {
-			if !items[current+1].IsTab() {
-				break
-			}
-			indentBaseLevel++
-			current++
-		}
+		current = current + indentLevel
 	}
 
 	for current < itemsLength {
 		if items[current].IsNewline() {
-			if current+1 < itemsLength && items[current+1].IsTab() {
-				if isDeeperThanCurrentIndent(indentLevel, items[current+1:]) {
+			if current+1 < itemsLength && (items[current+1].IsTab() || items[current+1].IsSpace()) {
+				foundIndentLevel := getIndentLevel(items[current+1:])
+				if indentLevel < foundIndentLevel {
 					if foundOrderedListItem(items[current+1:]) ||
 						foundUnorderedListItem(items[current+1:]) {
-						indentLevel++
-						end = current
+						indentLevel = foundIndentLevel
 						if foundNestedListStart == 0 {
+							end = current
 							foundNestedListStart = current + 1
 						}
 					} else {
 						current = current + 1
 						for current < itemsLength {
-							if !items[current].IsTab() {
+							if !(items[current].IsTab() || items[current+1].IsSpace()) {
 								break
 							}
 							current++
@@ -229,36 +220,31 @@ func findListItem(items []lex.Item,
 					}
 				} else if indentBaseLevel == indentLevel {
 					return start, current + 1, foundNestedListStart, foundNestedListEnd
-				} else {
-					if foundNestedListStart != 0 {
-						foundNestedListEnd = current + 1
-					}
+				} else if foundNestedListStart != 0 {
+					foundNestedListEnd = current
 				}
-			} else if indentLevel > 0 {
-				foundNestedListEnd = current
-				indentLevel = 0
 			} else {
+				foundNestedListEnd = current
 				indentLevel = 0
 			}
 		}
 
 		if indentLevel == 0 && (current > 0 && foundListItemTerminatingNewline(items[current:], foundMatchFunc)) {
-			return start, end + 1, foundNestedListStart, foundNestedListEnd
-		}
-
-		if foundMatchFunc(items[current:]) {
-			start = current
+			return start, end, foundNestedListStart, foundNestedListEnd
 		}
 
 		if foundNestedListStart == 0 {
 			end++
+			if foundMatchFunc(items[current:]) {
+				start = current
+			}
 		}
 		current++
 	}
 	if foundNestedListStart != 0 {
 		foundNestedListEnd = current
 	}
-	return start, end + 1, foundNestedListStart, foundNestedListEnd
+	return start, end, foundNestedListStart, foundNestedListEnd
 }
 
 func findOrderedListItem(items []lex.Item) (start, end, foundNestedListStart, foundNestedListEnd int) {
@@ -269,7 +255,7 @@ func findOrderedListItem(items []lex.Item) (start, end, foundNestedListStart, fo
 func foundOrderedListItem(items []lex.Item) bool {
 	current := 0
 	for current < len(items) {
-		if !items[current].IsTab() {
+		if !(items[current].IsTab() || items[current].IsSpace()) {
 			break
 		}
 		current++
@@ -289,7 +275,7 @@ func findUnorderedListItem(items []lex.Item) (start, end, foundNestedListStart, 
 func foundUnorderedListItem(items []lex.Item) bool {
 	current := 0
 	for current < len(items) {
-		if !items[current].IsTab() {
+		if !(items[current].IsTab() || items[current].IsSpace()) {
 			break
 		}
 		current++

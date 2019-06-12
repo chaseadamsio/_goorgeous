@@ -4,106 +4,120 @@ import (
 	"testing"
 
 	"github.com/chaseadamsio/goorgeous/lex"
+	"github.com/chaseadamsio/goorgeous/testdata"
 )
 
 func TestIsUnorderedList(t *testing.T) {
-	testCases := []struct {
-		value    string
-		start    int
-		expected bool
+
+	var testCases = []struct {
+		source    string
+		startItem int
+		expected  bool
 	}{
-		{"- apples\n- bananas\n- oranges", 0, true},
-		{"\n- apples\n- bananas\n- oranges", 1, true},
-		{"\n- apples\n- bananas\n- oranges", 0, false},
-		{"beforedash- apples\n- bananas\n- oranges", 0, false},
-		{"\n-apples\n-bananas\n-oranges", 0, false},
-		{"\n-apples\n-bananas\n-oranges", 1, false},
+		{testdata.UnorderedListBasic, 0, true},
+		{testdata.UnorderedListNotAList, 0, false},
+		{testdata.UnorderedListWithStartingNewline, 1, true},
+		{testdata.UnorderedListWithStartingNewline, 0, false},
 	}
 
 	for _, tc := range testCases {
-		var items []lex.Item
-		lexedItems := lex.NewLexer(tc.value)
-		for item := range lexedItems {
-			items = append(items, item)
-		}
-		if isUnorderedList(items[tc.start:]) != tc.expected {
-			t.Errorf("expected \"%s\" to be %t", tc.value, tc.expected)
-		}
+		t.Run(tc.source, func(t *testing.T) {
+			value := testdata.GetOrgStr(tc.source)
+
+			var items []lex.Item
+			lexedItems := lex.NewLexer(value)
+			for item := range lexedItems {
+				items = append(items, item)
+			}
+			if isUnorderedList(items[tc.startItem:]) != tc.expected {
+				t.Errorf("expected \"%s\" to be %t", value, tc.expected)
+			}
+		})
 	}
 }
 
 func TestIsOrderedList(t *testing.T) {
+
 	testCases := []struct {
-		value    string
-		start    int
-		expected bool
+		source    string
+		startItem int
+		expected  bool
 	}{
-		{"1. apples\n2. bananas\n3. oranges", 0, true},
-		{"\n1. apples\n2. bananas\n3. oranges", 1, true},
-		{"\n1. apples\n2. bananas\n3. oranges", 0, false},
-		{"beforedash1. apples\n2. bananas\n3. oranges", 0, false},
-		{"\n1.apples\n2.bananas\n3.oranges", 0, false},
-		{"\n1.apples\n2.bananas\n3.oranges", 1, false},
+		{testdata.OrderedListBasic, 0, true},
+		{testdata.OrderedListNotAList, 0, false},
+		{testdata.OrderedListWithStartingNewline, 1, true},
+		{testdata.OrderedListWithStartingNewline, 0, false},
 	}
 
 	for _, tc := range testCases {
+		value := testdata.GetOrgStr(tc.source)
+
 		var items []lex.Item
-		lexedItems := lex.NewLexer(tc.value)
+		lexedItems := lex.NewLexer(value)
 		for item := range lexedItems {
 			items = append(items, item)
 		}
-		if isOrderedList(items[tc.start:]) != tc.expected {
-			t.Errorf("expected \"%s\" to be %t", tc.value, tc.expected)
+		if isOrderedList(items[tc.startItem:]) != tc.expected {
+			t.Errorf("expected \"%s\" to be %t", value, tc.expected)
 		}
 	}
 }
 
 func TestFindIsUnorderedList(t *testing.T) {
 	testCases := []struct {
-		value    string
+		source   string
 		expected int
 	}{
-		{"- apples\n- bananas\n- oranges", 11},
-		{"- apples\n- bananas\n- oranges\nsome text", 11},
-		{"- apples\n- bananas\n- oranges\n-test", 11},
-		{"- apples\n- bananas\n- oranges\n* test", 11},
-		{"- apples\n- bananas\n- oranges\n1. test", 11},
+		{testdata.UnorderedListBasic, 15},
+		{testdata.UnorderedListFollowParagraph, 15},
+		{testdata.UnorderedListFollowDashNotList, 11},
+		{testdata.UnorderedListFollowAsteriskHeading, 11},
+		{testdata.UnorderedListWithFollowOrderedList, 15},
+		{testdata.UnorderedListWithNestedOrderedList, 55},
+		{testdata.UnorderedListWithNestedContent, 29},
+		{testdata.UnorderedListWithDeepNestedChildren, 77},
 	}
 
 	for _, tc := range testCases {
+		value := testdata.GetOrgStr(tc.source)
+
 		var items []lex.Item
-		lexedItems := lex.NewLexer(tc.value)
+		lexedItems := lex.NewLexer(value)
 		for item := range lexedItems {
 			items = append(items, item)
 		}
 		found := findUnorderedList(items)
 		if found != tc.expected {
-			t.Errorf("expected \"%s\" to be %d. got %d", tc.value, tc.expected, found)
+			t.Errorf("expected \"%s\" to be %d. got %d", tc.source, tc.expected, found)
 		}
 	}
 }
 
-func TestFindIsOrderedList(t *testing.T) {
+func TestFindOrderedList(t *testing.T) {
 	testCases := []struct {
-		value    string
+		source   string
 		expected int
 	}{
-		{"1. apples\n2. bananas\n3. oranges", 11},
-		{"1. apples\n2. bananas\n3. oranges\nsome text", 11},
-		{"1. apples\n2. bananas\n3. oranges\n4.test", 11},
-		{"1. apples\n2. bananas\n3. oranges\n* test", 11},
-		{"1. apples\n2. bananas\n3. oranges\n- test", 11},
+		{testdata.OrderedListBasic, 15},
+		{testdata.OrderedListFollowParagraph, 15},
+		{testdata.OrderedListFollowAsteriskHeading, 15},
+		{testdata.OrderedListFollowNumberNotList, 15},
+		{testdata.OrderedListWithFollowUnOrderedList, 15},
+		{testdata.OrderedListWithNestedOrderedList, 55},
+		{testdata.OrderedListWithNestedContent, 29},
 	}
 
 	for _, tc := range testCases {
+		value := testdata.GetOrgStr(tc.source)
+
 		var items []lex.Item
-		lexedItems := lex.NewLexer(tc.value)
+		lexedItems := lex.NewLexer(value)
 		for item := range lexedItems {
 			items = append(items, item)
 		}
 		found := findOrderedList(items)
 		if found != tc.expected {
-			t.Errorf("expected \"%s\" to be %d. got %d", tc.value, tc.expected, found)
+			t.Errorf("expected \"%s\" to be %d. got %d", tc.source, tc.expected, found)
 		}
 	}
 }

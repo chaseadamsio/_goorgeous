@@ -1,0 +1,9 @@
+- apples
+- bananas
+- oranges
+- pears
+1. apples
+2. bananas
+3. oranges
+4. pears
+with an extra paragraph

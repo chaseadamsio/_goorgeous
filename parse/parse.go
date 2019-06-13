@@ -34,7 +34,7 @@ func (p *parser) peekToNextBlock(items []lex.Item) (end int) {
 		if currItem.IsEOF() {
 			return end
 		}
-		if prevIsNewline && isHeadline(items[end:]) {
+		if prevIsNewline && isHeadline(items, end) {
 			depth := headlineDepth(items[end:])
 			if p.depth < depth {
 				end++
@@ -176,7 +176,7 @@ func (p *parser) walk(parent ast.Node, items []lex.Item) {
 	for current < itemsLength {
 		token := items[current]
 
-		if token.Type() == lex.ItemAsterisk && isHeadline(items[current:]) {
+		if token.Type() == lex.ItemAsterisk && isHeadline(items, start) {
 			depth := headlineDepth(items[current:])
 
 			if p.depth < depth {
@@ -214,8 +214,9 @@ func (p *parser) walk(parent ast.Node, items []lex.Item) {
 			}
 		} else if listTyp, listStart, listEnd, found := maybeList(items[current:]); found {
 
-			p.makeList(listTyp, parent, items[listStart:listEnd])
-			current = listEnd
+			p.makeList(listTyp, parent, items[start+listStart:start+listEnd])
+
+			current = start + listEnd
 			start = current
 
 		} else if isTable(token, items, current) {

@@ -28,7 +28,7 @@ func TestIsHeadline(t *testing.T) {
 		for item := range lexedItems {
 			items = append(items, item)
 		}
-		if isHeadline(items) != tc.expected {
+		if isHeadline(items, 0) != tc.expected {
 			t.Errorf("expected \"%s\" to be %t", tc.value, tc.expected)
 		}
 	}

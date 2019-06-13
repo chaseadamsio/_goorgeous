@@ -1,0 +1,78 @@
+[
+  {
+    "NodeType": "Root",
+    "Children": [
+      {
+        "NodeType": "List",
+        "Children": [
+          {
+            "NodeType": "ListItem",
+            "Children": null,
+            "Value": "1. apples"
+          },
+          {
+            "NodeType": "ListItem",
+            "Children": [
+              {
+                "NodeType": "List",
+                "Children": [
+                  {
+                    "NodeType": "ListItem",
+                    "Children": null,
+                    "Value": "1. more apples"
+                  },
+                  {
+                    "NodeType": "ListItem",
+                    "Children": null,
+                    "Value": "2. more bananas"
+                  },
+                  {
+                    "NodeType": "ListItem",
+                    "Children": null,
+                    "Value": "3. more oranges"
+                  },
+                  {
+                    "NodeType": "ListItem",
+                    "Children": null,
+                    "Value": "4. more pears"
+                  }
+                ],
+                "Value": "    1. more apples\n    2. more bananas\n    3. more oranges\n    4. more pears\n"
+              }
+            ],
+            "Value": "2. bananas"
+          },
+          {
+            "NodeType": "ListItem",
+            "Children": null,
+            "Value": "3. oranges"
+          },
+          {
+            "NodeType": "ListItem",
+            "Children": null,
+            "Value": "4. pears"
+          }
+        ],
+        "Value": "1. apples\n2. bananas\n    1. more apples\n    2. more bananas\n    3. more oranges\n    4. more pears\n3. oranges\n4. pears\n"
+      },
+      {
+        "NodeType": "Section",
+        "Children": [
+          {
+            "NodeType": "Paragraph",
+            "Children": [
+              {
+                "NodeType": "Text",
+                "Children": null,
+                "Value": "with an extra paragraph\n"
+              }
+            ],
+            "Value": "with an extra paragraph\n"
+          }
+        ],
+        "Value": ""
+      }
+    ],
+    "Value": ""
+  }
+]

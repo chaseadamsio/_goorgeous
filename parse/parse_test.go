@@ -2,6 +2,11 @@ package parse
 
 import (
 	"encoding/json"
+	"flag"
+	"fmt"
+	"io/ioutil"
+	"os"
+	"path/filepath"
 	"reflect"
 	"testing"
 
@@ -9,25 +14,46 @@ import (
 	"github.com/chaseadamsio/goorgeous/testdata"
 )
 
+var update = flag.Bool("update", false, "update golden files")
+
 func TestParse(t *testing.T) {
 	for _, tc := range tests {
-		t.Run(tc.name, func(t *testing.T) {
-			// if !strings.HasPrefix(tc.name, "unordered-list-with-child-ordered-list-with-unordered-list-child") {
+
+		t.Run(tc.source, func(t *testing.T) {
+			// if !strings.HasSuffix(tc.name, "with-nested-ordered-list") {
 			// 	return
 			// }
 			value := testdata.GetOrgStr(tc.source)
 			// _ = Parse(value)
 			ast := Parse(value)
+
+			if *update {
+				out := fmt.Sprintf("%v", ast)
+				err := os.MkdirAll(filepath.Dir(tc.golden), os.ModePerm)
+				if err != nil {
+					t.Errorf("failed to make directories for %s: %s", tc.golden, err)
+				}
+				if err := ioutil.WriteFile(tc.golden, []byte(out), os.ModePerm); err != nil {
+					t.Errorf("failed to write %s file: %s", tc.golden, err)
+				}
+				return
+			}
+
 			var expected []interface{}
-			err := json.Unmarshal([]byte(tc.expected), &expected)
+			gldn, err := ioutil.ReadFile(tc.golden)
+			if err != nil {
+				t.Fatalf("failed to read %s file: %s", tc.golden, err)
+			}
+
+			err = json.Unmarshal([]byte(gldn), &expected)
 			if err != nil {
 				t.Errorf("failed to unmarshal expected string: %s", err)
 				// use an empty string to get a view of the world and uncomment this next line...
-				// fmt.Printf("\nexpected:\n\t%v\nactual:\n\t%v", expected, ast)
+				fmt.Printf("\nexpected:\n\t%v\nactual:\n\t%v", expected, ast)
 			}
 
 			if reflect.DeepEqual(ast, expected) {
-				t.Errorf("expected %s AST shape to match expected.", tc.name)
+				t.Errorf("expected %s AST shape to match expected.", tc.source)
 			}
 		})
 	}
@@ -35,9 +61,8 @@ func TestParse(t *testing.T) {
 }
 
 type testCase struct {
-	name     string
-	source   string
-	expected string
+	source string
+	golden string
 }
 
 type testNode struct {
@@ -69,6 +94,38 @@ func (n *testNode) Type() ast.NodeType {
 // }
 
 var tests = []testCase{
+	{
+		testdata.UnorderedListBasic,
+		fmt.Sprintf("testdata/%s.json", testdata.UnorderedListBasic),
+	},
+	{
+		testdata.UnorderedListWithNestedOrderedList,
+		fmt.Sprintf("testdata/%s.json", testdata.UnorderedListWithNestedOrderedList),
+	},
+	{
+		testdata.UnorderedListWithDeepNestedChildren,
+		fmt.Sprintf("testdata/%s.json", testdata.UnorderedListWithDeepNestedChildren),
+	},
+	{
+		testdata.OrderedListWithNestedOrderedList,
+		fmt.Sprintf("testdata/%s.json", testdata.OrderedListWithNestedOrderedList),
+	},
+	{
+		testdata.OrderedListWithNestedUnorderedList,
+		fmt.Sprintf("testdata/%s.json", testdata.OrderedListWithNestedUnorderedList),
+	},
+	{
+		testdata.UnorderedListWithNestedUnorderedList,
+		fmt.Sprintf("testdata/%s.json", testdata.UnorderedListWithNestedUnorderedList),
+	},
+	{
+		testdata.UnorderedListWithNestedOrderedList,
+		fmt.Sprintf("testdata/%s.json", testdata.UnorderedListWithNestedOrderedList),
+	},
+	{
+		testdata.ElementBold,
+		fmt.Sprintf("testdata/%s.json", testdata.ElementBold),
+	},
 	// {
 	// 	"headers",
 	// 	"#+title: headers\n#+author: Chase Adams\n#+description: This is my description!",
@@ -258,40 +315,6 @@ var tests = []testCase{
 	// 	}},
 	// },
 	// {
-	// 	"link w/ newline",
-	// 	"[[https://github.com][this is a link]]\n",
-	// 	[]testNode{{
-	// 		"Root",
-	// 		[]testNode{{
-	// 			"Headline",
-	// 			[]testNode{{
-	// 				"Headline",
-	// 				[]testNode{{
-	// 					"Headline",
-	// 					nil,
-	// 				}},
-	// 			}},
-	// 		}},
-	// 	}},
-	// },
-	// {
-	// 	"link-self-describing",
-	// 	"[[https://github.com]]\n",
-	// 	[]testNode{{
-	// 		"Root",
-	// 		[]testNode{{
-	// 			"Headline",
-	// 			[]testNode{{
-	// 				"Headline",
-	// 				[]testNode{{
-	// 					"Headline",
-	// 					nil,
-	// 				}},
-	// 			}},
-	// 		}},
-	// 	}},
-	// },
-	// {
 	// 	"complex",
 	// 	"** hello\nthis is some text\n#+BEGIN_SRC javascript\nconsole.log(\"hello world\");\n#+END_SRC",
 	// 	[]testNode{{
@@ -342,254 +365,7 @@ var tests = []testCase{
 	// 		}},
 	// 	}},
 	// },
-	{
-		"unordered-list",
-		testdata.UnorderedListBasic,
-		` [
-			{
-			  "NodeType": "Root",
-			  "Children": [
-				{
-				  "NodeType": "List",
-				  "Children": [
-					{
-					  "NodeType": "ListItem",
-					  "Children": null,
-					  "Value": "- apples"
-					},
-					{
-					  "NodeType": "ListItem",
-					  "Children": null,
-					  "Value": "- bananas"
-					},
-					{
-					  "NodeType": "ListItem",
-					  "Children": null,
-					  "Value": "- oranges"
-					},
-					{
-					  "NodeType": "ListItem",
-					  "Children": null,
-					  "Value": "- pears"
-					}
-				  ],
-				  "Value": "- apples\n- bananas\n- oranges\n- pears\n"
-				}
-			  ],
-			  "Value": ""
-			}
-		  ]`,
-	},
-	{
-		"unordered-list-with-child-ordered-list",
-		testdata.UnorderedListWithNestedOrderedList,
-		`[
-			{
-			  "NodeType": "Root",
-			  "Children": [
-				{
-				  "NodeType": "List",
-				  "Children": [
-					{
-					  "NodeType": "ListItem",
-					  "Children": null,
-					  "Value": "- apples"
-					},
-					{
-					  "NodeType": "ListItem",
-					  "Children": [
-						{
-						  "NodeType": "List",
-						  "Children": [
-							{
-							  "NodeType": "ListItem",
-							  "Children": null,
-							  "Value": "1. more apples"
-							},
-							{
-							  "NodeType": "ListItem",
-							  "Children": null,
-							  "Value": "2. more bananas"
-							},
-							{
-							  "NodeType": "ListItem",
-							  "Children": null,
-							  "Value": "3. more oranges"
-							},
-							{
-							  "NodeType": "ListItem",
-							  "Children": null,
-							  "Value": "4. more pears"
-							}
-						  ],
-						  "Value": "    1. more apples\n    2. more bananas\n    3. more oranges\n    4. more pears\n"
-						}
-					  ],
-					  "Value": "- bananas"
-					},
-					{
-					  "NodeType": "ListItem",
-					  "Children": null,
-					  "Value": "- oranges"
-					},
-					{
-					  "NodeType": "ListItem",
-					  "Children": null,
-					  "Value": "- pears"
-					}
-				  ],
-				  "Value": "- apples\n- bananas\n    1. more apples\n    2. more bananas\n    3. more oranges\n    4. more pears\n- oranges\n- pears\n"
-				},
-				{
-				  "NodeType": "Section",
-				  "Children": [
-					{
-					  "NodeType": "Paragraph",
-					  "Children": [
-						{
-						  "NodeType": "Text",
-						  "Children": null,
-						  "Value": "with an extra paragraph\n"
-						}
-					  ],
-					  "Value": "with an extra paragraph\n"
-					}
-				  ],
-				  "Value": ""
-				}
-			  ],
-			  "Value": ""
-			}
-		  ]`,
-	},
-	// {
-	// 	"unordered-list-with-child-ordered-list-with-ordered-list-child",
-	// 	"- apples\n\t1. in apples 1\n\t2. in apples 2\n\t\t1. in apples 1\n\t\t2. in apples 2\n\t\t3. in apples 3\n\t3. in apples 3\n- oranges\n- bananas\nsomething else",
-	// 	[]testNode{{
-	// 		"Root",
-	// 		[]testNode{{
-	// 			"Headline",
-	// 			[]testNode{{
-	// 				"Headline",
-	// 				[]testNode{{
-	// 					"Headline",
-	// 					nil,
-	// 				}},
-	// 			}},
-	// 		}},
-	// 	}},
-	// },
-	{
-		"unordered-list-with-child-ordered-list-with-unordered-list-child",
-		testdata.UnorderedListWithDeepNestedChildren,
-		`[
-			{
-			  "NodeType": "Root",
-			  "Children": [
-				{
-				  "NodeType": "List",
-				  "Children": [
-					{
-					  "NodeType": "ListItem",
-					  "Children": [
-						{
-						  "NodeType": "List",
-						  "Children": [
-							{
-							  "NodeType": "ListItem",
-							  "Children": null,
-							  "Value": "1. in apples 1"
-							},
-							{
-							  "NodeType": "ListItem",
-							  "Children": [
-								{
-								  "NodeType": "List",
-								  "Children": [
-									{
-									  "NodeType": "ListItem",
-									  "Children": null,
-									  "Value": "- in apples 1"
-									},
-									{
-									  "NodeType": "ListItem",
-									  "Children": null,
-									  "Value": "- in apples 2"
-									},
-									{
-									  "NodeType": "ListItem",
-									  "Children": null,
-									  "Value": "- in apples 3"
-									}
-								  ],
-								  "Value": "    - in apples 1\n    - in apples 2\n    - in apples 3\n"
-								}
-							  ],
-							  "Value": "2. in apples 2"
-							},
-							{
-							  "NodeType": "ListItem",
-							  "Children": null,
-							  "Value": "3. in apples 3"
-							}
-						  ],
-						  "Value": "  1. in apples 1\n  2. in apples 2\n    - in apples 1\n    - in apples 2\n    - in apples 3\n  3. in apples 3\n"
-						}
-					  ],
-					  "Value": "- apples"
-					},
-					{
-					  "NodeType": "ListItem",
-					  "Children": null,
-					  "Value": "- oranges"
-					},
-					{
-					  "NodeType": "ListItem",
-					  "Children": null,
-					  "Value": "- bananas"
-					}
-				  ],
-				  "Value": "- apples\n  1. in apples 1\n  2. in apples 2\n    - in apples 1\n    - in apples 2\n    - in apples 3\n  3. in apples 3\n- oranges\n- bananas\n"
-				},
-				{
-				  "NodeType": "Section",
-				  "Children": [
-					{
-					  "NodeType": "Paragraph",
-					  "Children": [
-						{
-						  "NodeType": "Text",
-						  "Children": null,
-						  "Value": "something else\n"
-						}
-					  ],
-					  "Value": "something else\n"
-					}
-				  ],
-				  "Value": ""
-				}
-			  ],
-			  "Value": ""
-			}
-		  ]`,
-	},
-	// {
-	// 	"ordered-list-with-unordered-list-child",
-	// 	"1. apples\n2. oranges\n\t- apples\n\t- oranges\n\t- bananas\n\t\tsomething else\n3. bananas\nsomething else",
-	// 	[]testNode{{
-	// 		"Root",
-	// 		[]testNode{{
-	// 			"Headline",
-	// 			[]testNode{{
-	// 				"Headline",
-	// 				[]testNode{{
-	// 					"Headline",
-	// 					nil,
-	// 				}},
-	// 			}},
-	// 		}},
-	// 	}},
-	// },
+
 	// {
 	// 	"table",
 	// 	"| Name  | Phone | Age |\n|-------+-------+-----|\n| Peter |  1234 |  17 |\n| Anna  |  4321 |  25 |\n",

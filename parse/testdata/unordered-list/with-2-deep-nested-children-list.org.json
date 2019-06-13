@@ -1,0 +1,90 @@
+[
+  {
+    "NodeType": "Root",
+    "Children": [
+      {
+        "NodeType": "List",
+        "Children": [
+          {
+            "NodeType": "ListItem",
+            "Children": [
+              {
+                "NodeType": "List",
+                "Children": [
+                  {
+                    "NodeType": "ListItem",
+                    "Children": null,
+                    "Value": "1. in apples 1"
+                  },
+                  {
+                    "NodeType": "ListItem",
+                    "Children": [
+                      {
+                        "NodeType": "List",
+                        "Children": [
+                          {
+                            "NodeType": "ListItem",
+                            "Children": null,
+                            "Value": "- in apples 1"
+                          },
+                          {
+                            "NodeType": "ListItem",
+                            "Children": null,
+                            "Value": "- in apples 2"
+                          },
+                          {
+                            "NodeType": "ListItem",
+                            "Children": null,
+                            "Value": "- in apples 3"
+                          }
+                        ],
+                        "Value": "    - in apples 1\n    - in apples 2\n    - in apples 3\n"
+                      }
+                    ],
+                    "Value": "2. in apples 2"
+                  },
+                  {
+                    "NodeType": "ListItem",
+                    "Children": null,
+                    "Value": "3. in apples 3"
+                  }
+                ],
+                "Value": "  1. in apples 1\n  2. in apples 2\n    - in apples 1\n    - in apples 2\n    - in apples 3\n  3. in apples 3\n"
+              }
+            ],
+            "Value": "- apples"
+          },
+          {
+            "NodeType": "ListItem",
+            "Children": null,
+            "Value": "- oranges"
+          },
+          {
+            "NodeType": "ListItem",
+            "Children": null,
+            "Value": "- bananas"
+          }
+        ],
+        "Value": "- apples\n  1. in apples 1\n  2. in apples 2\n    - in apples 1\n    - in apples 2\n    - in apples 3\n  3. in apples 3\n- oranges\n- bananas\n"
+      },
+      {
+        "NodeType": "Section",
+        "Children": [
+          {
+            "NodeType": "Paragraph",
+            "Children": [
+              {
+                "NodeType": "Text",
+                "Children": null,
+                "Value": "something else\n"
+              }
+            ],
+            "Value": "something else\n"
+          }
+        ],
+        "Value": ""
+      }
+    ],
+    "Value": ""
+  }
+]

@@ -1,0 +1,34 @@
+[
+  {
+    "NodeType": "Root",
+    "Children": [
+      {
+        "NodeType": "List",
+        "Children": [
+          {
+            "NodeType": "ListItem",
+            "Children": null,
+            "Value": "- apples"
+          },
+          {
+            "NodeType": "ListItem",
+            "Children": null,
+            "Value": "- bananas"
+          },
+          {
+            "NodeType": "ListItem",
+            "Children": null,
+            "Value": "- oranges"
+          },
+          {
+            "NodeType": "ListItem",
+            "Children": null,
+            "Value": "- pears"
+          }
+        ],
+        "Value": "- apples\n- bananas\n- oranges\n- pears\n"
+      }
+    ],
+    "Value": ""
+  }
+]

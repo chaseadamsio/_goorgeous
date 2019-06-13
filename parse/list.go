@@ -52,25 +52,6 @@ func isOrderedList(items []lex.Item) (start int, found bool) {
 	return isList(items, foundOrderedListItem)
 }
 
-// findList takes a collection of Item and a function to check a collection
-// against and returns the end of the list
-func findList(items []lex.Item, isListFunc func(items []lex.Item) (start int, found bool)) int {
-	current := 0
-	itemsLength := len(items)
-	baseIndentLevel, _ := getIndentLevel(items[current:])
-	for current < itemsLength {
-		if _, found := foundTerminatingNewline(items[current:], baseIndentLevel, isListFunc); found {
-			if current+1 < itemsLength {
-				if _, found := isListFunc(items[current+1:]); !found {
-					return current
-				}
-			}
-		}
-		current++
-	}
-	return current
-}
-
 func maybeList(items []lex.Item) (listTyp string, start, end int, found bool) {
 	if _, found = isOrderedList(items); found {
 		listTyp = "ORDERED"
@@ -100,13 +81,15 @@ func findListBoundaries(items []lex.Item, isListFunc func(items []lex.Item) (sta
 	itemsLength := len(items)
 	baseIndentLevel, _ := getIndentLevel(items[current:])
 	for current < itemsLength {
-		if _, found := isListFunc(items[current:]); startFound && found { // this *should* always be 0.
+		if _, found := isListFunc(items[current:]); !startFound && found { // this *should* always be 0.
 			start = current
 			startFound = true
 		} else if _, found := foundTerminatingNewline(items[current:], baseIndentLevel, isListFunc); found {
 			if current+1 < itemsLength {
 				current++
-				if _, found := isListFunc(items[current:]); !found {
+				currIndentLevel, _ := getIndentLevel(items[current:])
+				if _, found := isListFunc(items[current:]); !found ||
+					(found && currIndentLevel < baseIndentLevel) { // could match list type but be diff. level of nesting
 					end = current
 					return start, end
 				}
@@ -116,14 +99,6 @@ func findListBoundaries(items []lex.Item, isListFunc func(items []lex.Item) (sta
 	}
 	end = current
 	return start, end
-}
-
-func findUnorderedList(items []lex.Item) int {
-	return findList(items, isUnorderedList)
-}
-
-func findOrderedList(items []lex.Item) int {
-	return findList(items, isOrderedList)
 }
 
 var findItemFuncMap = map[string]func(items []lex.Item) (start, end, foundNestedListStart, foundNestedListEnd int){
@@ -163,41 +138,46 @@ func (p *parser) makeList(listTyp string, parent ast.Node, items []lex.Item) (en
 func foundTerminatingNewline(items []lex.Item, indentLevel int,
 	foundMatchFunc func(items []lex.Item) (start int, found bool)) (offset int, found bool) {
 	itemsLength := len(items)
-	if items[0].IsNewline() { // found the first new line in example
+	if items[0].IsNewline() && 1 < itemsLength { // found the first new line in example
+		next := 1
+		currIndentLevel, _ := getIndentLevel(items[next:])
 
-		if (1 < itemsLength && items[1].IsTab()) || (1 < itemsLength && items[1].IsSpace()) {
-			if currIndentLevel, _ := getIndentLevel(items[1:]); currIndentLevel < indentLevel {
+		if items[next].IsTab() || items[next].IsSpace() {
+			if currIndentLevel < indentLevel {
 				return 0, true
 			}
 			return 0, false
+			// TODO handle if curr indent level < indentLevel
 		} else if indentLevel > 0 { // no tab or space, but indentlevel means the list is closed
 			return 0, true
 		}
 
-		if 1 < itemsLength {
-			if _, found := foundMatchFunc(items[1:]); found {
-				return 0, false
-			}
-		}
-
-		if 1 < itemsLength && items[1].IsWord() || 1 < itemsLength && items[1].IsNonWord() {
+		if currIndentLevel < indentLevel {
 			return 0, true
 		}
 
-		if itemsLength == 1 {
+		if _, found := foundMatchFunc(items[next:]); found {
+			return 0, false
+		}
+
+		if items[next].IsWord() || items[next].IsNonWord() {
 			return 0, true
 		}
 
-		if 1 < itemsLength && items[1].IsEOF() {
+		if items[next].IsEOF() {
 			return 0, true
 		}
 
-		if 1 < itemsLength && items[1].IsNewline() { // found the second newline
-			if 2 < itemsLength && items[2].IsNewline() {
+		if items[next].IsNewline() { // found the second newline
+			next++
+			if next < itemsLength && items[next].IsNewline() {
 				return 0, true
 			}
 		}
+	} else if itemsLength == 1 {
+		return 0, true
 	}
+
 	return 0, false
 }
 

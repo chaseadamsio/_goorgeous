@@ -36,6 +36,10 @@ func GetOrgStr(filename string) (content string) {
 }
 
 const (
+	Headline1            = "headline/headline-1.org"
+	Headline1WithContent = "headline/headline-1-with-content.org"
+
+	HeadersBasic = "header/basic.org"
 
 	OrderedListBasic                   = "ordered-list/basic.org"
 	OrderedListNotAList                = "ordered-list/not-a-list.org"

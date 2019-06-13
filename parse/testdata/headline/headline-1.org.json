@@ -1,0 +1,13 @@
+[
+  {
+    "NodeType": "Root",
+    "Children": [
+      {
+        "NodeType": "Headline",
+        "Children": null,
+        "Value": "This is a headline"
+      }
+    ],
+    "Value": ""
+  }
+]

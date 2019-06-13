@@ -1,0 +1,40 @@
+[
+  {
+    "NodeType": "Root",
+    "Children": [
+      {
+        "NodeType": "Section",
+        "Children": [
+          {
+            "NodeType": "Keyword",
+            "Children": null,
+            "Value": "title: headers"
+          },
+          {
+            "NodeType": "Keyword",
+            "Children": null,
+            "Value": "author: Chase Adams"
+          },
+          {
+            "NodeType": "Keyword",
+            "Children": null,
+            "Value": "description: This is my description!"
+          },
+          {
+            "NodeType": "Paragraph",
+            "Children": [
+              {
+                "NodeType": "Text",
+                "Children": null,
+                "Value": "\n"
+              }
+            ],
+            "Value": "\n"
+          }
+        ],
+        "Value": ""
+      }
+    ],
+    "Value": ""
+  }
+]

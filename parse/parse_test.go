@@ -20,11 +20,11 @@ func TestParse(t *testing.T) {
 	for _, tc := range tests {
 
 		t.Run(tc.source, func(t *testing.T) {
-			// if !strings.HasSuffix(tc.name, "with-nested-ordered-list") {
+			// filter := "unordered-list/with-follow-asterisk-heading.org"
+			// if !strings.HasPrefix(tc.source, filter) {
 			// 	return
 			// }
 			value := testdata.GetOrgStr(tc.source)
-			// _ = Parse(value)
 			ast := Parse(value)
 
 			if *update {
@@ -95,8 +95,25 @@ func (n *testNode) Type() ast.NodeType {
 
 var tests = []testCase{
 	{
-		testdata.UnorderedListBasic,
-		fmt.Sprintf("testdata/%s.json", testdata.UnorderedListBasic),
+		testdata.Headline1,
+		fmt.Sprintf("testdata/%s.json", testdata.Headline1),
+	},
+	{
+		testdata.Headline1WithContent,
+		fmt.Sprintf("testdata/%s.json", testdata.Headline1WithContent),
+	},
+	{
+		testdata.HeadersBasic,
+		fmt.Sprintf("testdata/%s.json", testdata.HeadersBasic),
+	},
+	{
+		testdata.LinkStandard,
+		fmt.Sprintf("testdata/%s.json", testdata.LinkStandard),
+	},
+	{
+		testdata.LinkSelfDescriptive,
+		fmt.Sprintf("testdata/%s.json", testdata.LinkSelfDescriptive),
+	},
 	{
 		testdata.OrderedListBasic,
 		fmt.Sprintf("testdata/%s.json", testdata.OrderedListBasic),

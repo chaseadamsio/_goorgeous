@@ -1,0 +1,30 @@
+[
+  {
+    "NodeType": "Root",
+    "Children": [
+      {
+        "NodeType": "Headline",
+        "Children": null,
+        "Value": "This is a headline"
+      },
+      {
+        "NodeType": "Section",
+        "Children": [
+          {
+            "NodeType": "Paragraph",
+            "Children": [
+              {
+                "NodeType": "Text",
+                "Children": null,
+                "Value": "\nThis is some text in a paragraph."
+              }
+            ],
+            "Value": "\nThis is some text in a paragraph."
+          }
+        ],
+        "Value": ""
+      }
+    ],
+    "Value": ""
+  }
+]

@@ -1,0 +1,3 @@
+This has some *bold* text.
+
+*Bold* text at the beginning of a line.

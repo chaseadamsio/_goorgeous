@@ -1,0 +1,46 @@
+[
+  {
+    "NodeType": "Root",
+    "Children": [
+      {
+        "NodeType": "Section",
+        "Children": [
+          {
+            "NodeType": "Paragraph",
+            "Children": [
+              {
+                "NodeType": "Text",
+                "Children": null,
+                "Value": "This has some "
+              },
+              {
+                "NodeType": "Bold",
+                "Children": [
+                  {
+                    "NodeType": "Text",
+                    "Children": null,
+                    "Value": "bold"
+                  }
+                ],
+                "Value": "*bold* text.\n"
+              },
+              {
+                "NodeType": "Text",
+                "Children": null,
+                "Value": " text.\n"
+              }
+            ],
+            "Value": "This has some *bold* text.\n"
+          }
+        ],
+        "Value": ""
+      },
+      {
+        "NodeType": "Headline",
+        "Children": null,
+        "Value": "text at the beginning of a line."
+      }
+    ],
+    "Value": ""
+  }
+]

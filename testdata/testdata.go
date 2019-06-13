@@ -49,8 +49,8 @@ const (
 	OrderedListFollowAsteriskHeading   = "ordered-list/with-follow-asterisk-heading.org"
 	OrderedListWithFollowUnOrderedList = "ordered-list/with-follow-unordered-list.org"
 	OrderedListWithNestedOrderedList   = "ordered-list/with-nested-ordered-list.org"
-	OrderedListWithNestedUnorderedList   = "unordered-list/with-nested-unordered-list.org"
-	OrderedListWithNestedContent         = "ordered-list/with-nested-content.org"
+	OrderedListWithNestedUnorderedList = "unordered-list/with-nested-unordered-list.org"
+	OrderedListWithNestedContent       = "ordered-list/with-nested-content.org"
 	
 	UnorderedListBasic                   = "unordered-list/basic.org"
 	UnorderedListNotAList                = "unordered-list/not-a-list.org"

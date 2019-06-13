@@ -1,0 +1,46 @@
+[
+  {
+    "NodeType": "Root",
+    "Children": [
+      {
+        "NodeType": "List",
+        "Children": [
+          {
+            "NodeType": "ListItem",
+            "Children": null,
+            "Value": "- apples"
+          },
+          {
+            "NodeType": "ListItem",
+            "Children": null,
+            "Value": "- bananas"
+          },
+          {
+            "NodeType": "ListItem",
+            "Children": null,
+            "Value": "- oranges\n"
+          }
+        ],
+        "Value": "\n- apples\n- bananas\n- oranges"
+      },
+      {
+        "NodeType": "Section",
+        "Children": [
+          {
+            "NodeType": "Paragraph",
+            "Children": [
+              {
+                "NodeType": "Text",
+                "Children": null,
+                "Value": "\nwith an extra paragraph\n"
+              }
+            ],
+            "Value": "\nwith an extra paragraph\n"
+          }
+        ],
+        "Value": ""
+      }
+    ],
+    "Value": ""
+  }
+]

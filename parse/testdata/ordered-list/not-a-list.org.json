@@ -1,0 +1,25 @@
+[
+  {
+    "NodeType": "Root",
+    "Children": [
+      {
+        "NodeType": "Section",
+        "Children": [
+          {
+            "NodeType": "Paragraph",
+            "Children": [
+              {
+                "NodeType": "Text",
+                "Children": null,
+                "Value": "1.apples\n2.bananas\n3.oranges\nwith an extra paragraph\n"
+              }
+            ],
+            "Value": "1.apples\n2.bananas\n3.oranges\nwith an extra paragraph\n"
+          }
+        ],
+        "Value": ""
+      }
+    ],
+    "Value": ""
+  }
+]

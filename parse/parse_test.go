@@ -97,14 +97,33 @@ var tests = []testCase{
 	{
 		testdata.UnorderedListBasic,
 		fmt.Sprintf("testdata/%s.json", testdata.UnorderedListBasic),
+	{
+		testdata.OrderedListBasic,
+		fmt.Sprintf("testdata/%s.json", testdata.OrderedListBasic),
 	},
 	{
-		testdata.UnorderedListWithNestedOrderedList,
-		fmt.Sprintf("testdata/%s.json", testdata.UnorderedListWithNestedOrderedList),
+		testdata.OrderedListNotAList,
+		fmt.Sprintf("testdata/%s.json", testdata.OrderedListNotAList),
 	},
 	{
-		testdata.UnorderedListWithDeepNestedChildren,
-		fmt.Sprintf("testdata/%s.json", testdata.UnorderedListWithDeepNestedChildren),
+		testdata.OrderedListWithStartingNewline,
+		fmt.Sprintf("testdata/%s.json", testdata.OrderedListWithStartingNewline),
+	},
+	{
+		testdata.OrderedListFollowParagraph,
+		fmt.Sprintf("testdata/%s.json", testdata.OrderedListFollowParagraph),
+	},
+	{
+		testdata.OrderedListFollowNumberNotList,
+		fmt.Sprintf("testdata/%s.json", testdata.OrderedListFollowNumberNotList),
+	},
+	{
+		testdata.OrderedListFollowAsteriskHeading,
+		fmt.Sprintf("testdata/%s.json", testdata.OrderedListFollowAsteriskHeading),
+	},
+	{
+		testdata.OrderedListWithFollowUnOrderedList,
+		fmt.Sprintf("testdata/%s.json", testdata.OrderedListWithFollowUnOrderedList),
 	},
 	{
 		testdata.OrderedListWithNestedOrderedList,
@@ -115,12 +134,52 @@ var tests = []testCase{
 		fmt.Sprintf("testdata/%s.json", testdata.OrderedListWithNestedUnorderedList),
 	},
 	{
-		testdata.UnorderedListWithNestedUnorderedList,
-		fmt.Sprintf("testdata/%s.json", testdata.UnorderedListWithNestedUnorderedList),
+		testdata.OrderedListWithNestedContent,
+		fmt.Sprintf("testdata/%s.json", testdata.OrderedListWithNestedContent),
+	},
+	{
+		testdata.UnorderedListBasic,
+		fmt.Sprintf("testdata/%s.json", testdata.UnorderedListBasic),
+	},
+	{
+		testdata.UnorderedListNotAList,
+		fmt.Sprintf("testdata/%s.json", testdata.UnorderedListNotAList),
+	},
+	{
+		testdata.UnorderedListWithStartingNewline,
+		fmt.Sprintf("testdata/%s.json", testdata.UnorderedListWithStartingNewline),
+	},
+	{
+		testdata.UnorderedListFollowParagraph,
+		fmt.Sprintf("testdata/%s.json", testdata.UnorderedListFollowParagraph),
+	},
+	{
+		testdata.UnorderedListFollowDashNotList,
+		fmt.Sprintf("testdata/%s.json", testdata.UnorderedListFollowDashNotList),
+	},
+	{
+		testdata.UnorderedListFollowAsteriskHeading,
+		fmt.Sprintf("testdata/%s.json", testdata.UnorderedListFollowAsteriskHeading),
+	},
+	{
+		testdata.UnorderedListWithFollowOrderedList,
+		fmt.Sprintf("testdata/%s.json", testdata.UnorderedListWithFollowOrderedList),
 	},
 	{
 		testdata.UnorderedListWithNestedOrderedList,
 		fmt.Sprintf("testdata/%s.json", testdata.UnorderedListWithNestedOrderedList),
+	},
+	{
+		testdata.UnorderedListWithNestedUnorderedList,
+		fmt.Sprintf("testdata/%s.json", testdata.UnorderedListWithNestedUnorderedList),
+	},
+	{
+		testdata.UnorderedListWithDeepNestedChildren,
+		fmt.Sprintf("testdata/%s.json", testdata.UnorderedListWithDeepNestedChildren),
+	},
+	{
+		testdata.UnorderedListWithNestedContent,
+		fmt.Sprintf("testdata/%s.json", testdata.UnorderedListWithNestedContent),
 	},
 	{
 		testdata.ElementBold,

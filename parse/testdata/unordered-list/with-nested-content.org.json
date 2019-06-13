@@ -1,0 +1,51 @@
+[
+  {
+    "NodeType": "Root",
+    "Children": [
+      {
+        "NodeType": "List",
+        "Children": [
+          {
+            "NodeType": "ListItem",
+            "Children": null,
+            "Value": "- apples"
+          },
+          {
+            "NodeType": "ListItem",
+            "Children": null,
+            "Value": "- bananas\n    this is a nested sentence"
+          },
+          {
+            "NodeType": "ListItem",
+            "Children": null,
+            "Value": "- oranges"
+          },
+          {
+            "NodeType": "ListItem",
+            "Children": null,
+            "Value": "- pears"
+          }
+        ],
+        "Value": "- apples\n- bananas\n    this is a nested sentence\n- oranges\n- pears\n"
+      },
+      {
+        "NodeType": "Section",
+        "Children": [
+          {
+            "NodeType": "Paragraph",
+            "Children": [
+              {
+                "NodeType": "Text",
+                "Children": null,
+                "Value": "with an extra paragraph\n"
+              }
+            ],
+            "Value": "with an extra paragraph\n"
+          }
+        ],
+        "Value": ""
+      }
+    ],
+    "Value": ""
+  }
+]

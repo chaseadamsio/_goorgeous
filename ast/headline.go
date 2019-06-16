@@ -9,21 +9,22 @@ import (
 // HeadlineNode is a node that represents a Headline
 type HeadlineNode struct {
 	NodeType
-	start, end int
-	depth      int
-	parent     Node
-	rawvalue   string
-	children   []Node
-	Keyword    string
+	Start         int
+	End           int
+	Depth         int
+	parent        Node
+	rawvalue      string
+	ChildrenNodes []Node
+	Keyword       string
 }
 
 func NewHeadlineNode(start, end, depth int, parent Node, items []lex.Item) *HeadlineNode {
 	node := &HeadlineNode{
 		NodeType: "Headline",
-		depth:    depth,
+		Depth:    depth,
 		parent:   parent,
-		start:    start,
-		end:      end,
+		Start:    items[0].Offset(),
+		End:      items[len(items)-1].End(),
 	}
 
 	node.parse(items)
@@ -68,16 +69,13 @@ func (n *HeadlineNode) String() string {
 }
 
 func (n HeadlineNode) Children() []Node {
-	return n.children
+	return n.ChildrenNodes
 }
 
 func (n *HeadlineNode) Parent() Node {
 	return n.parent
 }
-func (n HeadlineNode) Depth() int {
-	return n.depth
-}
 
 func (n *HeadlineNode) Append(child Node) {
-	n.children = append(n.children, child)
+	n.ChildrenNodes = append(n.ChildrenNodes, child)
 }

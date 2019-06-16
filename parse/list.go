@@ -7,6 +7,54 @@ import (
 	"github.com/chaseadamsio/goorgeous/lex"
 )
 
+func (p *parser) makeList(listTyp string, parent ast.Node, items []lex.Item) (end int) {
+	start, current := 0, 0
+	itemsLength := len(items)
+	findFunc := findItemFuncMap[listTyp]
+
+	listNode := ast.NewListNode(listTyp, parent, items)
+	parent.Append(listNode)
+
+	for current < itemsLength {
+
+		foundStart, end, foundNestedListStart, foundNestedListEnd := findFunc(items[current:])
+		end = current + end
+		node := ast.NewListItemNode(parent, items[start+foundStart:end])
+		listNode.Append(node)
+
+		if foundNestedListStart > 0 {
+			foundNestedListStart = start + foundNestedListStart
+			foundNestedListEnd = start + foundNestedListEnd
+			p.walk(node, items[foundNestedListStart:foundNestedListEnd])
+
+			current = foundNestedListEnd
+		} else {
+			current = end + 1 // skip the newline
+		}
+		start = current
+	}
+	return current
+}
+
+func maybeList(items []lex.Item) (listTyp string, start, end int, found bool) {
+	if _, found = isOrderedList(items); found {
+		listTyp = "ORDERED"
+		start, end = findOrderedListBoundaries(items)
+	} else if _, found = isUnorderedList(items); found {
+		listTyp = "UNORDERED"
+		start, end = findUnorderedListBoundaries(items)
+	}
+	return listTyp, start, end, found
+}
+
+func isOrderedList(items []lex.Item) (start int, found bool) {
+	return isList(items, foundOrderedListItem)
+}
+
+func isUnorderedList(items []lex.Item) (start int, found bool) {
+	return isList(items, foundUnorderedListItem)
+}
+
 // checks if the current collection of items is a list by checking
 // it against a provided list function.
 func isList(items []lex.Item, isListFunc func([]lex.Item) bool) (start int, found bool) {
@@ -42,25 +90,6 @@ func isList(items []lex.Item, isListFunc func([]lex.Item) bool) (start int, foun
 
 	}
 	return -1, false
-}
-
-func isUnorderedList(items []lex.Item) (start int, found bool) {
-	return isList(items, foundUnorderedListItem)
-}
-
-func isOrderedList(items []lex.Item) (start int, found bool) {
-	return isList(items, foundOrderedListItem)
-}
-
-func maybeList(items []lex.Item) (listTyp string, start, end int, found bool) {
-	if _, found = isOrderedList(items); found {
-		listTyp = "ORDERED"
-		start, end = findOrderedListBoundaries(items)
-	} else if _, found = isUnorderedList(items); found {
-		listTyp = "UNORDERED"
-		start, end = findUnorderedListBoundaries(items)
-	}
-	return listTyp, start, end, found
 }
 
 func findOrderedListBoundaries(items []lex.Item) (start, end int) {
@@ -104,35 +133,6 @@ func findListBoundaries(items []lex.Item, isListFunc func(items []lex.Item) (sta
 var findItemFuncMap = map[string]func(items []lex.Item) (start, end, foundNestedListStart, foundNestedListEnd int){
 	"UNORDERED": findUnorderedListItem,
 	"ORDERED":   findOrderedListItem,
-}
-
-func (p *parser) makeList(listTyp string, parent ast.Node, items []lex.Item) (end int) {
-	start, current := 0, 0
-	itemsLength := len(items)
-	findFunc := findItemFuncMap[listTyp]
-
-	listNode := ast.NewListNode(listTyp, parent, items)
-	parent.Append(listNode)
-
-	for current < itemsLength {
-
-		foundStart, end, foundNestedListStart, foundNestedListEnd := findFunc(items[current:])
-		end = current + end
-		node := ast.NewListItemNode(parent, items[start+foundStart:end])
-		listNode.Append(node)
-
-		if foundNestedListStart > 0 {
-			foundNestedListStart = start + foundNestedListStart
-			foundNestedListEnd = start + foundNestedListEnd
-			p.walk(node, items[foundNestedListStart:foundNestedListEnd])
-
-			current = foundNestedListEnd
-		} else {
-			current = end + 1 // skip the newline
-		}
-		start = current
-	}
-	return current
 }
 
 func foundTerminatingNewline(items []lex.Item, indentLevel int,
@@ -237,6 +237,16 @@ var isListFuncs = map[string]func([]lex.Item) (start int, found bool){
 	"ORDERED":   isOrderedList,
 }
 
+func findOrderedListItem(items []lex.Item) (start, end, foundNestedListStart, foundNestedListEnd int) {
+	start, end, foundNestedListStart, foundNestedListEnd = findListItem(items, foundOrderedListItem)
+	return start, end, foundNestedListStart, foundNestedListEnd
+}
+
+func findUnorderedListItem(items []lex.Item) (start, end, foundNestedListStart, foundNestedListEnd int) {
+	start, end, foundNestedListStart, foundNestedListEnd = findListItem(items, foundUnorderedListItem)
+	return start, end, foundNestedListStart, foundNestedListEnd
+}
+
 // findListItem returns
 // - start (start being the first character after the (bullet + N space character)
 // - end (the character before the newline)
@@ -295,11 +305,6 @@ func findListItem(items []lex.Item,
 	return start, end + 1, foundNestedListStart, foundNestedListEnd
 }
 
-func findOrderedListItem(items []lex.Item) (start, end, foundNestedListStart, foundNestedListEnd int) {
-	start, end, foundNestedListStart, foundNestedListEnd = findListItem(items, foundOrderedListItem)
-	return start, end, foundNestedListStart, foundNestedListEnd
-}
-
 func foundListItem(items []lex.Item) (listTyp string, found bool) {
 	if found = foundOrderedListItem(items); found {
 		listTyp = "ORDERED"
@@ -322,11 +327,6 @@ func foundOrderedListItem(items []lex.Item) bool {
 		panic(err)
 	}
 	return items[current].Type() == lex.ItemText && matched
-}
-
-func findUnorderedListItem(items []lex.Item) (start, end, foundNestedListStart, foundNestedListEnd int) {
-	start, end, foundNestedListStart, foundNestedListEnd = findListItem(items, foundUnorderedListItem)
-	return start, end, foundNestedListStart, foundNestedListEnd
 }
 
 func foundUnorderedListItem(items []lex.Item) bool {

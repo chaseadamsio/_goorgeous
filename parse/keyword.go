@@ -2,8 +2,9 @@ package parse
 
 import "github.com/chaseadamsio/goorgeous/lex"
 
-func isKeyword(token lex.Item, items []lex.Item) bool {
+func isKeyword(items []lex.Item) bool {
 	current := 0
+	token := items[0]
 	itemsLength := len(items)
 
 	if !token.IsHash() {
@@ -22,6 +23,11 @@ func findGreaterBlock(items []lex.Item) (found bool, end int) {
 	current := 0
 	itemsLength := len(items)
 	foundEnd := false
+
+	if !isKeyword(items) {
+		return false, -1
+	}
+
 	if itemsLength > current+1 && items[current+2].Value() != "BEGIN" {
 		return false, -1
 	}

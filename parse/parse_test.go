@@ -7,8 +7,9 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"reflect"
 	"testing"
+
+	"github.com/google/go-cmp/cmp"
 
 	"github.com/chaseadamsio/goorgeous/ast"
 	"github.com/chaseadamsio/goorgeous/testdata"
@@ -18,12 +19,12 @@ var update = flag.Bool("update", false, "update golden files")
 
 func TestParse(t *testing.T) {
 	for _, tc := range tests {
+		// filter := "element/plain.org"
+		// if !strings.HasPrefix(tc.source, filter) {
+		// 	return
+		// }
 
 		t.Run(tc.source, func(t *testing.T) {
-			// filter := "unordered-list/with-follow-asterisk-heading.org"
-			// if !strings.HasPrefix(tc.source, filter) {
-			// 	return
-			// }
 			value := testdata.GetOrgStr(tc.source)
 			ast := Parse(value)
 
@@ -52,7 +53,7 @@ func TestParse(t *testing.T) {
 				fmt.Printf("\nexpected:\n\t%v\nactual:\n\t%v", expected, ast)
 			}
 
-			if reflect.DeepEqual(ast, expected) {
+			if cmp.Equal(ast, expected) {
 				t.Errorf("expected %s AST shape to match expected.", tc.source)
 			}
 		})
@@ -94,6 +95,14 @@ func (n *testNode) Type() ast.NodeType {
 // }
 
 var tests = []testCase{
+	{
+		testdata.ElementPlain,
+		fmt.Sprintf("testdata/%s.json", testdata.ElementPlain),
+	},
+	{
+		testdata.ElementNested,
+		fmt.Sprintf("testdata/%s.json", testdata.ElementNested),
+	},
 	{
 		testdata.Headline1,
 		fmt.Sprintf("testdata/%s.json", testdata.Headline1),
@@ -197,6 +206,10 @@ var tests = []testCase{
 	{
 		testdata.UnorderedListWithNestedContent,
 		fmt.Sprintf("testdata/%s.json", testdata.UnorderedListWithNestedContent),
+	},
+	{
+		testdata.ElementBold,
+		fmt.Sprintf("testdata/%s.json", testdata.ElementBold),
 	},
 	{
 		testdata.ElementBold,

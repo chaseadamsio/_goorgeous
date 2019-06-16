@@ -1,0 +1,1 @@
+*/=this is bold, italic and verbatim=/*

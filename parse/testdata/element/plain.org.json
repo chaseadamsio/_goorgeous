@@ -7,22 +7,22 @@
         {
           "NodeType": "Paragraph",
           "Start": 0,
-          "End": 52,
+          "End": 19,
           "ChildrenNodes": [
             {
               "NodeType": "Text",
               "ChildrenNodes": null,
-              "Val": "1.apples\n2.bananas\n3.oranges\nwith an extra paragraph\n",
+              "Val": "This is plain text.\n",
               "Start": 0,
-              "End": 52
+              "End": 19
             }
           ]
         }
       ],
-      "Start": 53,
-      "End": 53
+      "Start": 20,
+      "End": 20
     }
   ],
   "Start": 0,
-  "End": 53
+  "End": 20
 }

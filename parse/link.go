@@ -6,7 +6,7 @@ import (
 )
 
 func (p *parser) newLink(parent ast.Node, items []lex.Item) (end int) {
-	end = findLink(items)
+	end = findLinkBoundary(items)
 	node := ast.NewLinkNode(parent, items)
 	parent.Append(node)
 	textCurrent, textEnd := findLinkText(items)
@@ -16,7 +16,7 @@ func (p *parser) newLink(parent ast.Node, items []lex.Item) (end int) {
 	return end
 }
 
-func findLink(items []lex.Item) int {
+func findLinkBoundary(items []lex.Item) int {
 	current := 0
 	itemsLength := len(items)
 	foundInsideClosingBracket := false

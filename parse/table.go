@@ -1,6 +1,13 @@
 package parse
 
-import "github.com/chaseadamsio/goorgeous/lex"
+import (
+	"github.com/chaseadamsio/goorgeous/ast"
+	"github.com/chaseadamsio/goorgeous/lex"
+)
+
+func (p *parser) makeTable(parent ast.Node, items []lex.Item) (end int) {
+	return 0
+}
 
 func isTable(token lex.Item, items []lex.Item, current int) bool {
 	itemsLength := len(items)
@@ -14,7 +21,7 @@ func isTable(token lex.Item, items []lex.Item, current int) bool {
 	return false
 }
 
-func findTable(items []lex.Item) int {
+func findTable(items []lex.Item) (end int) {
 	current := 0
 	itemsLength := len(items)
 	for current < itemsLength {

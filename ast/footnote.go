@@ -8,20 +8,20 @@ import (
 
 type FootnoteDefinitionNode struct {
 	NodeType
-	parent   Node
-	rawvalue string
-	label    string
-	start    int
-	end      int
-	children []Node
+	parent        Node
+	rawvalue      string
+	Label         string
+	Start         int
+	End           int
+	ChildrenNodes []Node
 }
 
 func NewFootnoteDefinitionNode(parent Node, items []lex.Item) *FootnoteDefinitionNode {
 	node := &FootnoteDefinitionNode{
 		NodeType: "FootnoteDefinition",
 		parent:   parent,
-		start:    items[0].Offset(),
-		end:      items[len(items)-1].Offset(),
+		Start:    items[0].Offset(),
+		End:      items[len(items)-1].End(),
 	}
 
 	node.parse(items)
@@ -53,12 +53,12 @@ func (n *FootnoteDefinitionNode) parse(items []lex.Item) {
 			var labelStrs []string
 
 			if start == current {
-				n.label = ""
+				n.Label = ""
 			} else {
 				for idx := start; idx < current; idx++ {
 					labelStrs = append(labelStrs, items[idx].Value())
 				}
-				n.label = strings.Join(labelStrs, "")
+				n.Label = strings.Join(labelStrs, "")
 			}
 			labelFound = true
 			start = current
@@ -83,7 +83,7 @@ func (n *FootnoteDefinitionNode) String() string {
 }
 
 func (n FootnoteDefinitionNode) Children() []Node {
-	return n.children
+	return n.ChildrenNodes
 }
 
 func (n *FootnoteDefinitionNode) Parent() Node {
@@ -91,5 +91,5 @@ func (n *FootnoteDefinitionNode) Parent() Node {
 }
 
 func (n *FootnoteDefinitionNode) Append(child Node) {
-	n.children = append(n.children, child)
+	n.ChildrenNodes = append(n.ChildrenNodes, child)
 }

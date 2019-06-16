@@ -1,77 +1,102 @@
-[
-  {
-    "NodeType": "Root",
-    "Children": [
-      {
-        "NodeType": "List",
-        "Children": [
-          {
-            "NodeType": "ListItem",
-            "Children": null,
-            "Value": "- apples"
-          },
-          {
-            "NodeType": "ListItem",
-            "Children": null,
-            "Value": "- bananas"
-          },
-          {
-            "NodeType": "ListItem",
-            "Children": null,
-            "Value": "- oranges"
-          },
-          {
-            "NodeType": "ListItem",
-            "Children": null,
-            "Value": "- pears"
-          }
-        ],
-        "Value": "- apples\n- bananas\n- oranges\n- pears\n"
-      },
-      {
-        "NodeType": "List",
-        "Children": [
-          {
-            "NodeType": "ListItem",
-            "Children": null,
-            "Value": "1. apples"
-          },
-          {
-            "NodeType": "ListItem",
-            "Children": null,
-            "Value": "2. bananas"
-          },
-          {
-            "NodeType": "ListItem",
-            "Children": null,
-            "Value": "3. oranges"
-          },
-          {
-            "NodeType": "ListItem",
-            "Children": null,
-            "Value": "4. pears"
-          }
-        ],
-        "Value": "1. apples\n2. bananas\n3. oranges\n4. pears\n"
-      },
-      {
-        "NodeType": "Section",
-        "Children": [
-          {
-            "NodeType": "Paragraph",
-            "Children": [
-              {
-                "NodeType": "Text",
-                "Children": null,
-                "Value": "with an extra paragraph\n"
-              }
-            ],
-            "Value": "with an extra paragraph\n"
-          }
-        ],
-        "Value": ""
-      }
-    ],
-    "Value": ""
-  }
-]
+{
+  "NodeType": "Root",
+  "ChildrenNodes": [
+    {
+      "NodeType": "List",
+      "ListType": "UNORDERED",
+      "Value": "- apples\n- bananas\n- oranges\n- pears\n",
+      "Start": 0,
+      "End": 36,
+      "ChildrenNodes": [
+        {
+          "NodeType": "ListItem",
+          "Value": "- apples",
+          "Start": 0,
+          "End": 8,
+          "ChildrenNodes": null
+        },
+        {
+          "NodeType": "ListItem",
+          "Value": "- bananas",
+          "Start": 9,
+          "End": 18,
+          "ChildrenNodes": null
+        },
+        {
+          "NodeType": "ListItem",
+          "Value": "- oranges",
+          "Start": 19,
+          "End": 28,
+          "ChildrenNodes": null
+        },
+        {
+          "NodeType": "ListItem",
+          "Value": "- pears",
+          "Start": 29,
+          "End": 36,
+          "ChildrenNodes": null
+        }
+      ]
+    },
+    {
+      "NodeType": "List",
+      "ListType": "ORDERED",
+      "Value": "1. apples\n2. bananas\n3. oranges\n4. pears\n",
+      "Start": 37,
+      "End": 77,
+      "ChildrenNodes": [
+        {
+          "NodeType": "ListItem",
+          "Value": "1. apples",
+          "Start": 37,
+          "End": 46,
+          "ChildrenNodes": null
+        },
+        {
+          "NodeType": "ListItem",
+          "Value": "2. bananas",
+          "Start": 47,
+          "End": 57,
+          "ChildrenNodes": null
+        },
+        {
+          "NodeType": "ListItem",
+          "Value": "3. oranges",
+          "Start": 58,
+          "End": 68,
+          "ChildrenNodes": null
+        },
+        {
+          "NodeType": "ListItem",
+          "Value": "4. pears",
+          "Start": 69,
+          "End": 77,
+          "ChildrenNodes": null
+        }
+      ]
+    },
+    {
+      "NodeType": "Section",
+      "ChildrenNodes": [
+        {
+          "NodeType": "Paragraph",
+          "Start": 78,
+          "End": 101,
+          "ChildrenNodes": [
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": "with an extra paragraph\n",
+              "Start": 78,
+              "End": 101
+            }
+          ]
+        }
+      ],
+      "Start": 102,
+      "End": 102
+    }
+  ],
+  "Start": 0,
+  "End": 102
+}

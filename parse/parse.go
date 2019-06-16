@@ -34,7 +34,7 @@ func (p *parser) peekToNextBlock(items []lex.Item) (end int) {
 		if currItem.IsEOF() {
 			return end
 		}
-		if prevIsNewline && isHeadline(items, end) {
+		if prevIsNewline && isHeadline(items[end:], end) {
 			depth := headlineDepth(items[end:])
 			if p.depth < depth {
 				end++
@@ -49,7 +49,7 @@ func (p *parser) peekToNextBlock(items []lex.Item) (end int) {
 	return itemsLength
 }
 
-func findClosestSectionNode(parent ast.Node) ast.Node {
+func findClosestSectionNode(parent ast.Node, items []lex.Item) ast.Node {
 	for parent.Type() != "Root" {
 		if parent.Type() == "Section" {
 			return parent
@@ -59,7 +59,7 @@ func findClosestSectionNode(parent ast.Node) ast.Node {
 	if len(parent.Children()) > 0 && parent.Children()[0].Type() == "Section" {
 		return parent.Children()[0]
 	}
-	node := ast.NewSectionNode(parent)
+	node := ast.NewSectionNode(parent, items)
 	parent.Append(node)
 	return node
 }
@@ -166,6 +166,10 @@ func (p *parser) walkElements(parent ast.Node, items []lex.Item) {
 	appendCurrentItemsToParent(start, itemsLength, parent, items)
 }
 
+func (p *parser) walkGreaterElements(parent ast.Node, items []lex.Item) {
+
+}
+
 // recursively walk through each token
 func (p *parser) walk(parent ast.Node, items []lex.Item) {
 	// create top-level paragraph nodes by creating nodes
@@ -176,7 +180,7 @@ func (p *parser) walk(parent ast.Node, items []lex.Item) {
 	for current < itemsLength {
 		token := items[current]
 
-		if token.Type() == lex.ItemAsterisk && isHeadline(items, start) {
+		if isHeadline(items, current) {
 			depth := headlineDepth(items[current:])
 
 			if p.depth < depth {
@@ -222,26 +226,23 @@ func (p *parser) walk(parent ast.Node, items []lex.Item) {
 		} else if isTable(token, items, current) {
 			tableEnd := findTable(items[current:])
 			if parent.Type() != "Section" {
-				parent = findClosestSectionNode(parent)
+				parent = findClosestSectionNode(parent, items[current:])
 			}
 			node := ast.NewTableNode(current, tableEnd, parent, items[current:current+tableEnd])
 			parent.Append(node)
 			current = current + tableEnd
 			start = current
-		} else if isKeyword(token, items[current:]) {
-			foundGreaterBlock, end := findGreaterBlock(items[current:])
-			if foundGreaterBlock {
-				if parent.Type() != "Section" {
-					parent = findClosestSectionNode(parent)
-				}
-				node := ast.NewGreaterBlockNode(current, end, parent, items[current:current+end])
-				parent.Append(node)
-				current = current + end
-				continue
-			}
+		} else if foundGreaterBlock, end := findGreaterBlock(items[current:]); foundGreaterBlock {
+
+			p.makeGreaterBlock(parent, items[current:current+end])
+
+			current = current + end
+			start = current
+
+		} else if isKeyword(items[current:]) {
 
 			if parent.Type() == "Root" {
-				node := ast.NewSectionNode(parent)
+				node := ast.NewSectionNode(parent, items[current:])
 				parent.Append(node)
 				parent = node
 			}
@@ -255,7 +256,7 @@ func (p *parser) walk(parent ast.Node, items []lex.Item) {
 		} else if isFootnoteDefinition(items[current:]) {
 			if start < current {
 				if parent.Type() != "Section" {
-					parent = findClosestSectionNode(parent)
+					parent = findClosestSectionNode(parent, items[current:])
 				}
 				node := ast.NewParagraphNode(start, current-1, parent, items[start:current-1])
 				p.walkElements(node, items[start:current])
@@ -268,21 +269,10 @@ func (p *parser) walk(parent ast.Node, items []lex.Item) {
 			parent.Append(node)
 			current = end
 			start = current
-		} else if token.IsEOF() || current+1 == itemsLength {
-			if start < current {
-				if parent.Type() != "Section" {
-					parent = findClosestSectionNode(parent)
-				}
-				node := ast.NewParagraphNode(start, current, parent, items[start:current])
-				p.walkElements(node, items[start:current])
-				parent.Append(node)
-			}
-			current++
-			start = current
 		} else if token.IsNewline() {
 			if start < current && items[current-1].IsNewline() {
 				if parent.Type() != "Section" {
-					parent = findClosestSectionNode(parent)
+					parent = findClosestSectionNode(parent, items[current:])
 				}
 				node := ast.NewParagraphNode(start, current, parent, items[start:current])
 				p.walkElements(node, items[start:current])
@@ -291,7 +281,19 @@ func (p *parser) walk(parent ast.Node, items []lex.Item) {
 				current++
 				start = current
 			}
+
 			current++
+		} else if token.IsEOF() || current+1 == itemsLength {
+			if start < current {
+				if parent.Type() != "Section" {
+					parent = findClosestSectionNode(parent, items[current:])
+				}
+				node := ast.NewParagraphNode(start, current, parent, items[start:current])
+				p.walkElements(node, items[start:current])
+				parent.Append(node)
+			}
+			current++
+			start = current
 		} else {
 			current++
 		}
@@ -313,12 +315,12 @@ func Parse(input string) *ast.RootNode {
 	// items is a slice that contains slices of items that are based on newline.
 	var items []lex.Item
 
-	root := ast.NewRootNode()
-
 	// gather all of the tokens
 	for item := range lexedItems {
 		items = append(items, item)
 	}
+
+	root := ast.NewRootNode(items)
 
 	p.walk(root, items)
 

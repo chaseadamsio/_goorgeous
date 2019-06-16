@@ -1,9 +1,13 @@
 package ast
 
-func NewSectionNode(parent Node) *SectionNode {
+import "github.com/chaseadamsio/goorgeous/lex"
+
+func NewSectionNode(parent Node, items []lex.Item) *SectionNode {
 	node := &SectionNode{
 		NodeType: "Section",
 		parent:   parent,
+		Start:    items[0].Offset(),
+		End:      items[len(items)-1].End(),
 	}
 
 	return node
@@ -11,8 +15,9 @@ func NewSectionNode(parent Node) *SectionNode {
 
 type SectionNode struct {
 	NodeType
-	parent   Node
-	children []Node
+	parent        Node
+	ChildrenNodes []Node
+	Start, End    int
 }
 
 func (n SectionNode) Type() NodeType {
@@ -24,7 +29,7 @@ func (n SectionNode) String() string {
 }
 
 func (n SectionNode) Children() []Node {
-	return n.children
+	return n.ChildrenNodes
 }
 
 func (n *SectionNode) Parent() Node {
@@ -32,5 +37,5 @@ func (n *SectionNode) Parent() Node {
 }
 
 func (n *SectionNode) Append(child Node) {
-	n.children = append(n.children, child)
+	n.ChildrenNodes = append(n.ChildrenNodes, child)
 }

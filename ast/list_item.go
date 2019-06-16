@@ -8,19 +8,19 @@ import (
 
 type ListItemNode struct {
 	NodeType
-	parent   Node
-	value    string
-	start    int
-	end      int
-	children []Node
+	parent        Node
+	Value         string
+	Start         int
+	End           int
+	ChildrenNodes []Node
 }
 
 func NewListItemNode(parent Node, items []lex.Item) *ListItemNode {
 	node := &ListItemNode{
 		NodeType: "ListItem",
 		parent:   parent,
-		start:    items[0].Offset(),
-		end:      items[len(items)-1].Offset(),
+		Start:    items[0].Offset(),
+		End:      items[len(items)-1].End(),
 	}
 
 	var valStrs []string
@@ -28,7 +28,7 @@ func NewListItemNode(parent Node, items []lex.Item) *ListItemNode {
 		valStrs = append(valStrs, item.Value())
 	}
 
-	node.value = strings.Join(valStrs, "")
+	node.Value = strings.Join(valStrs, "")
 
 	return node
 }
@@ -40,11 +40,11 @@ func (n *ListItemNode) Type() NodeType {
 
 // Type returns the type of node this is
 func (n *ListItemNode) String() string {
-	return n.value
+	return n.Value
 }
 
 func (n ListItemNode) Children() []Node {
-	return n.children
+	return n.ChildrenNodes
 }
 
 func (n *ListItemNode) Parent() Node {
@@ -52,5 +52,5 @@ func (n *ListItemNode) Parent() Node {
 }
 
 func (n *ListItemNode) Append(child Node) {
-	n.children = append(n.children, child)
+	n.ChildrenNodes = append(n.ChildrenNodes, child)
 }

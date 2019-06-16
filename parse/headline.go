@@ -16,13 +16,16 @@ func isHeadline(items []lex.Item, start int) bool {
 	if 0 < start {
 		reverseSearch := start - 1 // start with the previous character
 		for 0 < reverseSearch {
-			if items[reverseSearch].IsSpace() || items[reverseSearch].IsTab() {
+			currItem := items[reverseSearch]
+
+			if currItem.IsSpace() || currItem.IsTab() {
 				reverseSearch--
 				continue
 			}
-			if items[reverseSearch].IsNewline() {
-				return true
+			if !currItem.IsNewline() {
+				return false
 			}
+			break
 		}
 	}
 

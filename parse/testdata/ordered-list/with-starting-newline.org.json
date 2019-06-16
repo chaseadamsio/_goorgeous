@@ -1,46 +1,58 @@
-[
-  {
-    "NodeType": "Root",
-    "Children": [
-      {
-        "NodeType": "List",
-        "Children": [
-          {
-            "NodeType": "ListItem",
-            "Children": null,
-            "Value": "1. apples"
-          },
-          {
-            "NodeType": "ListItem",
-            "Children": null,
-            "Value": "2. bananas"
-          },
-          {
-            "NodeType": "ListItem",
-            "Children": null,
-            "Value": "3. oranges\n"
-          }
-        ],
-        "Value": "\n1. apples\n2. bananas\n3. oranges"
-      },
-      {
-        "NodeType": "Section",
-        "Children": [
-          {
-            "NodeType": "Paragraph",
-            "Children": [
-              {
-                "NodeType": "Text",
-                "Children": null,
-                "Value": "\nwith an extra paragraph\n"
-              }
-            ],
-            "Value": "\nwith an extra paragraph\n"
-          }
-        ],
-        "Value": ""
-      }
-    ],
-    "Value": ""
-  }
-]
+{
+  "NodeType": "Root",
+  "ChildrenNodes": [
+    {
+      "NodeType": "List",
+      "ListType": "ORDERED",
+      "Value": "\n1. apples\n2. bananas\n3. oranges",
+      "Start": 0,
+      "End": 32,
+      "ChildrenNodes": [
+        {
+          "NodeType": "ListItem",
+          "Value": "1. apples",
+          "Start": 1,
+          "End": 10,
+          "ChildrenNodes": null
+        },
+        {
+          "NodeType": "ListItem",
+          "Value": "2. bananas",
+          "Start": 11,
+          "End": 21,
+          "ChildrenNodes": null
+        },
+        {
+          "NodeType": "ListItem",
+          "Value": "3. oranges\n",
+          "Start": 22,
+          "End": 32,
+          "ChildrenNodes": null
+        }
+      ]
+    },
+    {
+      "NodeType": "Section",
+      "ChildrenNodes": [
+        {
+          "NodeType": "Paragraph",
+          "Start": 32,
+          "End": 56,
+          "ChildrenNodes": [
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": "\nwith an extra paragraph\n",
+              "Start": 32,
+              "End": 56
+            }
+          ]
+        }
+      ],
+      "Start": 57,
+      "End": 57
+    }
+  ],
+  "Start": 0,
+  "End": 57
+}

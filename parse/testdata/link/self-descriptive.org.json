@@ -7,22 +7,29 @@
         {
           "NodeType": "Paragraph",
           "Start": 0,
-          "End": 52,
+          "End": 22,
           "ChildrenNodes": [
+            {
+              "NodeType": "Link",
+              "Link": "",
+              "Start": 0,
+              "End": 22,
+              "ChildrenNodes": null
+            },
             {
               "NodeType": "Text",
               "ChildrenNodes": null,
-              "Val": "1.apples\n2.bananas\n3.oranges\nwith an extra paragraph\n",
-              "Start": 0,
-              "End": 52
+              "Val": "\n",
+              "Start": 22,
+              "End": 22
             }
           ]
         }
       ],
-      "Start": 53,
-      "End": 53
+      "Start": 23,
+      "End": 23
     }
   ],
   "Start": 0,
-  "End": 53
+  "End": 23
 }

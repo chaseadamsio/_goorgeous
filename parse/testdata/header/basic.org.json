@@ -1,40 +1,49 @@
-[
-  {
-    "NodeType": "Root",
-    "Children": [
-      {
-        "NodeType": "Section",
-        "Children": [
-          {
-            "NodeType": "Keyword",
-            "Children": null,
-            "Value": "title: headers"
-          },
-          {
-            "NodeType": "Keyword",
-            "Children": null,
-            "Value": "author: Chase Adams"
-          },
-          {
-            "NodeType": "Keyword",
-            "Children": null,
-            "Value": "description: This is my description!"
-          },
-          {
-            "NodeType": "Paragraph",
-            "Children": [
-              {
-                "NodeType": "Text",
-                "Children": null,
-                "Value": "\n"
-              }
-            ],
-            "Value": "\n"
-          }
-        ],
-        "Value": ""
-      }
-    ],
-    "Value": ""
-  }
-]
+{
+  "NodeType": "Root",
+  "ChildrenNodes": [
+    {
+      "NodeType": "Section",
+      "ChildrenNodes": [
+        {
+          "NodeType": "Keyword",
+          "Key": "title",
+          "Value": " headers",
+          "Start": 2,
+          "End": 16
+        },
+        {
+          "NodeType": "Keyword",
+          "Key": "author",
+          "Value": " Chase Adams",
+          "Start": 19,
+          "End": 38
+        },
+        {
+          "NodeType": "Keyword",
+          "Key": "description",
+          "Value": " This is my description!",
+          "Start": 41,
+          "End": 77
+        },
+        {
+          "NodeType": "Paragraph",
+          "Start": 77,
+          "End": 77,
+          "ChildrenNodes": [
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": "\n",
+              "Start": 77,
+              "End": 77
+            }
+          ]
+        }
+      ],
+      "Start": 0,
+      "End": 78
+    }
+  ],
+  "Start": 0,
+  "End": 78
+}

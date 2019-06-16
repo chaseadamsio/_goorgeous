@@ -1,46 +1,79 @@
-[
-  {
-    "NodeType": "Root",
-    "Children": [
-      {
-        "NodeType": "Section",
-        "Children": [
-          {
-            "NodeType": "Paragraph",
-            "Children": [
-              {
-                "NodeType": "Text",
-                "Children": null,
-                "Value": "This has some "
-              },
-              {
-                "NodeType": "Bold",
-                "Children": [
-                  {
-                    "NodeType": "Text",
-                    "Children": null,
-                    "Value": "bold"
-                  }
-                ],
-                "Value": "*bold* text.\n"
-              },
-              {
-                "NodeType": "Text",
-                "Children": null,
-                "Value": " text.\n"
-              }
-            ],
-            "Value": "This has some *bold* text.\n"
-          }
-        ],
-        "Value": ""
-      },
-      {
-        "NodeType": "Headline",
-        "Children": null,
-        "Value": "text at the beginning of a line."
-      }
-    ],
-    "Value": ""
-  }
-]
+{
+  "NodeType": "Root",
+  "ChildrenNodes": [
+    {
+      "NodeType": "Section",
+      "ChildrenNodes": [
+        {
+          "NodeType": "Paragraph",
+          "Start": 0,
+          "End": 26,
+          "ChildrenNodes": [
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": "This has some ",
+              "Start": 0,
+              "End": 13
+            },
+            {
+              "NodeType": "Bold",
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "bold",
+                  "Start": 15,
+                  "End": 19
+                }
+              ],
+              "Val": "bold",
+              "Start": 15,
+              "End": 19
+            },
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": " text.\n",
+              "Start": 20,
+              "End": 26
+            }
+          ]
+        },
+        {
+          "NodeType": "Paragraph",
+          "Start": 28,
+          "End": 67,
+          "ChildrenNodes": [
+            {
+              "NodeType": "Bold",
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "Bold",
+                  "Start": 29,
+                  "End": 33
+                }
+              ],
+              "Val": "Bold",
+              "Start": 29,
+              "End": 33
+            },
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": " text at the beginning of a line.\n",
+              "Start": 34,
+              "End": 67
+            }
+          ]
+        }
+      ],
+      "Start": 27,
+      "End": 68
+    }
+  ],
+  "Start": 0,
+  "End": 68
+}

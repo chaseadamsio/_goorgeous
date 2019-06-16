@@ -1,13 +1,15 @@
-[
-  {
-    "NodeType": "Root",
-    "Children": [
-      {
-        "NodeType": "Headline",
-        "Children": null,
-        "Value": "This is a headline"
-      }
-    ],
-    "Value": ""
-  }
-]
+{
+  "NodeType": "Root",
+  "ChildrenNodes": [
+    {
+      "NodeType": "Headline",
+      "Start": 2,
+      "End": 20,
+      "Depth": 1,
+      "ChildrenNodes": null,
+      "Keyword": ""
+    }
+  ],
+  "Start": 0,
+  "End": 21
+}

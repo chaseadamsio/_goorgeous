@@ -63,7 +63,7 @@ func findElementMarkup(items []lex.Item, expectedTypeFunc func(lex.Item) bool) i
 func (p *parser) newBold(parent ast.Node, items []lex.Item) (end int) {
 	current := 0
 	end = findBold(items)
-	node := ast.NewBoldNode(parent, items)
+	node := ast.NewBoldNode(parent, items[current+1:end])
 	parent.Append(node)
 	p.walkElements(node, items[current+1:end])
 	return end
@@ -86,7 +86,7 @@ func findBold(items []lex.Item) int {
 func (p *parser) newItalic(parent ast.Node, items []lex.Item) (end int) {
 	current := 0
 	end = findItalic(items)
-	node := ast.NewItalicNode(parent, items)
+	node := ast.NewItalicNode(parent, items[current+1:end])
 	parent.Append(node)
 	p.walkElements(node, items[current+1:end])
 	return end
@@ -109,7 +109,7 @@ func findItalic(items []lex.Item) int {
 func (p *parser) newVerbatim(parent ast.Node, items []lex.Item) (end int) {
 	current := 0
 	end = findVerbatim(items)
-	node := ast.NewVerbatimNode(parent, items)
+	node := ast.NewVerbatimNode(parent, items[current+1:end])
 	parent.Append(node)
 	p.walkElements(node, items[current+1:end])
 	return end
@@ -132,7 +132,7 @@ func findVerbatim(items []lex.Item) int {
 func (p *parser) newStrikeThrough(parent ast.Node, items []lex.Item) (end int) {
 	current := 0
 	end = findStrikeThrough(items)
-	node := ast.NewStrikeThroughNode(parent, items)
+	node := ast.NewStrikeThroughNode(parent, items[current+1:end])
 	parent.Append(node)
 	p.walkElements(node, items[current+1:end])
 	return end
@@ -155,7 +155,7 @@ func findStrikeThrough(items []lex.Item) int {
 func (p *parser) newUnderline(parent ast.Node, items []lex.Item) (end int) {
 	current := 0
 	end = findUnderline(items)
-	node := ast.NewUnderlineNode(parent, items)
+	node := ast.NewUnderlineNode(parent, items[current+1:end])
 	parent.Append(node)
 	p.walkElements(node, items[current+1:end])
 	return end
@@ -178,7 +178,7 @@ func findUnderline(items []lex.Item) int {
 func (p *parser) newCode(parent ast.Node, items []lex.Item) (end int) {
 	current := 0
 	end = findCode(items)
-	node := ast.NewCodeNode(parent, items)
+	node := ast.NewCodeNode(parent, items[current+1:end])
 	parent.Append(node)
 	p.walkElements(node, items[current+1:end])
 	return end

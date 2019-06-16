@@ -1,45 +1,26 @@
 package ast
 
 import (
-	"strings"
-
 	"github.com/chaseadamsio/goorgeous/lex"
 )
 
 type GreaterBlockNode struct {
 	NodeType
 	parent Node
-	key    string
-	value  string
-	start  int
-	end    int
+	Key    string
+	Value  string
+	Start  int
+	End    int
 }
 
-func NewGreaterBlockNode(start, end int, parent Node, items []lex.Item) *GreaterBlockNode {
+func NewGreaterBlockNode(parent Node, items []lex.Item) *GreaterBlockNode {
 	node := &GreaterBlockNode{
 		NodeType: "GreaterBlock",
 		parent:   parent,
-		start:    start,
-		end:      end,
+		Start:    items[0].Offset(),
+		End:      items[len(items)-1].End(),
 	}
-
-	node.parse(items)
 	return node
-}
-
-func (n *GreaterBlockNode) parse(items []lex.Item) {
-	var key string
-	var val []string
-	for idx, item := range items {
-		if item.Type() == lex.ItemColon {
-			key = items[idx-1].Value()
-			continue
-		} else if key != "" {
-			val = append(val, item.Value())
-		}
-	}
-	n.key = key
-	n.value = strings.Join(val, "")
 }
 
 // Type returns the type of node this is
@@ -49,7 +30,7 @@ func (n *GreaterBlockNode) Type() NodeType {
 
 // Type returns the type of node this is
 func (n *GreaterBlockNode) String() string {
-	return n.key + ":" + n.value
+	return n.Key + ":" + n.Value
 }
 
 func (n GreaterBlockNode) Children() []Node {

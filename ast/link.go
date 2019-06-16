@@ -8,20 +8,20 @@ import (
 
 type LinkNode struct {
 	NodeType
-	parent   Node
-	rawvalue string
-	link     string
-	start    int
-	end      int
-	children []Node
+	parent        Node
+	rawvalue      string
+	Link          string
+	Start         int
+	End           int
+	ChildrenNodes []Node
 }
 
 func NewLinkNode(parent Node, items []lex.Item) *LinkNode {
 	node := &LinkNode{
 		NodeType: "Link",
 		parent:   parent,
-		start:    items[0].Offset(),
-		end:      items[len(items)-1].Offset(),
+		Start:    items[0].Offset(),
+		End:      items[len(items)-1].End(),
 	}
 
 	node.parse(items)
@@ -52,7 +52,7 @@ func (n *LinkNode) String() string {
 }
 
 func (n LinkNode) Children() []Node {
-	return n.children
+	return n.ChildrenNodes
 }
 
 func (n *LinkNode) Parent() Node {
@@ -60,5 +60,5 @@ func (n *LinkNode) Parent() Node {
 }
 
 func (n *LinkNode) Append(child Node) {
-	n.children = append(n.children, child)
+	n.ChildrenNodes = append(n.ChildrenNodes, child)
 }

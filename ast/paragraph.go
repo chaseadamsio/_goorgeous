@@ -8,19 +8,19 @@ import (
 
 type ParagraphNode struct {
 	NodeType
-	parent   Node
-	rawvalue string
-	start    int
-	end      int
-	children []Node
+	parent        Node
+	rawvalue      string
+	Start         int
+	End           int
+	ChildrenNodes []Node
 }
 
 func NewParagraphNode(start, end int, parent Node, items []lex.Item) *ParagraphNode {
 	node := &ParagraphNode{
 		NodeType: "Paragraph",
 		parent:   parent,
-		start:    start,
-		end:      end,
+		Start:    items[0].Offset(),
+		End:      items[len(items)-1].End(),
 	}
 
 	var rawvalueStrs []string
@@ -43,11 +43,11 @@ func (n *ParagraphNode) String() string {
 }
 
 func (n ParagraphNode) Children() []Node {
-	return n.children
+	return n.ChildrenNodes
 }
 func (n *ParagraphNode) Parent() Node {
 	return n.parent
 }
 func (n *ParagraphNode) Append(child Node) {
-	n.children = append(n.children, child)
+	n.ChildrenNodes = append(n.ChildrenNodes, child)
 }

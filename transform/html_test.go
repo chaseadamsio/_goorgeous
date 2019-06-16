@@ -1,6 +1,7 @@
 package transform
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/chaseadamsio/goorgeous/parse"
@@ -13,22 +14,20 @@ type testCase struct {
 
 var testCases = []testCase{
 	{
-		"#+title: basic-happy-path-new-content-after\n#+author: Chase Adams\n#+description: This is my description!\n* This starts the content!",
-	},
-	{
-		"- apples\n- oranges\n- bananas\nsomething else",
+		"* This is a headline",
 	},
 }
 
 func TestTransform(t *testing.T) {
 	for _, tc := range testCases {
 		ast := parse.Parse(tc.input)
-		out := TransformToHTML(ast)
-		flatOut := []string{"\n"}
+		fmt.Println(ast)
+		// TransformToHTML(ast)
+		// flatOut := []string{"\n"}
 
-		for _, node := range out {
-			flatOut = append(flatOut, "type: "+string(node.Type)+"\n\t"+node.Value+"\n")
-		}
+		// for _, node := range out {
+		// 	flatOut = append(flatOut, "type: "+string(node.Type)+"\n\t"+node.Value+"\n")
+		// }
 		// fmt.Println(strings.Join(flatOut, ""))
 	}
 }

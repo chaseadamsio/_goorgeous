@@ -48,10 +48,10 @@ func newTextNode(typ NodeType, parent Node, items []lex.Item) *TextNode {
 	}
 	node := &TextNode{
 		NodeType: typ,
-		val:      strings.Join(values, ""),
+		Val:      strings.Join(values, ""),
 		parent:   parent,
-		start:    items[0].Offset(),
-		end:      items[len(items)-1].Offset(),
+		Start:    items[0].Offset(),
+		End:      items[len(items)-1].End(),
 	}
 
 	return node
@@ -59,11 +59,11 @@ func newTextNode(typ NodeType, parent Node, items []lex.Item) *TextNode {
 
 type TextNode struct {
 	NodeType
-	parent   Node
-	children []Node
-	val      string
-	start    int
-	end      int
+	parent        Node
+	ChildrenNodes []Node
+	Val           string
+	Start         int
+	End           int
 }
 
 func (n TextNode) Type() NodeType {
@@ -71,15 +71,15 @@ func (n TextNode) Type() NodeType {
 }
 
 func (n TextNode) String() string {
-	return n.val
+	return n.Val
 }
 
 func (n TextNode) Children() []Node {
-	return n.children
+	return n.ChildrenNodes
 }
 func (n *TextNode) Parent() Node {
 	return n.parent
 }
 func (n *TextNode) Append(child Node) {
-	n.children = append(n.children, child)
+	n.ChildrenNodes = append(n.ChildrenNodes, child)
 }

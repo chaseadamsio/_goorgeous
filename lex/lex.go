@@ -27,7 +27,7 @@ type lexer struct {
 }
 
 func (l lexer) emit(i itemType, value string) {
-	l.items <- item{i, value, l.column, l.offset, l.line}
+	l.items <- item{i, value, l.column, l.offset, l.width, l.line}
 }
 
 func (l lexer) emitText() {
@@ -39,7 +39,7 @@ func (l lexer) emitNewLine() {
 }
 
 func (l lexer) emitEOF() {
-	l.items <- item{ItemEOF, "", l.pos, l.pos, l.line}
+	l.items <- item{ItemEOF, "", l.pos, l.pos, 0, l.line}
 }
 
 // TODO maybe rename this to tokenizer

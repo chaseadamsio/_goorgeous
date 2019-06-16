@@ -9,18 +9,18 @@ import (
 type KeywordNode struct {
 	NodeType
 	parent Node
-	key    string
-	value  string
-	start  int
-	end    int
+	Key    string
+	Value  string
+	Start  int
+	End    int
 }
 
 func NewKeywordNode(start, end int, parent Node, items []lex.Item) *KeywordNode {
 	node := &KeywordNode{
 		NodeType: "Keyword",
 		parent:   parent,
-		start:    start,
-		end:      end,
+		Start:    items[0].Offset(),
+		End:      items[len(items)-1].End(),
 	}
 
 	node.parse(items)
@@ -38,8 +38,8 @@ func (n *KeywordNode) parse(items []lex.Item) {
 			val = append(val, item.Value())
 		}
 	}
-	n.key = key
-	n.value = strings.Join(val, "")
+	n.Key = key
+	n.Value = strings.Join(val, "")
 }
 
 // Type returns the type of node this is
@@ -49,7 +49,7 @@ func (n *KeywordNode) Type() NodeType {
 
 // Type returns the type of node this is
 func (n *KeywordNode) String() string {
-	return n.key + ":" + n.value
+	return n.Key + ":" + n.Value
 }
 
 func (n KeywordNode) Children() []Node {

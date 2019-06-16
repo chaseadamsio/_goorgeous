@@ -1,10 +1,16 @@
 package ast
 
-import "encoding/json"
+import (
+	"encoding/json"
 
-func NewRootNode() *RootNode {
+	"github.com/chaseadamsio/goorgeous/lex"
+)
+
+func NewRootNode(items []lex.Item) *RootNode {
 	node := &RootNode{
 		NodeType: "Root",
+		Start:    items[0].Offset(),
+		End:      items[len(items)-1].End(),
 	}
 
 	return node
@@ -12,19 +18,12 @@ func NewRootNode() *RootNode {
 
 type RootNode struct {
 	NodeType
-	parent   Node
-	children []Node
+	ChildrenNodes []Node
+	Start, End    int
 }
 
 func (n *RootNode) String() string {
-	tree := []treeTyp{
-		{
-			"Root",
-			getChildren(n),
-			"",
-		},
-	}
-	out, _ := json.MarshalIndent(tree, "", "  ")
+	out, _ := json.MarshalIndent(n, "", "  ")
 	return string(out)
 }
 
@@ -37,13 +36,13 @@ func (n RootNode) Type() NodeType {
 }
 
 func (n RootNode) Children() []Node {
-	return n.children
+	return n.ChildrenNodes
 }
 
 func (n *RootNode) Parent() Node {
-	return n.parent
+	return nil
 }
 
 func (n *RootNode) Append(child Node) {
-	n.children = append(n.children, child)
+	n.ChildrenNodes = append(n.ChildrenNodes, child)
 }

@@ -1,0 +1,43 @@
+{
+  "NodeType": "Root",
+  "ChildrenNodes": [
+    {
+      "NodeType": "Section",
+      "ChildrenNodes": [
+        {
+          "NodeType": "Paragraph",
+          "Start": 0,
+          "End": 38,
+          "ChildrenNodes": [
+            {
+              "NodeType": "Link",
+              "Link": "",
+              "Start": 0,
+              "End": 38,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "this is a link",
+                  "Start": 22,
+                  "End": 36
+                }
+              ]
+            },
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": "\n",
+              "Start": 38,
+              "End": 38
+            }
+          ]
+        }
+      ],
+      "Start": 39,
+      "End": 39
+    }
+  ],
+  "Start": 0,
+  "End": 39
+}

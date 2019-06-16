@@ -9,6 +9,7 @@ type Item interface {
 	Value() string
 	Column() int
 	Offset() int
+	End() int
 	Line() int
 }
 
@@ -228,6 +229,7 @@ type item struct {
 	val    string
 	column int
 	offset int
+	width  int
 	line   int
 }
 
@@ -245,6 +247,10 @@ func (i item) Column() int {
 
 func (i item) Offset() int {
 	return i.offset
+}
+
+func (i item) End() int {
+	return i.offset + i.width
 }
 
 func (i item) Line() int {

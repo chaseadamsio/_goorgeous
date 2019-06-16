@@ -41,6 +41,9 @@ const (
 
 	HeadersBasic = "header/basic.org"
 
+	LinkSelfDescriptive = "link/self-descriptive.org"
+	LinkStandard        = "link/standard.org"
+
 	OrderedListBasic                   = "ordered-list/basic.org"
 	OrderedListNotAList                = "ordered-list/not-a-list.org"
 	OrderedListWithStartingNewline     = "ordered-list/with-starting-newline.org"
@@ -51,7 +54,7 @@ const (
 	OrderedListWithNestedOrderedList   = "ordered-list/with-nested-ordered-list.org"
 	OrderedListWithNestedUnorderedList = "unordered-list/with-nested-unordered-list.org"
 	OrderedListWithNestedContent       = "ordered-list/with-nested-content.org"
-	
+
 	UnorderedListBasic                   = "unordered-list/basic.org"
 	UnorderedListNotAList                = "unordered-list/not-a-list.org"
 	UnorderedListWithStartingNewline     = "unordered-list/with-starting-newline.org"
@@ -64,5 +67,7 @@ const (
 	UnorderedListWithDeepNestedChildren  = "unordered-list/with-2-deep-nested-children-list.org"
 	UnorderedListWithNestedContent       = "unordered-list/with-nested-content.org"
 
-	ElementBold = "element/bold.org"
+	ElementPlain  = "element/plain.org"
+	ElementNested = "element/nested.org"
+	ElementBold   = "element/bold.org"
 )

@@ -1,0 +1,55 @@
+{
+  "NodeType": "Root",
+  "ChildrenNodes": [
+    {
+      "NodeType": "Headline",
+      "Start": 0,
+      "End": 164,
+      "Depth": 1,
+      "ChildrenNodes": [
+        {
+          "NodeType": "HorizontalRule",
+          "Key": "",
+          "Value": "",
+          "Start": 28,
+          "End": 32
+        },
+        {
+          "NodeType": "Headline",
+          "Start": 34,
+          "End": 164,
+          "Depth": 1,
+          "ChildrenNodes": [
+            {
+              "NodeType": "HorizontalRule",
+              "Key": "",
+              "Value": "",
+              "Start": 93,
+              "End": 97
+            },
+            {
+              "NodeType": "Headline",
+              "Start": 99,
+              "End": 164,
+              "Depth": 1,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "HorizontalRule",
+                  "Key": "",
+                  "Value": "",
+                  "Start": 159,
+                  "End": 163
+                }
+              ],
+              "Keyword": ""
+            }
+          ],
+          "Keyword": ""
+        }
+      ],
+      "Keyword": ""
+    }
+  ],
+  "Start": 0,
+  "End": 165
+}

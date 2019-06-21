@@ -27,8 +27,8 @@
                   "End": 19
                 }
               ],
-              "Val": "bold",
-              "Start": 15,
+              "Val": "*bold*",
+              "Start": 14,
               "End": 19
             },
             {
@@ -56,8 +56,8 @@
                   "End": 33
                 }
               ],
-              "Val": "Bold",
-              "Start": 29,
+              "Val": "*Bold*",
+              "Start": 28,
               "End": 33
             },
             {

@@ -9,22 +9,21 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/google/go-cmp/cmp"
-
 	"github.com/chaseadamsio/goorgeous/ast"
 	"github.com/chaseadamsio/goorgeous/testdata"
+	"github.com/google/go-cmp/cmp"
 )
 
 var update = flag.Bool("update", false, "update golden files")
 
 func TestParse(t *testing.T) {
 	for _, tc := range tests {
-		// filter := "element/plain.org"
-		// if !strings.HasPrefix(tc.source, filter) {
-		// 	return
-		// }
 
 		t.Run(tc.source, func(t *testing.T) {
+			// filter := "unordered-list/with-follow-asterisk"
+			// if !strings.HasPrefix(tc.source, filter) {
+			// 	return
+			// }
 			value := testdata.GetOrgStr(tc.source)
 			ast := Parse(value)
 
@@ -40,17 +39,17 @@ func TestParse(t *testing.T) {
 				return
 			}
 
-			var expected []interface{}
 			gldn, err := ioutil.ReadFile(tc.golden)
 			if err != nil {
 				t.Fatalf("failed to read %s file: %s", tc.golden, err)
 			}
 
+			var expected map[string]interface{}
 			err = json.Unmarshal([]byte(gldn), &expected)
 			if err != nil {
 				t.Errorf("failed to unmarshal expected string: %s", err)
 				// use an empty string to get a view of the world and uncomment this next line...
-				fmt.Printf("\nexpected:\n\t%v\nactual:\n\t%v", expected, ast)
+				// fmt.Printf("\nexpected:\n\t%v\nactual:\n\t%v", expected, ast)
 			}
 
 			if cmp.Equal(ast, expected) {
@@ -104,8 +103,20 @@ var tests = []testCase{
 		fmt.Sprintf("testdata/%s.json", testdata.ElementNested),
 	},
 	{
+		testdata.ElementBold,
+		fmt.Sprintf("testdata/%s.json", testdata.ElementBold),
+	},
+	{
+		testdata.ElementHorizontalRule,
+		fmt.Sprintf("testdata/%s.json", testdata.ElementHorizontalRule),
+	},
+	{
 		testdata.Headline1,
 		fmt.Sprintf("testdata/%s.json", testdata.Headline1),
+	},
+	{
+		testdata.Headline1And2,
+		fmt.Sprintf("testdata/%s.json", testdata.Headline1And2),
 	},
 	{
 		testdata.Headline1WithContent,
@@ -207,21 +218,13 @@ var tests = []testCase{
 		testdata.UnorderedListWithNestedContent,
 		fmt.Sprintf("testdata/%s.json", testdata.UnorderedListWithNestedContent),
 	},
-	{
-		testdata.ElementBold,
-		fmt.Sprintf("testdata/%s.json", testdata.ElementBold),
-	},
-	{
-		testdata.ElementBold,
-		fmt.Sprintf("testdata/%s.json", testdata.ElementBold),
-	},
 	// {
 	// 	"headers",
 	// 	"#+title: headers\n#+author: Chase Adams\n#+description: This is my description!",
 	// 	[]testNode{{
 	// 		"Root",
 	// 		[]testNode{{
-	// 			"Section",
+	//			"Section",
 	// 			[]testNode{{
 	// 				"Keyword",
 	// 				nil,

@@ -26,19 +26,19 @@
                           "End": 36
                         }
                       ],
-                      "Val": "this is bold, italic and verbatim",
-                      "Start": 3,
+                      "Val": "=this is bold, italic and verbatim=",
+                      "Start": 2,
                       "End": 36
                     }
                   ],
-                  "Val": "=this is bold, italic and verbatim=",
-                  "Start": 2,
-                  "End": 36
+                  "Val": "/=this is bold, italic and verbatim=/",
+                  "Start": 1,
+                  "End": 37
                 }
               ],
-              "Val": "/=this is bold, italic and verbatim=/",
-              "Start": 1,
-              "End": 37
+              "Val": "*/=this is bold, italic and verbatim=/*",
+              "Start": 0,
+              "End": 38
             },
             {
               "NodeType": "Text",

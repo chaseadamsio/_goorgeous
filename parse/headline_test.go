@@ -28,7 +28,11 @@ func TestIsHeadline(t *testing.T) {
 		for item := range lexedItems {
 			items = append(items, item)
 		}
-		if isHeadline(items, 0) != tc.expected {
+		p := &parser{
+			items: items,
+			depth: 0,
+		}
+		if found, _ := p.matchesHeadline(0); found != tc.expected {
 			t.Errorf("expected \"%s\" to be %t", tc.value, tc.expected)
 		}
 	}

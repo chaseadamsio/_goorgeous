@@ -5,15 +5,13 @@ import (
 	"github.com/chaseadamsio/goorgeous/lex"
 )
 
-func (p *parser) newLink(parent ast.Node, items []lex.Item) (end int) {
-	end = findLinkBoundary(items)
-	node := ast.NewLinkNode(parent, items)
+func (p *parser) newLink(parent ast.Node, start, end int) {
+	node := ast.NewLinkNode(parent, p.items[start:end])
 	parent.Append(node)
-	textCurrent, textEnd := findLinkText(items)
+	textCurrent, textEnd := findLinkText(p.items[start:end])
 	if textCurrent < textEnd {
-		p.walkElements(node, items[textCurrent:textEnd])
+		p.walkElements(node, textCurrent, textEnd)
 	}
-	return end
 }
 
 func findLinkBoundary(items []lex.Item) int {
@@ -62,15 +60,14 @@ func findLinkText(items []lex.Item) (start, end int) {
 	return start, end
 }
 
-func isLink(items []lex.Item) bool {
-	current := 0
-	itemsLength := len(items)
+func (p *parser) matchesLink(current int) (found bool, end int) {
+	itemsLength := len(p.items)
 
 	// a link will always start with two brackets [[
-	if !((items[current].IsBracket() && items[current].Value() == "[") &&
-		(current < itemsLength && items[current+1].IsBracket() && items[current+1].Value() == "[")) {
+	if !((p.items[current].IsBracket() && p.items[current].Value() == "[") &&
+		(current < itemsLength && p.items[current+1].IsBracket() && p.items[current+1].Value() == "[")) {
 
-		return false
+		return false, -1
 	}
 	current = current + 2
 
@@ -78,25 +75,25 @@ func isLink(items []lex.Item) bool {
 
 	for current < itemsLength {
 		// we only care about brackets if we've closed the link part
-		if items[current].IsBracket() && (foundLinkCloseBracket || items[current].Value() == "]") {
+		if p.items[current].IsBracket() && (foundLinkCloseBracket || p.items[current].Value() == "]") {
 			// we found a ] to get here and if the next bracket is a closing bracket, this is a link!
-			if current < itemsLength && items[current+1].IsBracket() && items[current+1].Value() == "]" {
-				return true
+			if current < itemsLength && p.items[current+1].IsBracket() && p.items[current+1].Value() == "]" {
+				return true, current
 			}
 			// we hadn't found a closing bracket, but the current bracket is a closing bracket
 			// because the next bracket opens the description
-			if current < itemsLength && items[current+1].IsBracket() && items[current+1].Value() == "[" {
+			if current < itemsLength && p.items[current+1].IsBracket() && p.items[current+1].Value() == "[" {
 				foundLinkCloseBracket = true
 			}
 			// this is a self-describing link
-			if foundLinkCloseBracket && items[current+1].IsBracket() && items[current+1].Value() == "]" {
-				return true
+			if foundLinkCloseBracket && p.items[current+1].IsBracket() && p.items[current+1].Value() == "]" {
+				return true, -1
 			}
 			// if it's a bracket and it's not a closing bracket and we haven't found a closed bracket yet, this isn't a link
-		} else if items[current].IsBracket() && items[current].Value() != "]" {
-			return false
+		} else if p.items[current].IsBracket() && p.items[current].Value() != "]" {
+			return false, -1
 		}
 		current++
 	}
-	return false
+	return false, -1
 }

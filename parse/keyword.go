@@ -1,45 +1,62 @@
 package parse
 
-import "github.com/chaseadamsio/goorgeous/lex"
+import (
+	"github.com/chaseadamsio/goorgeous/ast"
+	"github.com/chaseadamsio/goorgeous/lex"
+)
 
-func isKeyword(items []lex.Item) bool {
-	current := 0
-	token := items[0]
-	itemsLength := len(items)
+func (p *parser) makeKeyword(parent ast.Node, start, end int) {
+	if parent.Type() == "Root" {
+		node := ast.NewSectionNode(parent, p.items[start:end])
+		parent.Append(node)
+		parent = node
+	}
 
-	if !token.IsHash() {
-		return false
-	}
-	if current < itemsLength && items[current+1].Type() != lex.ItemPlus {
-		return false
-	}
-	if current == 0 || items[current-1].IsNewline() {
-		return true
-	}
-	return false
+	node := ast.NewKeywordNode(parent, p.items[start:end])
+	parent.Append(node)
 }
 
-func findGreaterBlock(items []lex.Item) (found bool, end int) {
-	current := 0
-	itemsLength := len(items)
+func (p *parser) matchesKeyword(current int) (found bool, end int) {
+	token := p.items[current]
+	itemsLength := len(p.items)
+
+	if !token.IsHash() {
+		return false, -1
+	}
+	if current < itemsLength && p.items[current+1].Type() != lex.ItemPlus {
+		return false, -1
+	}
+	if current == 0 || p.items[current-1].IsNewline() {
+		for current < itemsLength {
+			if p.items[current].IsNewline() {
+				return true, current
+			}
+			current++
+		}
+	}
+	return false, -1
+}
+
+func (p *parser) matchesGreaterBlock(current int) (found bool, end int) {
+	itemsLength := len(p.items)
 	foundEnd := false
 
-	if !isKeyword(items) {
+	if found, _ := p.matchesKeyword(current); !found {
 		return false, -1
 	}
 
-	if itemsLength > current+1 && items[current+2].Value() != "BEGIN" {
+	if current+2 < itemsLength && p.items[current+2].Value() != "BEGIN" {
 		return false, -1
 	}
 	current = current + 2
 
 	for current < itemsLength {
-		if foundEnd && (current+1 == itemsLength || items[current].IsNewline() || items[current].IsEOF()) {
+		if foundEnd && (current+1 == itemsLength || p.items[current].IsNewline() || p.items[current].IsEOF()) {
 			return true, itemsLength
 		}
-		if items[current].Type() == lex.ItemHash {
-			if itemsLength > current && items[current+1].Type() == lex.ItemPlus {
-				if itemsLength > current+1 && items[current+2].Value() == "END" {
+		if p.items[current].Type() == lex.ItemHash {
+			if itemsLength > current && p.items[current+1].Type() == lex.ItemPlus {
+				if itemsLength > current+1 && p.items[current+2].Value() == "END" {
 					foundEnd = true
 				}
 			}

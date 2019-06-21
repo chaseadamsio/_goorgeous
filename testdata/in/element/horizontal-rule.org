@@ -1,0 +1,6 @@
+* This is a horizontal rule
+-----
+* This is a horizontal rule with a space at the beginning
+ -----
+* This is a horizontal rule with a tab at the beginning
+    -----

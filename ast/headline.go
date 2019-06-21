@@ -18,7 +18,7 @@ type HeadlineNode struct {
 	Keyword       string
 }
 
-func NewHeadlineNode(start, end, depth int, parent Node, items []lex.Item) *HeadlineNode {
+func NewHeadlineNode(depth int, parent Node, items []lex.Item) *HeadlineNode {
 	node := &HeadlineNode{
 		NodeType: "Headline",
 		Depth:    depth,

@@ -15,7 +15,7 @@ type KeywordNode struct {
 	End    int
 }
 
-func NewKeywordNode(start, end int, parent Node, items []lex.Item) *KeywordNode {
+func NewKeywordNode(parent Node, items []lex.Item) *KeywordNode {
 	node := &KeywordNode{
 		NodeType: "Keyword",
 		parent:   parent,

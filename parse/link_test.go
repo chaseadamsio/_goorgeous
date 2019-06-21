@@ -25,7 +25,10 @@ func TestIsLink(t *testing.T) {
 		for item := range lexedItems {
 			items = append(items, item)
 		}
-		if isLink(items) != tc.expected {
+		p := parser{
+			items: items,
+		}
+		if found, _ := p.matchesLink(0); found != tc.expected {
 			t.Errorf("expected \"%s\" to be %t", tc.value, tc.expected)
 		}
 	}

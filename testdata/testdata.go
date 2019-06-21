@@ -38,6 +38,7 @@ func GetOrgStr(filename string) (content string) {
 const (
 	Headline1            = "headline/headline-1.org"
 	Headline1WithContent = "headline/headline-1-with-content.org"
+	Headline1And2        = "headline/headline-1-2.org"
 
 	HeadersBasic = "header/basic.org"
 
@@ -67,7 +68,8 @@ const (
 	UnorderedListWithDeepNestedChildren  = "unordered-list/with-2-deep-nested-children-list.org"
 	UnorderedListWithNestedContent       = "unordered-list/with-nested-content.org"
 
-	ElementPlain  = "element/plain.org"
-	ElementNested = "element/nested.org"
-	ElementBold   = "element/bold.org"
+	ElementPlain          = "element/plain.org"
+	ElementNested         = "element/nested.org"
+	ElementBold           = "element/bold.org"
+	ElementHorizontalRule = "element/horizontal-rule.org"
 )

@@ -7,15 +7,15 @@ import (
 	"github.com/chaseadamsio/goorgeous/lex"
 )
 
-func (p *parser) makeGreaterBlock(parent ast.Node, items []lex.Item) {
-	node := ast.NewGreaterBlockNode(parent, items)
+func (p *parser) makeGreaterBlock(parent ast.Node, start, end int) {
+	node := ast.NewGreaterBlockNode(parent, p.items[start:end])
 
 	parent.Append(node)
 	var key string
 	var val []string
-	for idx, item := range items {
+	for idx, item := range p.items[start:end] {
 		if item.Type() == lex.ItemColon {
-			key = items[idx-1].Value()
+			key = p.items[idx-1].Value()
 			continue
 		} else if key != "" {
 			val = append(val, item.Value())

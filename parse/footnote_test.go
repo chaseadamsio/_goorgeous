@@ -25,7 +25,10 @@ func TestIsFootnoteDefinition(t *testing.T) {
 		for item := range itemsChan {
 			items = append(items, item)
 		}
-		if isFootnoteDefinition(items[tc.start:]) != tc.expected {
+		p := &parser{
+			items: items,
+		}
+		if found, _ := p.matchesFootnoteDefinition(tc.start); found != tc.expected {
 			t.Errorf("Expected %s to be %t", tc.input, tc.expected)
 		}
 	}

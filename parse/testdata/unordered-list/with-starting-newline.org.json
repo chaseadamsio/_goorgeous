@@ -4,8 +4,8 @@
     {
       "NodeType": "List",
       "ListType": "UNORDERED",
-      "Value": "\n- apples\n- bananas\n- oranges",
-      "Start": 0,
+      "Value": "- apples\n- bananas\n- oranges\n",
+      "Start": 1,
       "End": 29,
       "ChildrenNodes": [
         {
@@ -24,7 +24,7 @@
         },
         {
           "NodeType": "ListItem",
-          "Value": "- oranges\n",
+          "Value": "- oranges",
           "Start": 20,
           "End": 29,
           "ChildrenNodes": null
@@ -36,14 +36,14 @@
       "ChildrenNodes": [
         {
           "NodeType": "Paragraph",
-          "Start": 29,
+          "Start": 30,
           "End": 53,
           "ChildrenNodes": [
             {
               "NodeType": "Text",
               "ChildrenNodes": null,
-              "Val": "\nwith an extra paragraph\n",
-              "Start": 29,
+              "Val": "with an extra paragraph\n",
+              "Start": 30,
               "End": 53
             }
           ]

@@ -28,7 +28,11 @@ func TestIsBold(t *testing.T) {
 		for item := range lexedItems {
 			items = append(items, item)
 		}
-		if isBold(items) != tc.expected {
+		p := parser{
+			input: tc.value,
+			items: items,
+		}
+		if found, _ := p.matchesBold(0); found != tc.expected {
 			t.Errorf("expected \"%s\" to be %t", tc.value, tc.expected)
 		}
 	}
@@ -54,7 +58,11 @@ func TestIsItalic(t *testing.T) {
 		for item := range lexedItems {
 			items = append(items, item)
 		}
-		if isItalic(items) != tc.expected {
+		p := parser{
+			input: tc.value,
+			items: items,
+		}
+		if found, _ := p.matchesItalic(0); found != tc.expected {
 			t.Errorf("expected \"%s\" to be %t", tc.value, tc.expected)
 		}
 	}
@@ -80,7 +88,11 @@ func TestIsVerbatim(t *testing.T) {
 		for item := range lexedItems {
 			items = append(items, item)
 		}
-		if isVerbatim(items) != tc.expected {
+		p := parser{
+			input: tc.value,
+			items: items,
+		}
+		if found, _ := p.matchesVerbatim(0); found != tc.expected {
 			t.Errorf("expected \"%s\" to be %t", tc.value, tc.expected)
 		}
 	}
@@ -106,7 +118,11 @@ func TestIsStrikeThrough(t *testing.T) {
 		for item := range lexedItems {
 			items = append(items, item)
 		}
-		if isStrikeThrough(items) != tc.expected {
+		p := parser{
+			input: tc.value,
+			items: items,
+		}
+		if found, _ := p.matchesStrikeThrough(0); found != tc.expected {
 			t.Errorf("expected \"%s\" to be %t", tc.value, tc.expected)
 		}
 	}
@@ -132,7 +148,11 @@ func TestIsUnderline(t *testing.T) {
 		for item := range lexedItems {
 			items = append(items, item)
 		}
-		if isUnderline(items) != tc.expected {
+		p := parser{
+			input: tc.value,
+			items: items,
+		}
+		if found, _ := p.matchesUnderline(0); found != tc.expected {
 			t.Errorf("expected \"%s\" to be %t", tc.value, tc.expected)
 		}
 	}
@@ -158,7 +178,11 @@ func TestIsCode(t *testing.T) {
 		for item := range lexedItems {
 			items = append(items, item)
 		}
-		if isCode(items) != tc.expected {
+		p := parser{
+			input: tc.value,
+			items: items,
+		}
+		if found, _ := p.matchesCode(0); found != tc.expected {
 			t.Errorf("expected \"%s\" to be %t", tc.value, tc.expected)
 		}
 	}

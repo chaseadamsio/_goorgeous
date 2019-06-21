@@ -15,7 +15,7 @@ type TableNode struct {
 	End    int
 }
 
-func NewTableNode(start, end int, parent Node, items []lex.Item) *TableNode {
+func NewTableNode(parent Node, items []lex.Item) *TableNode {
 	node := &TableNode{
 		NodeType: "Table",
 		parent:   parent,

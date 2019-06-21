@@ -26,9 +26,9 @@ func (p *parser) makeList(listTyp string, parent ast.Node, current, end int) {
 
 			current = foundNestedListEnd
 		} else {
-			current = foundEnd
+			current = foundEnd + 1
 		}
-		current++
+		// current++ // this is bumping it forward when it's nested
 	}
 }
 
@@ -44,33 +44,17 @@ func (p *parser) matchesUnorderedList(current int) (found bool, end int) {
 // it against a provided list function.
 func (p *parser) matchesList(current int, isListFunc func(current int) bool) (found bool, end int) {
 	itemsLength := len(p.items)
-	offset := current + 1 // we want to check if previous character is a newline
 
-	for current < itemsLength {
-		if !(p.items[current].IsTab() || p.items[current].IsSpace()) {
-			break
-		}
-		current++
-		offset++
+	if 0 < current && !p.items[current-1].IsNewline() {
+		return false, -1
 	}
 
 	if isListFunc(current) {
 		_, end := p.findListBoundaries(current, isListFunc)
 
-		if current != 0 {
-
-			for current >= 0 {
-				if current < offset || p.items[current-offset].IsNewline() {
-					return true, end
-				}
-				current--
-			}
-		}
-
 		if current < itemsLength && p.items[current+1].IsWhitespace() {
 			return true, end
 		}
-
 		return false, -1
 
 	}
@@ -110,18 +94,19 @@ func (p *parser) getIndentLevel(current int) (indentLevel, itemOffset int) {
 	foundIndentLevel := 0
 	tabIndentSize := 4 // tabs have to be equal to spaces and this is the best way to handle it
 	spaceIndentSize := 1
-	for foundIndentLevel < itemsLength {
-		if !(p.items[foundIndentLevel].IsTab() || p.items[foundIndentLevel].IsSpace()) {
+	for current < itemsLength {
+		if !(p.items[current].IsTab() || p.items[current].IsSpace()) {
 			break
 		}
-		if p.items[foundIndentLevel].IsTab() {
+		if p.items[current].IsTab() {
 			itemOffset++
 			foundIndentLevel = foundIndentLevel + tabIndentSize
 		}
-		if p.items[foundIndentLevel].IsSpace() {
+		if p.items[current].IsSpace() {
 			itemOffset++
 			foundIndentLevel = foundIndentLevel + spaceIndentSize
 		}
+		current++
 	}
 	return foundIndentLevel, itemOffset
 }

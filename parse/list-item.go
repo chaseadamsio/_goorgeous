@@ -94,7 +94,7 @@ func (p *parser) findListItem(current int,
 	if p.items[current].IsTab() || p.items[current].IsSpace() {
 		baseIndentLevel, offset = p.getIndentLevel(current)
 		indentLevel = baseIndentLevel
-		current = current + offset
+		current = offset
 	}
 
 	for current < itemsLength {

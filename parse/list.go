@@ -6,7 +6,7 @@ import (
 
 func (p *parser) makeList(listTyp string, parent ast.Node, current, end int) {
 
-	findItemFuncMap := map[string]func(current int) (start, end, foundNestedListStart, foundNestedListEnd int){
+	findItemFuncMap := map[string]func(current, listEnd int) (start, end, foundNestedListStart, foundNestedListEnd int){
 		"UNORDERED": p.findUnorderedListItem,
 		"ORDERED":   p.findOrderedListItem,
 	}
@@ -17,7 +17,7 @@ func (p *parser) makeList(listTyp string, parent ast.Node, current, end int) {
 
 	for current < end {
 
-		foundStart, foundEnd, foundNestedListStart, foundNestedListEnd := findFunc(current)
+		foundStart, foundEnd, foundNestedListStart, foundNestedListEnd := findFunc(current, end)
 		node := ast.NewListItemNode(parent, p.items[foundStart:foundEnd])
 		listNode.Append(node)
 

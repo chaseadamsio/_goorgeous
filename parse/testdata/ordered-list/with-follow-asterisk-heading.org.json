@@ -39,25 +39,12 @@
       ]
     },
     {
-      "NodeType": "Section",
-      "ChildrenNodes": [
-        {
-          "NodeType": "Paragraph",
-          "Start": 41,
-          "End": 50,
-          "ChildrenNodes": [
-            {
-              "NodeType": "Text",
-              "ChildrenNodes": null,
-              "Val": "* heading\n",
-              "Start": 41,
-              "End": 50
-            }
-          ]
-        }
-      ],
-      "Start": 51,
-      "End": 51
+      "NodeType": "Headline",
+      "Start": 41,
+      "End": 51,
+      "Depth": 1,
+      "ChildrenNodes": null,
+      "Keyword": ""
     }
   ],
   "Start": 0,

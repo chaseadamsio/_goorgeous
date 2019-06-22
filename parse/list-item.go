@@ -59,13 +59,13 @@ func (p *parser) foundListItemTerminatingNewline(current int,
 
 }
 
-func (p *parser) findOrderedListItem(current int) (start, end, foundNestedListStart, foundNestedListEnd int) {
-	start, end, foundNestedListStart, foundNestedListEnd = p.findListItem(current, p.foundOrderedListItem)
+func (p *parser) findOrderedListItem(current, listEnd int) (start, end, foundNestedListStart, foundNestedListEnd int) {
+	start, end, foundNestedListStart, foundNestedListEnd = p.findListItem(current, listEnd, p.foundOrderedListItem)
 	return start, end, foundNestedListStart, foundNestedListEnd
 }
 
-func (p *parser) findUnorderedListItem(current int) (start, end, foundNestedListStart, foundNestedListEnd int) {
-	start, end, foundNestedListStart, foundNestedListEnd = p.findListItem(current, p.foundUnorderedListItem)
+func (p *parser) findUnorderedListItem(current, listEnd int) (start, end, foundNestedListStart, foundNestedListEnd int) {
+	start, end, foundNestedListStart, foundNestedListEnd = p.findListItem(current, listEnd, p.foundUnorderedListItem)
 	return start, end, foundNestedListStart, foundNestedListEnd
 }
 
@@ -75,16 +75,13 @@ func (p *parser) findUnorderedListItem(current int) (start, end, foundNestedList
 // - next (the next character after the newline. either after end or foundNestedListEnd)
 // - foundNestedListStart (if there's a nested list, the beginning [greater than 0])
 // - foundNestedListEnd (if there's a nested list, the end of the nested list [greater than 0])
-func (p *parser) findListItem(current int,
+func (p *parser) findListItem(current, listEnd int,
 	foundMatchFunc func(current int) bool) (start, trueEnd, foundNestedListStart, foundNestedListEnd int) {
 
 	var matchesListFuncs = map[string]func(current int) (found bool){
 		"UNORDERED": p.foundUnorderedListItem,
 		"ORDERED":   p.foundOrderedListItem,
 	}
-
-	itemsLength := len(p.items)
-	end := current
 
 	offset := current
 	baseIndentLevel := 0
@@ -97,9 +94,11 @@ func (p *parser) findListItem(current int,
 		current = offset
 	}
 
-	for current < itemsLength {
+	end := current
+
+	for current <= listEnd {
 		if p.items[current].IsNewline() {
-			if current+1 < itemsLength && (p.items[current+1].IsTab() || p.items[current+1].IsSpace()) {
+			if current+1 <= listEnd && (p.items[current+1].IsTab() || p.items[current+1].IsSpace()) {
 				foundIndentLevel, _ := p.getIndentLevel(current + 1)
 				if indentLevel < foundIndentLevel {
 					if found, listTyp := p.foundListItem(current + 1); found {
@@ -109,7 +108,7 @@ func (p *parser) findListItem(current int,
 						return start, end, nestedStart, nestedEnd
 
 					}
-				} else if indentLevel == foundIndentLevel {
+				} else if indentLevel >= foundIndentLevel {
 					end = current // don't send the newline for closing
 					return start, end, 0, 0
 				}
@@ -118,7 +117,7 @@ func (p *parser) findListItem(current int,
 
 		if indentLevel == baseIndentLevel && current > 0 {
 			if found, _ := p.foundListItemTerminatingNewline(current, foundMatchFunc); found {
-				return start, current, foundNestedListStart, foundNestedListEnd
+				return start, end, foundNestedListStart, foundNestedListEnd
 			}
 		}
 

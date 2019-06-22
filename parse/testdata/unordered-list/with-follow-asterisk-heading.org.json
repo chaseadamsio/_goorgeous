@@ -32,25 +32,12 @@
       ]
     },
     {
-      "NodeType": "Section",
-      "ChildrenNodes": [
-        {
-          "NodeType": "Paragraph",
-          "Start": 29,
-          "End": 36,
-          "ChildrenNodes": [
-            {
-              "NodeType": "Text",
-              "ChildrenNodes": null,
-              "Val": "* pears\n",
-              "Start": 29,
-              "End": 36
-            }
-          ]
-        }
-      ],
-      "Start": 37,
-      "End": 37
+      "NodeType": "Headline",
+      "Start": 29,
+      "End": 37,
+      "Depth": 1,
+      "ChildrenNodes": null,
+      "Keyword": ""
     }
   ],
   "Start": 0,

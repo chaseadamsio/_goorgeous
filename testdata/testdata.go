@@ -53,7 +53,8 @@ const (
 	OrderedListFollowAsteriskHeading   = "ordered-list/with-follow-asterisk-heading.org"
 	OrderedListWithFollowUnOrderedList = "ordered-list/with-follow-unordered-list.org"
 	OrderedListWithNestedOrderedList   = "ordered-list/with-nested-ordered-list.org"
-	OrderedListWithNestedUnorderedList = "unordered-list/with-nested-unordered-list.org"
+	OrderedListWithNestedUnorderedList = "ordered-list/with-nested-unordered-list.org"
+	OrderedListWithDeepNestedChildren  = "ordered-list/with-2-deep-nested-children-list.org"
 	OrderedListWithNestedContent       = "ordered-list/with-nested-content.org"
 
 	UnorderedListBasic                   = "unordered-list/basic.org"

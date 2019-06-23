@@ -18,21 +18,56 @@ func walk(inAST []ast.Node) string {
 		switch node := child.(type) {
 		case *ast.HeadlineNode:
 			out = append(out, processHeadlineNode(node))
+		case *ast.SectionNode:
+			out = append(out, processSectionNode(node))
+		case *ast.HorizontalRuleNode:
+			out = append(out, processHorizontalNode(node))
+		case *ast.ParagraphNode:
+			out = append(out, processParagraphNode(node))
 		case *ast.ListNode:
 			out = append(out, processListNode(node))
 		case *ast.ListItemNode:
 			out = append(out, processListItemNode(node))
+		case *ast.LinkNode:
+			out = append(out, processLinkNode(node))
 		case *ast.TextNode:
-			out = append(out, node.Val)
+			switch node.NodeType {
+			case "Bold":
+				out = append(out, processBoldNode(node))
+			case "Italic":
+				out = append(out, processItalicNode(node))
+			case "Verbatim":
+				out = append(out, processVerbatimNode(node))
+			case "Underline":
+				out = append(out, processUnderlineNode(node))
+			default:
+				out = append(out, node.Val)
+			}
 		default:
+
 		}
 	}
 
-	return strings.Join(out, "\n")
+	return strings.Join(out, "")
 }
 
 func processHeadlineNode(node *ast.HeadlineNode) string {
-	return fmt.Sprintf("<h%d>%s</h%d>", node.Depth, node.Children()[0], node.Depth)
+	children := walk(node.ChildrenNodes)
+	return fmt.Sprintf("<h%d>%s</h%d>", node.Depth, children, node.Depth)
+}
+
+func processHorizontalNode(node *ast.HorizontalRuleNode) string {
+	return fmt.Sprintf("<hr />")
+}
+
+func processSectionNode(node *ast.SectionNode) string {
+	children := walk(node.ChildrenNodes)
+	return fmt.Sprintf("<div>\n%s\n</div>\n", children)
+}
+
+func processParagraphNode(node *ast.ParagraphNode) string {
+	children := walk(node.ChildrenNodes)
+	return fmt.Sprintf("<p>\n%s\n</p>\n", children)
 }
 
 func processListNode(node *ast.ListNode) string {
@@ -44,10 +79,43 @@ func processListNode(node *ast.ListNode) string {
 		listTyp = "ol"
 	}
 	children := walk(node.Children())
-	return fmt.Sprintf("<%s>%s</%s>", listTyp, children, listTyp)
+	return fmt.Sprintf("<%s>\n\t%s\n\t</%s>\n", listTyp, children, listTyp)
 }
 
 func processListItemNode(node *ast.ListItemNode) string {
 	children := walk(node.ChildrenNodes)
 	return fmt.Sprintf("<li>%s</li>", children)
+}
+
+func processLinkNode(node *ast.LinkNode) string {
+	children := node.Link // fallback link text is the link if no description provided
+	if 0 < len(node.ChildrenNodes) {
+		children = walk(node.ChildrenNodes)
+	}
+	return fmt.Sprintf("<a href=\"%s\">%s</a>", node.Link, children)
+}
+
+func processBoldNode(node *ast.TextNode) string {
+	children := walk(node.ChildrenNodes)
+	return fmt.Sprintf("<strong>%s</strong>", children)
+}
+
+func processItalicNode(node *ast.TextNode) string {
+	children := walk(node.ChildrenNodes)
+	return fmt.Sprintf("<em>%s</em>", children)
+}
+
+func processVerbatimNode(node *ast.TextNode) string {
+	children := walk(node.ChildrenNodes)
+	return fmt.Sprintf("<code>%s</code>", children)
+}
+
+func processStrikeThroughNode(node *ast.TextNode) string {
+	children := walk(node.ChildrenNodes)
+	return fmt.Sprintf("<span style=\"text-decoration: line-through\">%s</span>", children)
+}
+
+func processUnderlineNode(node *ast.TextNode) string {
+	children := walk(node.ChildrenNodes)
+	return fmt.Sprintf("<span style=\"text-decoration:underline\">%s</span>", children)
 }

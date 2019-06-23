@@ -126,9 +126,9 @@ func findClosestSectionNode(parent ast.Node, items []lex.Item) ast.Node {
 	return node
 }
 
-func appendCurrentItemsToParent(parent ast.Node, items []lex.Item) {
-	if 0 < len(items) {
-		child := ast.NewTextNode(parent, items)
+func (p *parser) appendCurrentItemsToParent(parent ast.Node, start, end int) {
+	if start != end {
+		child := ast.NewTextNode(parent, p.items[start:end])
 		parent.Append(child)
 	}
 }
@@ -138,13 +138,14 @@ func (p *parser) walkElements(parent ast.Node, current, end int) {
 
 	for current < end {
 		foundMatch := false
+
 	MatcherLoop:
 		for _, f := range p.elementMatchers {
 			if found, end := f.matcher(current); found {
-				appendCurrentItemsToParent(parent, p.items[start:current])
+				p.appendCurrentItemsToParent(parent, start, current)
 
 				f.createElement(parent, current, end)
-				current = end
+				current = end + 1
 				start = current
 				foundMatch = true
 				break MatcherLoop
@@ -155,7 +156,7 @@ func (p *parser) walkElements(parent ast.Node, current, end int) {
 		}
 	}
 
-	appendCurrentItemsToParent(parent, p.items[start:current])
+	p.appendCurrentItemsToParent(parent, start, current)
 }
 
 // recursively walk through each token

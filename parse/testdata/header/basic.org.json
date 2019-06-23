@@ -8,40 +8,40 @@
           "NodeType": "Keyword",
           "Key": "title",
           "Value": " headers",
-          "Start": 2,
+          "Start": 0,
           "End": 16
-        },
+        }
+      ],
+      "Start": 0,
+      "End": 16
+    },
+    {
+      "NodeType": "Section",
+      "ChildrenNodes": [
         {
           "NodeType": "Keyword",
           "Key": "author",
           "Value": " Chase Adams",
-          "Start": 19,
+          "Start": 17,
           "End": 38
-        },
+        }
+      ],
+      "Start": 17,
+      "End": 38
+    },
+    {
+      "NodeType": "Section",
+      "ChildrenNodes": [
         {
           "NodeType": "Keyword",
           "Key": "description",
           "Value": " This is my description!",
-          "Start": 41,
+          "Start": 39,
           "End": 77
-        },
-        {
-          "NodeType": "Paragraph",
-          "Start": 77,
-          "End": 77,
-          "ChildrenNodes": [
-            {
-              "NodeType": "Text",
-              "ChildrenNodes": null,
-              "Val": "\n",
-              "Start": 77,
-              "End": 77
-            }
-          ]
         }
       ],
-      "Start": 0,
-      "End": 78
+      "Start": 39,
+      "End": 77
     }
   ],
   "Start": 0,

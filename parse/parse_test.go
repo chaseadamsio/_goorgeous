@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/chaseadamsio/goorgeous/ast"
@@ -18,12 +19,13 @@ var update = flag.Bool("update", false, "update golden files")
 
 func TestParse(t *testing.T) {
 	for _, tc := range tests {
+		filter := "link"
+		if !strings.HasPrefix(tc.source, filter) {
+			continue
+		}
 
 		t.Run(tc.source, func(t *testing.T) {
-			// filter := "unordered-list/with-follow-asterisk"
-			// if !strings.HasPrefix(tc.source, filter) {
-			// 	return
-			// }
+
 			value := testdata.GetOrgStr(tc.source)
 			ast := Parse(value)
 
@@ -169,6 +171,10 @@ var tests = []testCase{
 	{
 		testdata.OrderedListWithNestedUnorderedList,
 		fmt.Sprintf("testdata/%s.json", testdata.OrderedListWithNestedUnorderedList),
+	},
+	{
+		testdata.OrderedListWithDeepNestedChildren,
+		fmt.Sprintf("testdata/%s.json", testdata.OrderedListWithDeepNestedChildren),
 	},
 	{
 		testdata.OrderedListWithNestedContent,

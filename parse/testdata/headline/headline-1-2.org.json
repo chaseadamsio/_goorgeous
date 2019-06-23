@@ -1,0 +1,24 @@
+{
+  "NodeType": "Root",
+  "ChildrenNodes": [
+    {
+      "NodeType": "Headline",
+      "Start": 0,
+      "End": 78,
+      "Depth": 1,
+      "ChildrenNodes": [
+        {
+          "NodeType": "Headline",
+          "Start": 31,
+          "End": 78,
+          "Depth": 2,
+          "ChildrenNodes": null,
+          "Keyword": ""
+        }
+      ],
+      "Keyword": ""
+    }
+  ],
+  "Start": 0,
+  "End": 79
+}

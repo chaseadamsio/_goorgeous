@@ -1,8 +1,6 @@
 package ast
 
 import (
-	"strings"
-
 	"github.com/chaseadamsio/goorgeous/lex"
 )
 
@@ -25,12 +23,6 @@ func NewListNode(listType string, parent Node, items []lex.Item) *ListNode {
 		End:      items[len(items)-1].End(),
 	}
 
-	var valStrs []string
-	for _, item := range items {
-		valStrs = append(valStrs, item.Value())
-	}
-
-	node.Value = strings.Join(valStrs, "")
 	return node
 }
 

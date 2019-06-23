@@ -1,6 +1,8 @@
 package parse
 
 import (
+	"regexp"
+
 	"github.com/chaseadamsio/goorgeous/ast"
 )
 
@@ -27,6 +29,10 @@ func (p *parser) makeList(listTyp string, parent ast.Node, current, end int) {
 
 		foundStart, foundEnd, foundNestedListStart, foundNestedListEnd := findFunc(current, end)
 		node := ast.NewListItemNode(parent, p.items[foundStart:foundEnd])
+		foundStart = p.parseBullet(node, listTyp, foundStart, foundEnd)
+
+		p.walkElements(node, foundStart, foundEnd)
+
 		listNode.Append(node)
 
 		if foundNestedListStart > 0 {
@@ -36,8 +42,39 @@ func (p *parser) makeList(listTyp string, parent ast.Node, current, end int) {
 		} else {
 			current = foundEnd + 1
 		}
-		// current++ // this is bumping it forward when it's nested
 	}
+}
+
+func (p *parser) parseBullet(node *ast.ListItemNode, listTyp string, current, end int) (newStart int) {
+	for current < end {
+		if listTyp == "UNORDERED" {
+			if p.items[current].IsDash() || p.items[current].IsPlus() {
+				node.Bullet = p.items[current].Value()
+				if p.items[current+1].IsSpace() {
+					current++
+				}
+				current++
+				return current
+			}
+		}
+		if listTyp == "ORDERED" {
+			matched, err := regexp.Match(`^\d+\.$`, []byte(p.items[current].Value()))
+			if err != nil {
+				panic(err)
+			}
+			if matched {
+				node.Bullet = p.items[current].Value()
+				if p.items[current+1].IsSpace() {
+					current++
+				}
+				current++
+				return current
+			}
+		}
+
+		current++
+	}
+	return -1
 }
 
 func (p *parser) matchesOrderedList(current int) (found bool, end int) {

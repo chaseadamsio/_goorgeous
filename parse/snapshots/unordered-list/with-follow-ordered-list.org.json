@@ -4,74 +4,146 @@
     {
       "NodeType": "List",
       "ListType": "UNORDERED",
-      "Value": "- apples\n- bananas\n- oranges\n- pears\n",
+      "Value": "",
       "Start": 0,
       "End": 36,
       "ChildrenNodes": [
         {
           "NodeType": "ListItem",
+          "Bullet": "-",
           "Value": "- apples",
           "Start": 0,
           "End": 8,
-          "ChildrenNodes": null
+          "ChildrenNodes": [
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": "apples",
+              "Start": 2,
+              "End": 8
+            }
+          ]
         },
         {
           "NodeType": "ListItem",
+          "Bullet": "-",
           "Value": "- bananas",
           "Start": 9,
           "End": 18,
-          "ChildrenNodes": null
+          "ChildrenNodes": [
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": "bananas",
+              "Start": 11,
+              "End": 18
+            }
+          ]
         },
         {
           "NodeType": "ListItem",
+          "Bullet": "-",
           "Value": "- oranges",
           "Start": 19,
           "End": 28,
-          "ChildrenNodes": null
+          "ChildrenNodes": [
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": "oranges",
+              "Start": 21,
+              "End": 28
+            }
+          ]
         },
         {
           "NodeType": "ListItem",
+          "Bullet": "-",
           "Value": "- pears",
           "Start": 29,
           "End": 36,
-          "ChildrenNodes": null
+          "ChildrenNodes": [
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": "pears",
+              "Start": 31,
+              "End": 36
+            }
+          ]
         }
       ]
     },
     {
       "NodeType": "List",
       "ListType": "ORDERED",
-      "Value": "1. apples\n2. bananas\n3. oranges\n4. pears\n",
+      "Value": "",
       "Start": 37,
       "End": 77,
       "ChildrenNodes": [
         {
           "NodeType": "ListItem",
+          "Bullet": "1.",
           "Value": "1. apples",
           "Start": 37,
           "End": 46,
-          "ChildrenNodes": null
+          "ChildrenNodes": [
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": "apples",
+              "Start": 40,
+              "End": 46
+            }
+          ]
         },
         {
           "NodeType": "ListItem",
+          "Bullet": "2.",
           "Value": "2. bananas",
           "Start": 47,
           "End": 57,
-          "ChildrenNodes": null
+          "ChildrenNodes": [
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": "bananas",
+              "Start": 50,
+              "End": 57
+            }
+          ]
         },
         {
           "NodeType": "ListItem",
+          "Bullet": "3.",
           "Value": "3. oranges",
           "Start": 58,
           "End": 68,
-          "ChildrenNodes": null
+          "ChildrenNodes": [
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": "oranges",
+              "Start": 61,
+              "End": 68
+            }
+          ]
         },
         {
           "NodeType": "ListItem",
+          "Bullet": "4.",
           "Value": "4. pears",
           "Start": 69,
           "End": 77,
-          "ChildrenNodes": null
+          "ChildrenNodes": [
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": "pears",
+              "Start": 72,
+              "End": 77
+            }
+          ]
         }
       ]
     },

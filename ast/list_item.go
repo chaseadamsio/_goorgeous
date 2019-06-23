@@ -9,6 +9,7 @@ import (
 type ListItemNode struct {
 	NodeType
 	parent        Node
+	Bullet        string
 	Value         string
 	Start         int
 	End           int

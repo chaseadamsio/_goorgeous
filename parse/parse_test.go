@@ -7,7 +7,6 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"strings"
 	"testing"
 
 	"github.com/chaseadamsio/goorgeous/testdata"
@@ -22,10 +21,10 @@ func snapshotPath(filename string) string {
 
 func TestParse(t *testing.T) {
 	for _, filename := range testdata.Tests {
-		filter := "headline/headline-all-the-options.org"
-		if !strings.HasPrefix(filename, filter) {
-			continue
-		}
+		// filter := "headline/headline-all-the-options.org"
+		// if !strings.HasPrefix(filename, filter) {
+		// 	continue
+		// }
 
 		t.Run(filename, func(t *testing.T) {
 

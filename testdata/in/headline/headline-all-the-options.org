@@ -3,3 +3,9 @@
 * DONE [#A] This Headline has all the things
 
 * DONE [#A] This Headline has all the things :tag1:tag_2:tag@3:tag#4:tag not actually tags %5:
+
+* DONE  [#A] This Headline doesn't have a priority
+
+* DONE This Headline doesn't have a priority  either
+
+* [#A] This Headline has a priority but not an action status

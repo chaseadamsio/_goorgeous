@@ -65,8 +65,62 @@
         "tag@3",
         "tag#4"
       ]
+    },
+    {
+      "NodeType": "Headline",
+      "Start": 219,
+      "End": 269,
+      "Depth": 1,
+      "ChildrenNodes": [
+        {
+          "NodeType": "Text",
+          "ChildrenNodes": null,
+          "Val": " [#A] This Headline doesn't have a priority",
+          "Start": 226,
+          "End": 269
+        }
+      ],
+      "Keyword": "DONE",
+      "Priority": "",
+      "Tags": null
+    },
+    {
+      "NodeType": "Headline",
+      "Start": 271,
+      "End": 323,
+      "Depth": 1,
+      "ChildrenNodes": [
+        {
+          "NodeType": "Text",
+          "ChildrenNodes": null,
+          "Val": "This Headline doesn't have a priority  either",
+          "Start": 278,
+          "End": 323
+        }
+      ],
+      "Keyword": "DONE",
+      "Priority": "",
+      "Tags": null
+    },
+    {
+      "NodeType": "Headline",
+      "Start": 325,
+      "End": 385,
+      "Depth": 1,
+      "ChildrenNodes": [
+        {
+          "NodeType": "Text",
+          "ChildrenNodes": null,
+          "Val": "This Headline has a priority but not an action status",
+          "Start": 332,
+          "End": 385
+        }
+      ],
+      "Keyword": "",
+      "Priority": "A",
+      "Tags": null
     }
   ],
   "Start": 0,
-  "End": 218
+  "End": 386
 }

@@ -1,8 +1,6 @@
 package ast
 
 import (
-	"strings"
-
 	"github.com/chaseadamsio/goorgeous/lex"
 )
 
@@ -23,23 +21,7 @@ func NewKeywordNode(parent Node, items []lex.Item) *KeywordNode {
 		End:      items[len(items)-1].End(),
 	}
 
-	node.parse(items)
 	return node
-}
-
-func (n *KeywordNode) parse(items []lex.Item) {
-	var key string
-	var val []string
-	for idx, item := range items {
-		if item.Type() == lex.ItemColon {
-			key = items[idx-1].Value()
-			continue
-		} else if key != "" {
-			val = append(val, item.Value())
-		}
-	}
-	n.Key = key
-	n.Value = strings.Join(val, "")
 }
 
 // Type returns the type of node this is

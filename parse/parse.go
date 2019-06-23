@@ -160,42 +160,51 @@ func (p *parser) walk(parent ast.Node, current, stop int) {
 			start = current
 
 		} else if found, end := p.matchesOrderedList(current); found {
-
-			p.makeList("ORDERED", parent, current, end)
+			p.makeOrderedList(parent, current, end)
 			current = end
 			start = current
 
 		} else if found, end := p.matchesUnorderedList(current); found {
-
-			p.makeList("UNORDERED", parent, current, end)
+			p.makeUnorderedList(parent, current, end)
 			current = end
 			start = current
 
 		} else if found, end := p.matchesHorizontalRule(current); found {
+			if parent.Type() != "Section" {
+				parent = findClosestSectionNode(parent, p.items[current:])
+			}
 			p.makeHorizontalRule(parent, current, end)
 			current = end
 			start = current
 
 		} else if found, end := p.matchesTable(current); found {
-
+			if parent.Type() != "Section" {
+				parent = findClosestSectionNode(parent, p.items[current:])
+			}
 			p.makeTable(parent, current, end)
 			current = end
 			start = current
 
 		} else if found, end := p.matchesGreaterBlock(current); found {
-
+			if parent.Type() != "Section" {
+				parent = findClosestSectionNode(parent, p.items[current:])
+			}
 			p.makeGreaterBlock(parent, current, end)
 			current = end
 			start = current
 
 		} else if found, end := p.matchesKeyword(current); found {
-
+			if parent.Type() != "Section" {
+				parent = findClosestSectionNode(parent, p.items[current:])
+			}
 			p.makeKeyword(parent, current, end)
 			current = end
 			start = current
 
 		} else if found, end := p.matchesFootnoteDefinition(current); found {
-
+			if parent.Type() != "Section" {
+				parent = findClosestSectionNode(parent, p.items[current:])
+			}
 			p.makeFootnoteDefinition(parent, current, end)
 			current = end
 			start = current

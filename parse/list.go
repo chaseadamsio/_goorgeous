@@ -4,6 +4,14 @@ import (
 	"github.com/chaseadamsio/goorgeous/ast"
 )
 
+func (p *parser) makeOrderedList(parent ast.Node, current, end int) {
+	p.makeList("ORDERED", parent, current, end)
+}
+
+func (p *parser) makeUnorderedList(parent ast.Node, current, end int) {
+	p.makeList("UNORDERED", parent, current, end)
+}
+
 func (p *parser) makeList(listTyp string, parent ast.Node, current, end int) {
 
 	findItemFuncMap := map[string]func(current, listEnd int) (start, end, foundNestedListStart, foundNestedListEnd int){

@@ -1,0 +1,120 @@
+{
+  "NodeType": "Root",
+  "ChildrenNodes": [
+    {
+      "NodeType": "List",
+      "ListType": "ORDERED",
+      "Value": "1. apples\n  - in apples 1\n  - in apples 2\n    1. in apples 1\n    2. in apples 2\n    3. in apples 3\n  - in apples 3\n2. oranges\n3. bananas\n",
+      "Start": 0,
+      "End": 136,
+      "ChildrenNodes": [
+        {
+          "NodeType": "ListItem",
+          "Value": "1. apples",
+          "Start": 0,
+          "End": 9,
+          "ChildrenNodes": [
+            {
+              "NodeType": "List",
+              "ListType": "UNORDERED",
+              "Value": "  - in apples 1\n  - in apples 2\n    1. in apples 1\n    2. in apples 2\n    3. in apples 3\n  - in apples 3\n",
+              "Start": 10,
+              "End": 114,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "ListItem",
+                  "Value": "- in apples 1",
+                  "Start": 12,
+                  "End": 25,
+                  "ChildrenNodes": null
+                },
+                {
+                  "NodeType": "ListItem",
+                  "Value": "- in apples 2",
+                  "Start": 28,
+                  "End": 41,
+                  "ChildrenNodes": [
+                    {
+                      "NodeType": "List",
+                      "ListType": "ORDERED",
+                      "Value": "    1. in apples 1\n    2. in apples 2\n    3. in apples 3\n",
+                      "Start": 42,
+                      "End": 98,
+                      "ChildrenNodes": [
+                        {
+                          "NodeType": "ListItem",
+                          "Value": "1. in apples 1",
+                          "Start": 46,
+                          "End": 60,
+                          "ChildrenNodes": null
+                        },
+                        {
+                          "NodeType": "ListItem",
+                          "Value": "2. in apples 2",
+                          "Start": 65,
+                          "End": 79,
+                          "ChildrenNodes": null
+                        },
+                        {
+                          "NodeType": "ListItem",
+                          "Value": "3. in apples 3",
+                          "Start": 84,
+                          "End": 98,
+                          "ChildrenNodes": null
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "NodeType": "ListItem",
+                  "Value": "- in apples 3",
+                  "Start": 101,
+                  "End": 114,
+                  "ChildrenNodes": null
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "NodeType": "ListItem",
+          "Value": "2. oranges",
+          "Start": 115,
+          "End": 125,
+          "ChildrenNodes": null
+        },
+        {
+          "NodeType": "ListItem",
+          "Value": "3. bananas",
+          "Start": 126,
+          "End": 136,
+          "ChildrenNodes": null
+        }
+      ]
+    },
+    {
+      "NodeType": "Section",
+      "ChildrenNodes": [
+        {
+          "NodeType": "Paragraph",
+          "Start": 137,
+          "End": 151,
+          "ChildrenNodes": [
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": "something else",
+              "Start": 137,
+              "End": 151
+            }
+          ]
+        }
+      ],
+      "Start": 151,
+      "End": 152
+    }
+  ],
+  "Start": 0,
+  "End": 152
+}

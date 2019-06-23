@@ -1,0 +1,28 @@
+{
+  "NodeType": "Root",
+  "ChildrenNodes": [
+    {
+      "NodeType": "Section",
+      "ChildrenNodes": [
+        {
+          "NodeType": "Paragraph",
+          "Start": 0,
+          "End": 21,
+          "ChildrenNodes": [
+            {
+              "NodeType": "Link",
+              "Link": "https://github.com",
+              "Start": 0,
+              "End": 21,
+              "ChildrenNodes": null
+            }
+          ]
+        }
+      ],
+      "Start": 22,
+      "End": 23
+    }
+  ],
+  "Start": 0,
+  "End": 23
+}

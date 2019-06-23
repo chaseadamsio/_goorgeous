@@ -1,0 +1,60 @@
+{
+  "NodeType": "Root",
+  "ChildrenNodes": [
+    {
+      "NodeType": "List",
+      "ListType": "ORDERED",
+      "Value": "1. apples\n2. bananas\n3. oranges\n4. pears\n",
+      "Start": 0,
+      "End": 40,
+      "ChildrenNodes": [
+        {
+          "NodeType": "ListItem",
+          "Value": "1. apples",
+          "Start": 0,
+          "End": 9,
+          "ChildrenNodes": null
+        },
+        {
+          "NodeType": "ListItem",
+          "Value": "2. bananas",
+          "Start": 10,
+          "End": 20,
+          "ChildrenNodes": null
+        },
+        {
+          "NodeType": "ListItem",
+          "Value": "3. oranges",
+          "Start": 21,
+          "End": 31,
+          "ChildrenNodes": null
+        },
+        {
+          "NodeType": "ListItem",
+          "Value": "4. pears",
+          "Start": 32,
+          "End": 40,
+          "ChildrenNodes": null
+        }
+      ]
+    },
+    {
+      "NodeType": "Headline",
+      "Start": 41,
+      "End": 50,
+      "Depth": 1,
+      "ChildrenNodes": [
+        {
+          "NodeType": "Text",
+          "ChildrenNodes": null,
+          "Val": "heading",
+          "Start": 43,
+          "End": 50
+        }
+      ],
+      "Keyword": ""
+    }
+  ],
+  "Start": 0,
+  "End": 51
+}

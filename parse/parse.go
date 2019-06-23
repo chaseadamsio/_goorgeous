@@ -18,7 +18,6 @@ type parser struct {
 	input           string
 	depth           int
 	elementMatchers []foundMatchers
-	blockMatchers   []foundMatchers
 	listMatchers    []foundMatchers
 }
 
@@ -37,12 +36,6 @@ func newParser(input string) *parser {
 		{p.matchesStrikeThrough, p.newStrikeThrough},
 		{p.matchesUnderline, p.newUnderline},
 		{p.matchesCode, p.newCode},
-	}
-
-	p.blockMatchers = []foundMatchers{
-		{p.matchesGreaterBlock, p.makeGreaterBlock},
-		{p.matchesFootnoteDefinition, p.makeFootnoteDefinition},
-		{p.matchesTable, p.makeTable},
 	}
 
 	return p

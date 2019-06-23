@@ -1,0 +1,238 @@
+{
+  "NodeType": "Root",
+  "ChildrenNodes": [
+    {
+      "NodeType": "Table",
+      "Key": "",
+      "Value": "",
+      "Start": 0,
+      "End": 96,
+      "ChildrenNodes": [
+        {
+          "NodeType": "TableRow",
+          "Key": "",
+          "Value": "",
+          "Start": 0,
+          "End": 22,
+          "ChildrenNodes": [
+            {
+              "NodeType": "TableCell",
+              "Key": "",
+              "Value": "",
+              "Start": 1,
+              "End": 7,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": " Name  ",
+                  "Start": 1,
+                  "End": 7
+                }
+              ]
+            },
+            {
+              "NodeType": "TableCell",
+              "Key": "",
+              "Value": "",
+              "Start": 9,
+              "End": 15,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": " Phone ",
+                  "Start": 9,
+                  "End": 15
+                }
+              ]
+            },
+            {
+              "NodeType": "TableCell",
+              "Key": "",
+              "Value": "",
+              "Start": 17,
+              "End": 21,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": " Age ",
+                  "Start": 17,
+                  "End": 21
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "NodeType": "TableRule",
+          "Key": "",
+          "Value": "",
+          "Start": 24,
+          "End": 46,
+          "ChildrenNodes": null
+        },
+        {
+          "NodeType": "TableRow",
+          "Key": "",
+          "Value": "",
+          "Start": 48,
+          "End": 70,
+          "ChildrenNodes": [
+            {
+              "NodeType": "TableCell",
+              "Key": "",
+              "Value": "",
+              "Start": 49,
+              "End": 55,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": " Peter ",
+                  "Start": 49,
+                  "End": 55
+                }
+              ]
+            },
+            {
+              "NodeType": "TableCell",
+              "Key": "",
+              "Value": "",
+              "Start": 57,
+              "End": 63,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "  1234 ",
+                  "Start": 57,
+                  "End": 63
+                }
+              ]
+            },
+            {
+              "NodeType": "TableCell",
+              "Key": "",
+              "Value": "",
+              "Start": 65,
+              "End": 69,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "  17 ",
+                  "Start": 65,
+                  "End": 69
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "NodeType": "TableRow",
+          "Key": "",
+          "Value": "",
+          "Start": 72,
+          "End": 96,
+          "ChildrenNodes": [
+            {
+              "NodeType": "TableCell",
+              "Key": "",
+              "Value": "",
+              "Start": 73,
+              "End": 79,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": " Anna  ",
+                  "Start": 73,
+                  "End": 79
+                }
+              ]
+            },
+            {
+              "NodeType": "TableCell",
+              "Key": "",
+              "Value": "",
+              "Start": 81,
+              "End": 89,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "  ",
+                  "Start": 81,
+                  "End": 82
+                },
+                {
+                  "NodeType": "Bold",
+                  "ChildrenNodes": [
+                    {
+                      "NodeType": "Text",
+                      "ChildrenNodes": null,
+                      "Val": "4321",
+                      "Start": 84,
+                      "End": 88
+                    }
+                  ],
+                  "Val": "*4321*",
+                  "Start": 83,
+                  "End": 88
+                },
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": " ",
+                  "Start": 89,
+                  "End": 89
+                }
+              ]
+            },
+            {
+              "NodeType": "TableCell",
+              "Key": "",
+              "Value": "",
+              "Start": 91,
+              "End": 95,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "  25 ",
+                  "Start": 91,
+                  "End": 95
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "NodeType": "Section",
+      "ChildrenNodes": [
+        {
+          "NodeType": "Paragraph",
+          "Start": 97,
+          "End": 121,
+          "ChildrenNodes": [
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": "\nfollowed by a paragraph",
+              "Start": 97,
+              "End": 121
+            }
+          ]
+        }
+      ],
+      "Start": 121,
+      "End": 122
+    }
+  ],
+  "Start": 0,
+  "End": 122
+}

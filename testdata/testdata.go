@@ -74,4 +74,6 @@ const (
 	ElementNested         = "element/nested.org"
 	ElementBold           = "element/bold.org"
 	ElementHorizontalRule = "element/horizontal-rule.org"
+
+	TableBasic = "table/basic.org"
 )

@@ -227,6 +227,10 @@ var tests = []testCase{
 		testdata.UnorderedListWithNestedContent,
 		fmt.Sprintf("testdata/%s.json", testdata.UnorderedListWithNestedContent),
 	},
+	{
+		testdata.TableBasic,
+		fmt.Sprintf("testdata/%s.json", testdata.TableBasic),
+	},
 	// {
 	// 	"headers",
 	// 	"#+title: headers\n#+author: Chase Adams\n#+description: This is my description!",

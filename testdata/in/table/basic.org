@@ -1,0 +1,5 @@
+| Name  | Phone | Age |
+|-------+-------+-----|
+| Peter |  1234 |  17 |
+| Anna  |  *4321* |  25 |
+followed by a paragraph

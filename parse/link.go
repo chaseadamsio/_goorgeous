@@ -30,9 +30,6 @@ func (p *parser) parseLink(current, end int) (linkStart, linkEnd, descriptionSta
 	if p.items[current].Value() == "[" {
 		current++ // advance and get rid of the overall link opening bracket
 	}
-	if p.items[end].Value() == "]" {
-		end-- // remove the end overall link closing bracket
-	}
 
 	for current <= end {
 		currItem := p.items[current]
@@ -46,9 +43,13 @@ func (p *parser) parseLink(current, end int) (linkStart, linkEnd, descriptionSta
 				current++
 				descriptionStart = current // skip the bracket itself
 			} else if currItem.Value() == "]" && foundLinkOpenBracket && !foundDescriptionOpenBracket {
-				linkEnd = current - 1 // don't include the bracket itself
+				linkEnd = current - 1                  // don't include the bracket itself
+				if p.items[current+1].Value() == "]" { // self-closing, early return
+					return linkStart, linkEnd, descriptionStart, descriptionEnd
+				}
 			} else if currItem.Value() == "]" && foundDescriptionOpenBracket {
 				descriptionEnd = current
+				return linkStart, linkEnd, descriptionStart, descriptionEnd
 			}
 		}
 		current++
@@ -74,7 +75,7 @@ func (p *parser) matchesLink(current int) (found bool, end int) {
 		if p.items[current].IsBracket() && (foundLinkCloseBracket || p.items[current].Value() == "]") {
 			// we found a ] to get here and if the next bracket is a closing bracket, this is a link!
 			if current < itemsLength && p.items[current+1].IsBracket() && p.items[current+1].Value() == "]" {
-				return true, current + 1
+				return true, current + 2
 			}
 			// we hadn't found a closing bracket, but the current bracket is a closing bracket
 			// because the next bracket opens the description
@@ -83,7 +84,7 @@ func (p *parser) matchesLink(current int) (found bool, end int) {
 			}
 			// this is a self-describing link
 			if foundLinkCloseBracket && p.items[current+1].IsBracket() && p.items[current+1].Value() == "]" {
-				return true, current + 1
+				return true, current + 2
 			}
 			// if it's a bracket and it's not a closing bracket and we haven't found a closed bracket yet, this isn't a link
 		} else if p.items[current].IsBracket() && p.items[current].Value() != "]" {

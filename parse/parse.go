@@ -145,7 +145,7 @@ func (p *parser) walkElements(parent ast.Node, current, end int) {
 				p.appendCurrentItemsToParent(parent, start, current)
 
 				f.createElement(parent, current, end)
-				current = end + 1
+				current = end
 				start = current
 				foundMatch = true
 				break MatcherLoop

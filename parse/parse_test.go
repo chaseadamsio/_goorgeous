@@ -7,7 +7,6 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"strings"
 	"testing"
 
 	"github.com/chaseadamsio/goorgeous/ast"
@@ -19,10 +18,10 @@ var update = flag.Bool("update", false, "update golden files")
 
 func TestParse(t *testing.T) {
 	for _, tc := range tests {
-		filter := "link"
-		if !strings.HasPrefix(tc.source, filter) {
-			continue
-		}
+		// filter := "link"
+		// if !strings.HasPrefix(tc.source, filter) {
+		// 	continue
+		// }
 
 		t.Run(tc.source, func(t *testing.T) {
 
@@ -135,6 +134,10 @@ var tests = []testCase{
 	{
 		testdata.LinkSelfDescriptive,
 		fmt.Sprintf("testdata/%s.json", testdata.LinkSelfDescriptive),
+	},
+	{
+		testdata.LinkBoth,
+		fmt.Sprintf("testdata/%s.json", testdata.LinkBoth),
 	},
 	{
 		testdata.OrderedListBasic,

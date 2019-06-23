@@ -44,6 +44,7 @@ const (
 
 	LinkSelfDescriptive = "link/self-descriptive.org"
 	LinkStandard        = "link/standard.org"
+	LinkBoth            = "link/both-links.org"
 
 	OrderedListBasic                   = "ordered-list/basic.org"
 	OrderedListNotAList                = "ordered-list/not-a-list.org"

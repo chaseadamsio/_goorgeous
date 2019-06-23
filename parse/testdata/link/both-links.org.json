@@ -1,0 +1,64 @@
+{
+  "NodeType": "Root",
+  "ChildrenNodes": [
+    {
+      "NodeType": "Section",
+      "ChildrenNodes": [
+        {
+          "NodeType": "Paragraph",
+          "Start": 0,
+          "End": 44,
+          "ChildrenNodes": [
+            {
+              "NodeType": "Link",
+              "Link": "https://chaseadams.io",
+              "Start": 0,
+              "End": 43,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "hello Chase Adams",
+                  "Start": 25,
+                  "End": 42
+                }
+              ]
+            },
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": "\n",
+              "Start": 44,
+              "End": 44
+            }
+          ]
+        },
+        {
+          "NodeType": "Paragraph",
+          "Start": 46,
+          "End": 71,
+          "ChildrenNodes": [
+            {
+              "NodeType": "Link",
+              "Link": "https://chaseadams.io",
+              "Start": 46,
+              "End": 70,
+              "ChildrenNodes": null
+            },
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": "\n",
+              "Start": 71,
+              "End": 71
+            }
+          ]
+        }
+      ],
+      "Start": 45,
+      "End": 72
+    }
+  ],
+  "Start": 0,
+  "End": 72
+}

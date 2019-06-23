@@ -14,7 +14,7 @@ func TransformToHTML(root *ast.RootNode) string {
 func walk(inAST []ast.Node) string {
 	var out []string
 
-	for _, child := range inAST {
+	for idx, child := range inAST {
 		switch node := child.(type) {
 		case *ast.HeadlineNode:
 			out = append(out, processHeadlineNode(node))
@@ -30,6 +30,16 @@ func walk(inAST []ast.Node) string {
 			out = append(out, processListItemNode(node))
 		case *ast.LinkNode:
 			out = append(out, processLinkNode(node))
+		case *ast.TableNode:
+			out = append(out, processTableNode(node))
+		case *ast.TableRowNode:
+			if idx+1 < len(inAST) && inAST[idx+1].Type() == "TableRule" {
+				out = append(out, processTableHeaderNode(node))
+			} else if node.NodeType != "TableRule" {
+				out = append(out, processTableRowNode(node))
+			}
+		case *ast.TableCellNode:
+			out = append(out, processTableCellNode(node))
 		case *ast.TextNode:
 			switch node.NodeType {
 			case "Bold":
@@ -85,6 +95,26 @@ func processListNode(node *ast.ListNode) string {
 func processListItemNode(node *ast.ListItemNode) string {
 	children := walk(node.ChildrenNodes)
 	return fmt.Sprintf("<li>%s</li>", children)
+}
+
+func processTableNode(node *ast.TableNode) string {
+	children := walk(node.ChildrenNodes)
+	return fmt.Sprintf("<table>%s</table>", children)
+}
+
+func processTableHeaderNode(node *ast.TableRowNode) string {
+	children := walk(node.ChildrenNodes)
+	return fmt.Sprintf("<th>%s</th>", children)
+}
+
+func processTableRowNode(node *ast.TableRowNode) string {
+	children := walk(node.ChildrenNodes)
+	return fmt.Sprintf("<tr>%s</tr>", children)
+}
+
+func processTableCellNode(node *ast.TableCellNode) string {
+	children := walk(node.ChildrenNodes)
+	return fmt.Sprintf("<td>%s</td>", children)
 }
 
 func processLinkNode(node *ast.LinkNode) string {

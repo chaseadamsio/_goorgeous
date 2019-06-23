@@ -7,7 +7,7 @@
         {
           "NodeType": "Paragraph",
           "Start": 0,
-          "End": 67,
+          "End": 26,
           "ChildrenNodes": [
             {
               "NodeType": "Text",
@@ -34,10 +34,17 @@
             {
               "NodeType": "Text",
               "ChildrenNodes": null,
-              "Val": " text.\n\n",
+              "Val": " text.",
               "Start": 20,
-              "End": 27
-            },
+              "End": 26
+            }
+          ]
+        },
+        {
+          "NodeType": "Paragraph",
+          "Start": 28,
+          "End": 67,
+          "ChildrenNodes": [
             {
               "NodeType": "Bold",
               "ChildrenNodes": [
@@ -63,7 +70,7 @@
           ]
         }
       ],
-      "Start": 67,
+      "Start": 26,
       "End": 68
     }
   ],

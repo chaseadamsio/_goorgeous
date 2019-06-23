@@ -179,7 +179,7 @@ func (p *parser) walk(parent ast.Node, current, stop int) {
 			start = current
 
 		} else if found, end := p.matchesHorizontalRule(current); found {
-			p.makeHorizontalRule(parent, p.items[current:end])
+			p.makeHorizontalRule(parent, current, end)
 			current = end
 			start = current
 
@@ -216,7 +216,7 @@ func (p *parser) walk(parent ast.Node, current, stop int) {
 				if parent.Type() != "Section" {
 					parent = findClosestSectionNode(parent, p.items[current:])
 				}
-				node := ast.NewParagraphNode(start, current, parent, p.items[start:current+1])
+				node := ast.NewParagraphNode(start, current, parent, p.items[start:current])
 				p.walkElements(node, start, current)
 
 				parent.Append(node)
@@ -224,7 +224,13 @@ func (p *parser) walk(parent ast.Node, current, stop int) {
 				start = current
 			}
 
+			if 0 < current && p.items[current-1].IsNewline() {
+				current++
+				start = current
+			}
+
 			current++
+
 		} else if token.IsEOF() || current+1 == stop {
 			if p.items[start].IsNewline() && p.items[start+1].IsEOF() {
 				break

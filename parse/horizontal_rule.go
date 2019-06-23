@@ -5,8 +5,8 @@ import (
 	"github.com/chaseadamsio/goorgeous/lex"
 )
 
-func (p *parser) makeHorizontalRule(parent ast.Node, items []lex.Item) (end int) {
-	node := ast.NewHorizontalRuleNode(parent, items)
+func (p *parser) makeHorizontalRule(parent ast.Node, current, end int) (offset int) {
+	node := ast.NewHorizontalRuleNode(parent, p.items[current:end])
 	parent.Append(node)
 	return 5
 }

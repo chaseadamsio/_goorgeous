@@ -7,7 +7,7 @@
         {
           "NodeType": "Paragraph",
           "Start": 0,
-          "End": 44,
+          "End": 43,
           "ChildrenNodes": [
             {
               "NodeType": "Link",
@@ -23,20 +23,13 @@
                   "End": 42
                 }
               ]
-            },
-            {
-              "NodeType": "Text",
-              "ChildrenNodes": null,
-              "Val": "\n",
-              "Start": 44,
-              "End": 44
             }
           ]
         },
         {
           "NodeType": "Paragraph",
           "Start": 46,
-          "End": 71,
+          "End": 70,
           "ChildrenNodes": [
             {
               "NodeType": "Link",
@@ -44,18 +37,11 @@
               "Start": 46,
               "End": 70,
               "ChildrenNodes": null
-            },
-            {
-              "NodeType": "Text",
-              "ChildrenNodes": null,
-              "Val": "\n",
-              "Start": 71,
-              "End": 71
             }
           ]
         }
       ],
-      "Start": 45,
+      "Start": 44,
       "End": 72
     }
   ],

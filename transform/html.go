@@ -104,7 +104,7 @@ func processTableNode(node *ast.TableNode) string {
 
 func processTableHeaderNode(node *ast.TableRowNode) string {
 	children := walk(node.ChildrenNodes)
-	return fmt.Sprintf("<th>%s</th>", children)
+	return fmt.Sprintf("<thead>%s</thead>", children)
 }
 
 func processTableRowNode(node *ast.TableRowNode) string {

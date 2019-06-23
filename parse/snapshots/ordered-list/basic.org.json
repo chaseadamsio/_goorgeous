@@ -90,12 +90,109 @@
               "End": 64
             }
           ]
+        },
+        {
+          "NodeType": "List",
+          "ListType": "ORDERED",
+          "Value": "",
+          "Start": 67,
+          "End": 107,
+          "ChildrenNodes": [
+            {
+              "NodeType": "ListItem",
+              "Bullet": "1.",
+              "Value": "1. this",
+              "Start": 67,
+              "End": 74,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "this",
+                  "Start": 70,
+                  "End": 74
+                }
+              ]
+            },
+            {
+              "NodeType": "ListItem",
+              "Bullet": "2.",
+              "Value": "2. is",
+              "Start": 75,
+              "End": 80,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "is",
+                  "Start": 78,
+                  "End": 80
+                }
+              ]
+            },
+            {
+              "NodeType": "ListItem",
+              "Bullet": "3.",
+              "Value": "3. an",
+              "Start": 81,
+              "End": 86,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "an",
+                  "Start": 84,
+                  "End": 86
+                }
+              ]
+            },
+            {
+              "NodeType": "ListItem",
+              "Bullet": "4.",
+              "Value": "4. ordered",
+              "Start": 87,
+              "End": 97,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "ordered",
+                  "Start": 90,
+                  "End": 97
+                }
+              ]
+            },
+            {
+              "NodeType": "ListItem",
+              "Bullet": "5.",
+              "Value": "5. =list=",
+              "Start": 98,
+              "End": 106,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Verbatim",
+                  "ChildrenNodes": [
+                    {
+                      "NodeType": "Text",
+                      "ChildrenNodes": null,
+                      "Val": "list",
+                      "Start": 102,
+                      "End": 106
+                    }
+                  ],
+                  "Val": "=list=",
+                  "Start": 101,
+                  "End": 106
+                }
+              ]
+            }
+          ]
         }
       ],
       "Start": 64,
-      "End": 65
+      "End": 108
     }
   ],
   "Start": 0,
-  "End": 65
+  "End": 108
 }

@@ -29,30 +29,30 @@
           "Val": "This is another headline",
           "Start": 23,
           "End": 47
-        },
-        {
-          "NodeType": "Section",
-          "ChildrenNodes": [
-            {
-              "NodeType": "Paragraph",
-              "Start": 48,
-              "End": 89,
-              "ChildrenNodes": [
-                {
-                  "NodeType": "Text",
-                  "ChildrenNodes": null,
-                  "Val": "this text belongs to the another headline",
-                  "Start": 48,
-                  "End": 89
-                }
-              ]
-            }
-          ],
-          "Start": 21,
-          "End": 89
         }
       ],
       "Keyword": ""
+    },
+    {
+      "NodeType": "Section",
+      "ChildrenNodes": [
+        {
+          "NodeType": "Paragraph",
+          "Start": 48,
+          "End": 89,
+          "ChildrenNodes": [
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": "this text belongs to the another headline",
+              "Start": 48,
+              "End": 89
+            }
+          ]
+        }
+      ],
+      "Start": 89,
+      "End": 121
     },
     {
       "NodeType": "Headline",

@@ -13,52 +13,52 @@
           "Val": "This is a headline",
           "Start": 2,
           "End": 20
-        },
+        }
+      ],
+      "Keyword": ""
+    },
+    {
+      "NodeType": "Section",
+      "ChildrenNodes": [
         {
-          "NodeType": "Section",
+          "NodeType": "Paragraph",
+          "Start": 21,
+          "End": 61,
           "ChildrenNodes": [
             {
-              "NodeType": "Paragraph",
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": "This is some ",
               "Start": 21,
-              "End": 61,
+              "End": 33
+            },
+            {
+              "NodeType": "Bold",
               "ChildrenNodes": [
                 {
                   "NodeType": "Text",
                   "ChildrenNodes": null,
-                  "Val": "This is some ",
-                  "Start": 21,
-                  "End": 33
-                },
-                {
-                  "NodeType": "Bold",
-                  "ChildrenNodes": [
-                    {
-                      "NodeType": "Text",
-                      "ChildrenNodes": null,
-                      "Val": "bold text",
-                      "Start": 35,
-                      "End": 44
-                    }
-                  ],
-                  "Val": "*bold text*",
-                  "Start": 34,
+                  "Val": "bold text",
+                  "Start": 35,
                   "End": 44
-                },
-                {
-                  "NodeType": "Text",
-                  "ChildrenNodes": null,
-                  "Val": " in a paragraph.",
-                  "Start": 45,
-                  "End": 61
                 }
-              ]
+              ],
+              "Val": "*bold text*",
+              "Start": 34,
+              "End": 44
+            },
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": " in a paragraph.",
+              "Start": 45,
+              "End": 61
             }
-          ],
-          "Start": 0,
-          "End": 61
+          ]
         }
       ],
-      "Keyword": ""
+      "Start": 61,
+      "End": 62
     }
   ],
   "Start": 0,

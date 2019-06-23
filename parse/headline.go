@@ -40,10 +40,7 @@ func (p *parser) makeHeadline(parent ast.Node, start, end int) (blockEnd int) {
 
 	// if foundEnd = end, nothing left to parse in the headline!
 	if end != blockEnd {
-		sectionNode := ast.NewSectionNode(node, p.items[start:blockEnd])
-		node.Append(sectionNode)
-
-		p.walk(sectionNode, end+1, blockEnd)
+		p.walk(node, end+1, blockEnd)
 	}
 
 	return blockEnd

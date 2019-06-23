@@ -13,23 +13,23 @@
           "Val": "This is a horizontal rule",
           "Start": 2,
           "End": 27
-        },
-        {
-          "NodeType": "Section",
-          "ChildrenNodes": [
-            {
-              "NodeType": "HorizontalRule",
-              "Key": "",
-              "Value": "",
-              "Start": 28,
-              "End": 32
-            }
-          ],
-          "Start": 0,
-          "End": 32
         }
       ],
       "Keyword": ""
+    },
+    {
+      "NodeType": "Section",
+      "ChildrenNodes": [
+        {
+          "NodeType": "HorizontalRule",
+          "Key": "",
+          "Value": "",
+          "Start": 28,
+          "End": 32
+        }
+      ],
+      "Start": 28,
+      "End": 165
     },
     {
       "NodeType": "Headline",
@@ -43,23 +43,23 @@
           "Val": "This is a horizontal rule with a space at the beginning",
           "Start": 36,
           "End": 91
-        },
-        {
-          "NodeType": "Section",
-          "ChildrenNodes": [
-            {
-              "NodeType": "HorizontalRule",
-              "Key": "",
-              "Value": "",
-              "Start": 93,
-              "End": 97
-            }
-          ],
-          "Start": 34,
-          "End": 97
         }
       ],
       "Keyword": ""
+    },
+    {
+      "NodeType": "Section",
+      "ChildrenNodes": [
+        {
+          "NodeType": "HorizontalRule",
+          "Key": "",
+          "Value": "",
+          "Start": 93,
+          "End": 97
+        }
+      ],
+      "Start": 93,
+      "End": 165
     },
     {
       "NodeType": "Headline",
@@ -73,23 +73,23 @@
           "Val": "This is a horizontal rule with a tab at the beginning",
           "Start": 101,
           "End": 154
-        },
-        {
-          "NodeType": "Section",
-          "ChildrenNodes": [
-            {
-              "NodeType": "HorizontalRule",
-              "Key": "",
-              "Value": "",
-              "Start": 159,
-              "End": 163
-            }
-          ],
-          "Start": 99,
-          "End": 163
         }
       ],
       "Keyword": ""
+    },
+    {
+      "NodeType": "Section",
+      "ChildrenNodes": [
+        {
+          "NodeType": "HorizontalRule",
+          "Key": "",
+          "Value": "",
+          "Start": 159,
+          "End": 163
+        }
+      ],
+      "Start": 159,
+      "End": 165
     }
   ],
   "Start": 0,

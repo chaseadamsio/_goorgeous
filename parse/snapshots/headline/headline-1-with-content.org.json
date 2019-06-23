@@ -15,7 +15,9 @@
           "End": 20
         }
       ],
-      "Keyword": ""
+      "Keyword": "",
+      "Priority": "",
+      "Tags": null
     },
     {
       "NodeType": "Section",

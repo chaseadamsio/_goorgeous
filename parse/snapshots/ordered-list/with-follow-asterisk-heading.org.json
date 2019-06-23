@@ -88,7 +88,9 @@
           "End": 50
         }
       ],
-      "Keyword": ""
+      "Keyword": "",
+      "Priority": "",
+      "Tags": null
     }
   ],
   "Start": 0,

@@ -43,10 +43,16 @@ Go through all of the tokens in the tokens slice.
 
 * Preview Org
 
-M-: to get eval in the minibuffer, then run this command:
+First, M-: to get eval in the minibuffer.
+
+To output org-mode content as emacs-lisp AST, run:
 
 #+BEGIN_SRC emacs-lisp
 (org-element-parse-buffer)
 #+END_SRC
 
-It will output
+To output org-mode content as HTML, run:
+
+#+BEGIN_SRC emacs-lisp
+ (org-html-export-as-html)
+#+END_SRC

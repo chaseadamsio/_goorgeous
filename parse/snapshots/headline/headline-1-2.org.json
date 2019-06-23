@@ -28,10 +28,14 @@
               "End": 65
             }
           ],
-          "Keyword": ""
+          "Keyword": "",
+          "Priority": "",
+          "Tags": null
         }
       ],
-      "Keyword": ""
+      "Keyword": "",
+      "Priority": "",
+      "Tags": null
     },
     {
       "NodeType": "Section",

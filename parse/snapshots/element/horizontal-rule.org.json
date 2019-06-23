@@ -15,7 +15,9 @@
           "End": 27
         }
       ],
-      "Keyword": ""
+      "Keyword": "",
+      "Priority": "",
+      "Tags": null
     },
     {
       "NodeType": "Section",
@@ -45,7 +47,9 @@
           "End": 91
         }
       ],
-      "Keyword": ""
+      "Keyword": "",
+      "Priority": "",
+      "Tags": null
     },
     {
       "NodeType": "Section",
@@ -75,7 +79,9 @@
           "End": 154
         }
       ],
-      "Keyword": ""
+      "Keyword": "",
+      "Priority": "",
+      "Tags": null
     },
     {
       "NodeType": "Section",

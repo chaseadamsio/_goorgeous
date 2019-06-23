@@ -226,10 +226,10 @@ func (p *parser) walk(parent ast.Node, current, stop int) {
 				start = current
 			}
 
-			if 0 < current && p.items[current-1].IsNewline() {
-				current++
-				start = current
-			}
+			// if 0 < current && p.items[current-1].IsNewline() {
+			// 	current++
+			// 	start = current
+			// }
 
 			current++
 

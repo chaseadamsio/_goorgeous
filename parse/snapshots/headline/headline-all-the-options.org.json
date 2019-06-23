@@ -1,0 +1,72 @@
+{
+  "NodeType": "Root",
+  "ChildrenNodes": [
+    {
+      "NodeType": "Headline",
+      "Start": 0,
+      "End": 74,
+      "Depth": 1,
+      "ChildrenNodes": [
+        {
+          "NodeType": "Text",
+          "ChildrenNodes": null,
+          "Val": "This Headline has all the things ",
+          "Start": 12,
+          "End": 44
+        }
+      ],
+      "Keyword": "TODO",
+      "Priority": "A",
+      "Tags": [
+        "tag1",
+        "tag_2",
+        "tag@3",
+        "tag#4",
+        "tag%5"
+      ]
+    },
+    {
+      "NodeType": "Headline",
+      "Start": 77,
+      "End": 121,
+      "Depth": 1,
+      "ChildrenNodes": [
+        {
+          "NodeType": "Text",
+          "ChildrenNodes": null,
+          "Val": "This Headline has all the things",
+          "Start": 89,
+          "End": 121
+        }
+      ],
+      "Keyword": "DONE",
+      "Priority": "A",
+      "Tags": null
+    },
+    {
+      "NodeType": "Headline",
+      "Start": 123,
+      "End": 216,
+      "Depth": 1,
+      "ChildrenNodes": [
+        {
+          "NodeType": "Text",
+          "ChildrenNodes": null,
+          "Val": "This Headline has all the things :tag1:tag_2:tag@3:tag#4:tag not actually tags %5",
+          "Start": 135,
+          "End": 216
+        }
+      ],
+      "Keyword": "DONE",
+      "Priority": "A",
+      "Tags": [
+        "tag1",
+        "tag_2",
+        "tag@3",
+        "tag#4"
+      ]
+    }
+  ],
+  "Start": 0,
+  "End": 218
+}

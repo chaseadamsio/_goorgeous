@@ -14,6 +14,8 @@ type HeadlineNode struct {
 	rawvalue      string
 	ChildrenNodes []Node
 	Keyword       string
+	Priority      string
+	Tags          []string
 }
 
 func NewHeadlineNode(depth int, parent Node, items []lex.Item) *HeadlineNode {

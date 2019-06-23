@@ -36,9 +36,10 @@ func GetOrgStr(filename string) (content string) {
 }
 
 const (
-	Headline1            = "headline/headline-1.org"
-	Headline1WithContent = "headline/headline-1-with-content.org"
-	Headline1And2        = "headline/headline-1-2.org"
+	Headline1             = "headline/headline-1.org"
+	Headline1WithContent  = "headline/headline-1-with-content.org"
+	Headline1And2         = "headline/headline-1-2.org"
+	HeadlineAllTheOptions = "headline/headline-all-the-options.org"
 
 	HeadersBasic = "header/basic.org"
 
@@ -86,6 +87,7 @@ var Tests = []string{
 	Headline1,
 	Headline1And2,
 	Headline1WithContent,
+	HeadlineAllTheOptions,
 	HeadersBasic,
 	LinkStandard,
 	LinkSelfDescriptive,

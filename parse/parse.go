@@ -66,49 +66,42 @@ func Parse(input string) *ast.RootNode {
 	return root
 }
 
-func peekToNewLine(items []lex.Item) (end int) {
-	end = 0
-	itemsLength := len(items)
-	for end < itemsLength {
-		currItem := items[end]
+func (p *parser) peekToNewLine(start int) (end int) {
+	current := start
+	itemsLength := len(p.items)
+	end = itemsLength
+	for current < end {
+		currItem := p.items[current]
 		if currItem.IsEOF() {
-			return end
+			return current
 		}
 		if currItem.IsNewline() {
-			if end+1 < itemsLength && items[end+1].IsEOF() {
-				return end + 2
-			}
-			return end + 1 // we don't want to pass the newline character
+			return current // we don't want to pass the newline character
 		}
-		end++
+		current++
 	}
-	return itemsLength
+	return current
 }
 
-func (p *parser) peekToNextBlock(items []lex.Item) (end int) {
-	end = 0
-	itemsLength := len(items)
-	for end < itemsLength {
-		currItem := items[end]
-		prevIsNewline := end > 0 && items[end-1].IsNewline()
-		if currItem.IsEOF() {
-			return end
-		}
-		if found, foundEnd := p.matchesHeadline(end); prevIsNewline && found {
-			depth := headlineDepth(items[end:foundEnd])
+func (p *parser) peekToNextBlock(current int) int {
+	itemsLength := len(p.items)
+	for current < itemsLength {
+		prevIsNewline := current > 0 && p.items[current-1].IsNewline()
+		if found, foundEnd := p.matchesHeadline(current); prevIsNewline && found {
+			depth := headlineDepth(p.items[current:foundEnd])
 			if p.depth < depth {
-				end++
+				current++
 				continue
 			} else {
-				return end
+				return current - 1
 			}
-		} else if items[end].IsNewline() && end+1 < itemsLength && items[end+1].IsEOF() {
-			return end + 1
-		}
+		} else if p.items[current].IsNewline() && current+1 < itemsLength && p.items[current+1].IsEOF() {
+			return current
 
-		end++
+		}
+		current++
 	}
-	return itemsLength
+	return current
 }
 
 func findClosestSectionNode(parent ast.Node, items []lex.Item) ast.Node {
@@ -160,27 +153,18 @@ func (p *parser) walkElements(parent ast.Node, current, end int) {
 }
 
 // recursively walk through each token
-func (p *parser) walk(parent ast.Node, current, end int) {
+func (p *parser) walk(parent ast.Node, current, stop int) {
 	// create top-level paragraph nodes by creating nodes
 	// on block level elements
 	start := current
-	for current < end {
+	for current < stop {
 		token := p.items[current]
 
 		if found, end := p.matchesHeadline(current); found {
-			if p.depth == 0 {
-				p.depth = headlineDepth(p.items[current:end])
-			}
 
-			blockEnd := end + p.peekToNextBlock(p.items[end:])
-			node := p.makeHeadline(parent, p.items, current, blockEnd)
+			blockEnd := p.makeHeadline(parent, current, end)
 			current = blockEnd
 			start = current
-
-			// if foundEnd = end, nothing left to parse in the headline!
-			if end != blockEnd {
-				p.walk(node, end, blockEnd)
-			}
 
 		} else if found, end := p.matchesOrderedList(current); found {
 
@@ -224,11 +208,15 @@ func (p *parser) walk(parent ast.Node, current, end int) {
 			start = current
 
 		} else if token.IsNewline() {
-			if start < current && p.items[current-1].IsNewline() {
+			if current+1 < stop && (p.items[current+1].IsNewline() || p.items[current+1].IsEOF()) {
+				if p.items[start].IsNewline() && p.items[start+1].IsEOF() {
+					break
+				}
+
 				if parent.Type() != "Section" {
 					parent = findClosestSectionNode(parent, p.items[current:])
 				}
-				node := ast.NewParagraphNode(start, current, parent, p.items[start:current])
+				node := ast.NewParagraphNode(start, current, parent, p.items[start:current+1])
 				p.walkElements(node, start, current)
 
 				parent.Append(node)
@@ -237,10 +225,15 @@ func (p *parser) walk(parent ast.Node, current, end int) {
 			}
 
 			current++
-		} else if token.IsEOF() || current+1 == end {
-			if current-start == 1 && p.items[current-1].IsNewline() {
+		} else if token.IsEOF() || current+1 == stop {
+			if p.items[start].IsNewline() && p.items[start+1].IsEOF() {
 				break
 			}
+
+			if current+1 == stop && stop != len(p.items) {
+				current++ // we've reached the end of an inner element's parse
+			}
+
 			if start < current {
 				if parent.Type() != "Section" {
 					parent = findClosestSectionNode(parent, p.items[current:])

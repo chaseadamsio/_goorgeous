@@ -12,14 +12,14 @@
             {
               "NodeType": "Text",
               "ChildrenNodes": null,
-              "Val": "This is plain text.\n",
+              "Val": "This is plain text.",
               "Start": 0,
               "End": 19
             }
           ]
         }
       ],
-      "Start": 20,
+      "Start": 19,
       "End": 20
     }
   ],

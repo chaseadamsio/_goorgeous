@@ -1,2 +1,2 @@
 * This is a headline
-This is some text in a paragraph.
+This is some *bold text* in a paragraph.

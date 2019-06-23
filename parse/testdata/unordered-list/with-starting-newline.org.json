@@ -37,22 +37,22 @@
         {
           "NodeType": "Paragraph",
           "Start": 30,
-          "End": 53,
+          "End": 70,
           "ChildrenNodes": [
             {
               "NodeType": "Text",
               "ChildrenNodes": null,
-              "Val": "with an extra paragraph\n",
+              "Val": "with an extra paragraph\nand another line",
               "Start": 30,
-              "End": 53
+              "End": 70
             }
           ]
         }
       ],
-      "Start": 54,
-      "End": 54
+      "Start": 70,
+      "End": 71
     }
   ],
   "Start": 0,
-  "End": 54
+  "End": 71
 }

@@ -18,7 +18,7 @@ var update = flag.Bool("update", false, "update golden files")
 
 func TestParse(t *testing.T) {
 	for _, tc := range tests {
-		// filter := "link"
+		// filter := "headline/headline-1.org"
 		// if !strings.HasPrefix(tc.source, filter) {
 		// 	continue
 		// }

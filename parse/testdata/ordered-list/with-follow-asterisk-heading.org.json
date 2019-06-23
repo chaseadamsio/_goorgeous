@@ -41,9 +41,17 @@
     {
       "NodeType": "Headline",
       "Start": 41,
-      "End": 51,
+      "End": 50,
       "Depth": 1,
-      "ChildrenNodes": null,
+      "ChildrenNodes": [
+        {
+          "NodeType": "Text",
+          "ChildrenNodes": null,
+          "Val": "heading",
+          "Start": 43,
+          "End": 50
+        }
+      ],
       "Keyword": ""
     }
   ],

@@ -12,14 +12,14 @@
             {
               "NodeType": "Text",
               "ChildrenNodes": null,
-              "Val": "-apples\n-bananas\n-oranges\nwith an extra paragraph\n",
+              "Val": "-apples\n-bananas\n-oranges\nwith an extra paragraph",
               "Start": 0,
               "End": 49
             }
           ]
         }
       ],
-      "Start": 50,
+      "Start": 49,
       "End": 50
     }
   ],

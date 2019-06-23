@@ -39,18 +39,11 @@
               "Val": "*/=this is bold, italic and verbatim=/*",
               "Start": 0,
               "End": 38
-            },
-            {
-              "NodeType": "Text",
-              "ChildrenNodes": null,
-              "Val": "\n",
-              "Start": 39,
-              "End": 39
             }
           ]
         }
       ],
-      "Start": 40,
+      "Start": 39,
       "End": 40
     }
   ],

@@ -87,14 +87,14 @@
             {
               "NodeType": "Text",
               "ChildrenNodes": null,
-              "Val": "with an extra paragraph\n",
+              "Val": "with an extra paragraph",
               "Start": 114,
               "End": 137
             }
           ]
         }
       ],
-      "Start": 138,
+      "Start": 137,
       "End": 138
     }
   ],

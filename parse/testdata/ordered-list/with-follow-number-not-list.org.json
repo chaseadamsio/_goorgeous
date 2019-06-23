@@ -49,14 +49,14 @@
             {
               "NodeType": "Text",
               "ChildrenNodes": null,
-              "Val": "5.peaches\n",
+              "Val": "5.peaches",
               "Start": 41,
               "End": 50
             }
           ]
         }
       ],
-      "Start": 51,
+      "Start": 50,
       "End": 51
     }
   ],

@@ -42,14 +42,14 @@
             {
               "NodeType": "Text",
               "ChildrenNodes": null,
-              "Val": "-pears\n",
+              "Val": "-pears",
               "Start": 29,
               "End": 35
             }
           ]
         }
       ],
-      "Start": 36,
+      "Start": 35,
       "End": 36
     }
   ],

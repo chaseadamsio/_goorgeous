@@ -1,8 +1,6 @@
 package ast
 
 import (
-	"strings"
-
 	"github.com/chaseadamsio/goorgeous/lex"
 )
 
@@ -27,36 +25,7 @@ func NewHeadlineNode(depth int, parent Node, items []lex.Item) *HeadlineNode {
 		End:      items[len(items)-1].End(),
 	}
 
-	node.parse(items)
-
 	return node
-}
-
-func (n *HeadlineNode) parse(items []lex.Item) {
-	var headlineVal []string
-	for idx, item := range items {
-		if hasKeyword(idx, items) {
-			n.Keyword = item.Value()
-		}
-		headlineVal = append(headlineVal, item.Value())
-	}
-	n.rawvalue = strings.Join(headlineVal, "")
-}
-
-var keywords = map[string]struct{}{
-	"TODO": struct{}{},
-	"DONE": struct{}{},
-}
-
-func hasKeyword(idx int, items []lex.Item) bool {
-	// keywords will only _ever_ occur in the first space
-	if idx != 0 {
-		return false
-	}
-	if _, ok := keywords[items[idx].Value()]; ok {
-		return true
-	}
-	return false
 }
 
 // Type returns the type of node this is

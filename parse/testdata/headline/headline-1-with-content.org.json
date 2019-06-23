@@ -4,12 +4,63 @@
     {
       "NodeType": "Headline",
       "Start": 0,
-      "End": 54,
+      "End": 20,
       "Depth": 1,
-      "ChildrenNodes": null,
+      "ChildrenNodes": [
+        {
+          "NodeType": "Text",
+          "ChildrenNodes": null,
+          "Val": "This is a headline",
+          "Start": 2,
+          "End": 20
+        },
+        {
+          "NodeType": "Section",
+          "ChildrenNodes": [
+            {
+              "NodeType": "Paragraph",
+              "Start": 21,
+              "End": 61,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "This is some ",
+                  "Start": 21,
+                  "End": 33
+                },
+                {
+                  "NodeType": "Bold",
+                  "ChildrenNodes": [
+                    {
+                      "NodeType": "Text",
+                      "ChildrenNodes": null,
+                      "Val": "bold text",
+                      "Start": 35,
+                      "End": 44
+                    }
+                  ],
+                  "Val": "*bold text*",
+                  "Start": 34,
+                  "End": 44
+                },
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": " in a paragraph.",
+                  "Start": 45,
+                  "End": 61
+                }
+              ]
+            }
+          ],
+          "Start": 0,
+          "End": 61
+        }
+      ],
       "Keyword": ""
     }
   ],
   "Start": 0,
-  "End": 55
+  "End": 62
 }

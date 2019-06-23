@@ -104,14 +104,14 @@
             {
               "NodeType": "Text",
               "ChildrenNodes": null,
-              "Val": "something else\n",
+              "Val": "something else",
               "Start": 137,
               "End": 151
             }
           ]
         }
       ],
-      "Start": 152,
+      "Start": 151,
       "End": 152
     }
   ],

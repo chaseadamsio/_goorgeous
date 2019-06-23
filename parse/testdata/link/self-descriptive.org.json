@@ -15,18 +15,11 @@
               "Start": 0,
               "End": 21,
               "ChildrenNodes": null
-            },
-            {
-              "NodeType": "Text",
-              "ChildrenNodes": null,
-              "Val": "\n",
-              "Start": 22,
-              "End": 22
             }
           ]
         }
       ],
-      "Start": 23,
+      "Start": 22,
       "End": 23
     }
   ],

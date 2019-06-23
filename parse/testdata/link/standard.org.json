@@ -23,18 +23,11 @@
                   "End": 36
                 }
               ]
-            },
-            {
-              "NodeType": "Text",
-              "ChildrenNodes": null,
-              "Val": "\n",
-              "Start": 38,
-              "End": 38
             }
           ]
         }
       ],
-      "Start": 39,
+      "Start": 38,
       "End": 39
     }
   ],

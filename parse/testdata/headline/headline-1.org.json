@@ -4,12 +4,73 @@
     {
       "NodeType": "Headline",
       "Start": 0,
-      "End": 21,
+      "End": 20,
       "Depth": 1,
-      "ChildrenNodes": null,
+      "ChildrenNodes": [
+        {
+          "NodeType": "Text",
+          "ChildrenNodes": null,
+          "Val": "This is a headline",
+          "Start": 2,
+          "End": 20
+        }
+      ],
+      "Keyword": ""
+    },
+    {
+      "NodeType": "Headline",
+      "Start": 21,
+      "End": 47,
+      "Depth": 1,
+      "ChildrenNodes": [
+        {
+          "NodeType": "Text",
+          "ChildrenNodes": null,
+          "Val": "This is another headline",
+          "Start": 23,
+          "End": 47
+        },
+        {
+          "NodeType": "Section",
+          "ChildrenNodes": [
+            {
+              "NodeType": "Paragraph",
+              "Start": 48,
+              "End": 89,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "this text belongs to the another headline",
+                  "Start": 48,
+                  "End": 89
+                }
+              ]
+            }
+          ],
+          "Start": 21,
+          "End": 89
+        }
+      ],
+      "Keyword": ""
+    },
+    {
+      "NodeType": "Headline",
+      "Start": 90,
+      "End": 120,
+      "Depth": 1,
+      "ChildrenNodes": [
+        {
+          "NodeType": "Text",
+          "ChildrenNodes": null,
+          "Val": "This is yet another headline",
+          "Start": 92,
+          "End": 120
+        }
+      ],
       "Keyword": ""
     }
   ],
   "Start": 0,
-  "End": 21
+  "End": 121
 }

@@ -4,21 +4,48 @@
     {
       "NodeType": "Headline",
       "Start": 0,
-      "End": 164,
+      "End": 27,
       "Depth": 1,
       "ChildrenNodes": [
         {
-          "NodeType": "HorizontalRule",
-          "Key": "",
-          "Value": "",
-          "Start": 28,
-          "End": 32
+          "NodeType": "Text",
+          "ChildrenNodes": null,
+          "Val": "This is a horizontal rule",
+          "Start": 2,
+          "End": 27
         },
         {
-          "NodeType": "Headline",
-          "Start": 34,
-          "End": 164,
-          "Depth": 1,
+          "NodeType": "Section",
+          "ChildrenNodes": [
+            {
+              "NodeType": "HorizontalRule",
+              "Key": "",
+              "Value": "",
+              "Start": 28,
+              "End": 32
+            }
+          ],
+          "Start": 0,
+          "End": 32
+        }
+      ],
+      "Keyword": ""
+    },
+    {
+      "NodeType": "Headline",
+      "Start": 34,
+      "End": 91,
+      "Depth": 1,
+      "ChildrenNodes": [
+        {
+          "NodeType": "Text",
+          "ChildrenNodes": null,
+          "Val": "This is a horizontal rule with a space at the beginning",
+          "Start": 36,
+          "End": 91
+        },
+        {
+          "NodeType": "Section",
           "ChildrenNodes": [
             {
               "NodeType": "HorizontalRule",
@@ -26,25 +53,40 @@
               "Value": "",
               "Start": 93,
               "End": 97
-            },
-            {
-              "NodeType": "Headline",
-              "Start": 99,
-              "End": 164,
-              "Depth": 1,
-              "ChildrenNodes": [
-                {
-                  "NodeType": "HorizontalRule",
-                  "Key": "",
-                  "Value": "",
-                  "Start": 159,
-                  "End": 163
-                }
-              ],
-              "Keyword": ""
             }
           ],
-          "Keyword": ""
+          "Start": 34,
+          "End": 97
+        }
+      ],
+      "Keyword": ""
+    },
+    {
+      "NodeType": "Headline",
+      "Start": 99,
+      "End": 154,
+      "Depth": 1,
+      "ChildrenNodes": [
+        {
+          "NodeType": "Text",
+          "ChildrenNodes": null,
+          "Val": "This is a horizontal rule with a tab at the beginning",
+          "Start": 101,
+          "End": 154
+        },
+        {
+          "NodeType": "Section",
+          "ChildrenNodes": [
+            {
+              "NodeType": "HorizontalRule",
+              "Key": "",
+              "Value": "",
+              "Start": 159,
+              "End": 163
+            }
+          ],
+          "Start": 99,
+          "End": 163
         }
       ],
       "Keyword": ""

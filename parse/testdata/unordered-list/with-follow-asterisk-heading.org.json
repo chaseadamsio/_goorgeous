@@ -34,9 +34,17 @@
     {
       "NodeType": "Headline",
       "Start": 29,
-      "End": 37,
+      "End": 36,
       "Depth": 1,
-      "ChildrenNodes": null,
+      "ChildrenNodes": [
+        {
+          "NodeType": "Text",
+          "ChildrenNodes": null,
+          "Val": "pears",
+          "Start": 31,
+          "End": 36
+        }
+      ],
       "Keyword": ""
     }
   ],

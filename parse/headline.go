@@ -6,10 +6,17 @@ import (
 )
 
 const maxHeadlineDepth = 6
+const space = 1
 
-func (p *parser) makeHeadline(parent ast.Node, items []lex.Item, start, end int) (node ast.Node) {
+func (p *parser) makeHeadline(parent ast.Node, start, end int) (blockEnd int) {
 
-	depth := headlineDepth(items[start:end])
+	depth := headlineDepth(p.items[start:end])
+
+	if p.depth == 0 {
+		p.depth = depth
+	}
+
+	blockEnd = p.peekToNextBlock(end)
 
 	if p.depth < depth {
 		// There will always be the chance that content occurs
@@ -25,11 +32,49 @@ func (p *parser) makeHeadline(parent ast.Node, items []lex.Item, start, end int)
 		p.depth = depth
 	}
 
-	node = ast.NewHeadlineNode(depth, parent, items[start:end])
+	node := ast.NewHeadlineNode(depth, parent, p.items[start:end])
+
+	p.walkHeadline(node, start+depth+space, end)
 
 	parent.Append(node)
 
-	return node
+	// if foundEnd = end, nothing left to parse in the headline!
+	if end != blockEnd {
+		sectionNode := ast.NewSectionNode(node, p.items[start:blockEnd])
+		node.Append(sectionNode)
+
+		p.walk(sectionNode, end+1, blockEnd)
+	}
+
+	return blockEnd
+}
+
+func (p *parser) walkHeadline(node *ast.HeadlineNode, start, end int) {
+	// var headlineText []string
+	current := start
+
+	for current < end {
+
+		current++
+	}
+
+	p.walkElements(node, start, end)
+}
+
+var keywords = map[string]struct{}{
+	"TODO": struct{}{},
+	"DONE": struct{}{},
+}
+
+func hasKeyword(idx int, items []lex.Item) bool {
+	// keywords will only _ever_ occur in the first space
+	if idx != 0 {
+		return false
+	}
+	if _, ok := keywords[items[idx].Value()]; ok {
+		return true
+	}
+	return false
 }
 
 func (p parser) matchesHeadline(start int) (found bool, end int) {
@@ -71,7 +116,7 @@ func (p parser) matchesHeadline(start int) (found bool, end int) {
 			depth := headlineDepth(p.items[current:])
 			spaceWidth := 1
 			peekStart := start + depth + spaceWidth
-			headlineEnd := peekStart + peekToNewLine(p.items[peekStart:])
+			headlineEnd := p.peekToNewLine(peekStart)
 			return true, headlineEnd
 		}
 		return false, -1

@@ -30,7 +30,7 @@ func (p *parser) makeGreaterBlock(parent ast.Node, start, end int) {
 			foundBlockOpening = true
 			p.parseBlockParameters(node, start, current)
 		} else if p.items[current].IsHash() && p.items[current+1].IsPlus() &&
-			p.items[current+2].IsText() && p.items[current+2].Value() == "END" {
+			p.items[current+2].IsText() && strings.ToUpper(p.items[current+2].Value()) == "END" {
 			break
 		} else if foundBlockOpening {
 			item := p.items[current]
@@ -50,7 +50,7 @@ func (p *parser) parseBlockParameters(node *ast.GreaterBlockNode, start, end int
 	if p.items[current].IsPlus() {
 		current++
 	}
-	if p.items[current].IsText() && p.items[current].Value() == "BEGIN" {
+	if p.items[current].IsText() && strings.ToUpper(p.items[current].Value()) == "BEGIN" {
 		current++
 	}
 
@@ -58,7 +58,7 @@ func (p *parser) parseBlockParameters(node *ast.GreaterBlockNode, start, end int
 		current++
 	}
 
-	node.Name = p.items[current].Value()
+	node.Name = strings.ToUpper(p.items[current].Value())
 	current++
 
 	if p.items[current].IsSpace() {
@@ -83,7 +83,7 @@ func (p *parser) matchesGreaterBlock(current int) (found bool, end int) {
 		return false, -1
 	}
 
-	if !(current+2 < itemsLength && p.items[current+2].Value() == "BEGIN") &&
+	if !(current+2 < itemsLength && strings.ToUpper(p.items[current+2].Value()) == "BEGIN") &&
 		!(current+3 < itemsLength && p.items[current+3].IsUnderscore()) {
 		return false, -1
 	}
@@ -95,7 +95,7 @@ func (p *parser) matchesGreaterBlock(current int) (found bool, end int) {
 			return true, itemsLength
 		}
 		if p.items[current].IsHash() && current < itemsLength && p.items[current+1].IsPlus() {
-			if current+1 < itemsLength && p.items[current+2].Value() == "END" &&
+			if current+1 < itemsLength && strings.ToUpper(p.items[current+2].Value()) == "END" &&
 				current+2 < itemsLength && p.items[current+3].IsUnderscore() &&
 				current+3 < itemsLength && p.items[current+4].Value() == name {
 				if current+4 < itemsLength && p.items[current+5].IsNewline() {

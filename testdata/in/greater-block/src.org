@@ -19,3 +19,13 @@ Earth’s cry ascends,
 But before it touches Heaven’s Eye,
  It returns.
 #+END_VERSE
+
+#+BEGIN_SRC bash
+  #!/bin/bash
+  uname -a
+#+END_SRC
+
+#+begin_src bash
+  #!/bin/bash
+  uname -a
+#+end_src

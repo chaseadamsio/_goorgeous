@@ -29,32 +29,48 @@
         {
           "NodeType": "GreaterBlock",
           "Name": "QUOTE",
-          "Value": "console.log(\"hello world!\")\n",
+          "Value": "Earth’s cry ascends,\nBut before it touches Heaven’s Eye,\n  It returns.\n",
           "Language": "",
           "Start": 77,
-          "End": 141
+          "End": 179
         },
         {
           "NodeType": "GreaterBlock",
           "Name": "NOTDEFINED",
           "Value": "console.log(\"hello world!\")\n",
           "Language": "",
-          "Start": 143,
-          "End": 217
+          "Start": 181,
+          "End": 255
         },
         {
           "NodeType": "GreaterBlock",
           "Name": "VERSE",
           "Value": "Earth’s cry ascends,\nBut before it touches Heaven’s Eye,\n It returns.\n",
           "Language": "",
-          "Start": 219,
-          "End": 320
+          "Start": 257,
+          "End": 358
+        },
+        {
+          "NodeType": "GreaterBlock",
+          "Name": "SRC",
+          "Value": "  #!/bin/bash\n  uname -a\n",
+          "Language": "bash",
+          "Start": 360,
+          "End": 411
+        },
+        {
+          "NodeType": "GreaterBlock",
+          "Name": "SRC",
+          "Value": "  #!/bin/bash\n  uname -a\n",
+          "Language": "bash",
+          "Start": 413,
+          "End": 464
         }
       ],
       "Start": 0,
-      "End": 321
+      "End": 465
     }
   ],
   "Start": 0,
-  "End": 321
+  "End": 465
 }

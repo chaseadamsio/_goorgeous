@@ -39,12 +39,205 @@
               "ChildrenNodes": null
             }
           ]
+        },
+        {
+          "NodeType": "Paragraph",
+          "Start": 73,
+          "End": 109,
+          "ChildrenNodes": [
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": "This is a line with a footnote.",
+              "Start": 73,
+              "End": 104
+            },
+            {
+              "NodeType": "FootnoteReference",
+              "ReferenceType": "",
+              "Label": "1",
+              "Start": 104,
+              "End": 109,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "]",
+                  "Start": 109,
+                  "End": 109
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "NodeType": "Paragraph",
+          "Start": 112,
+          "End": 225,
+          "ChildrenNodes": [
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": "This is another footnote, but defined inline without a label. ",
+              "Start": 112,
+              "End": 173
+            },
+            {
+              "NodeType": "FootnoteReference",
+              "ReferenceType": "",
+              "Label": "",
+              "Start": 174,
+              "End": 225,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "This is the inline definition of this footnote",
+                  "Start": 179,
+                  "End": 225
+                },
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "]",
+                  "Start": 225,
+                  "End": 225
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "NodeType": "Paragraph",
+          "Start": 228,
+          "End": 339,
+          "ChildrenNodes": [
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": "This is another footnote, but defined inline with a label. ",
+              "Start": 228,
+              "End": 286
+            },
+            {
+              "NodeType": "FootnoteReference",
+              "ReferenceType": "",
+              "Label": "2",
+              "Start": 287,
+              "End": 339,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "This is the inline definition of this footnote",
+                  "Start": 293,
+                  "End": 339
+                },
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "]",
+                  "Start": 339,
+                  "End": 339
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "NodeType": "FootnoteDefinition",
+          "Label": "1",
+          "Start": 342,
+          "End": 439,
+          "ChildrenNodes": [
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": "] this is a footnote with a ",
+              "Start": 347,
+              "End": 374
+            },
+            {
+              "NodeType": "Link",
+              "Link": "https://chaseadams.io",
+              "Start": 375,
+              "End": 405,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "link",
+                  "Start": 400,
+                  "End": 404
+                }
+              ]
+            },
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": " and ",
+              "Start": 406,
+              "End": 410
+            },
+            {
+              "NodeType": "Bold",
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "bold ",
+                  "Start": 412,
+                  "End": 416
+                },
+                {
+                  "NodeType": "Italic",
+                  "ChildrenNodes": [
+                    {
+                      "NodeType": "Text",
+                      "ChildrenNodes": null,
+                      "Val": "italic ",
+                      "Start": 418,
+                      "End": 424
+                    },
+                    {
+                      "NodeType": "Verbatim",
+                      "ChildrenNodes": [
+                        {
+                          "NodeType": "Text",
+                          "ChildrenNodes": null,
+                          "Val": "code",
+                          "Start": 426,
+                          "End": 430
+                        }
+                      ],
+                      "Val": "=code=",
+                      "Start": 425,
+                      "End": 430
+                    }
+                  ],
+                  "Val": "/italic =code=/",
+                  "Start": 417,
+                  "End": 431
+                }
+              ],
+              "Val": "*bold /italic =code=/*",
+              "Start": 411,
+              "End": 432
+            },
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": " text.",
+              "Start": 433,
+              "End": 439
+            }
+          ]
         }
       ],
       "Start": 44,
-      "End": 72
+      "End": 440
     }
   ],
   "Start": 0,
-  "End": 72
+  "End": 440
 }

@@ -51,6 +51,8 @@ func walk(inAST []ast.Node) string {
 			default:
 				out = append(out, processSpecialGreaterBlockNode(node))
 			}
+		case *ast.FootnoteDefinitionNode:
+			out = append(out, processFootnoteDefinitionNode(node))
 		case *ast.TextNode:
 			switch node.NodeType {
 			case "Bold":
@@ -142,6 +144,11 @@ func processGreaterBlockNode(node *ast.GreaterBlockNode) string {
 	}
 
 	return fmt.Sprintf("<pre class=\"%s\">%s</pre>", className, node.Value)
+}
+
+func processFootnoteDefinitionNode(node *ast.FootnoteDefinitionNode) string {
+	children := walk(node.ChildrenNodes)
+	return fmt.Sprintf("<div class=\"footdef\"><sup><a href=\" \">%s</a></sup><div>%s</div></div>", node.Label, children)
 }
 
 func processQuoteBlockNode(node *ast.GreaterBlockNode) string {

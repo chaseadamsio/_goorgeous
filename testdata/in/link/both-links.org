@@ -1,3 +1,11 @@
 [[https://chaseadams.io][hello Chase Adams]]
 
 [[https://chaseadams.io]]
+
+This is a line with a footnote.[fn:1]
+
+This is another footnote, but defined inline without a label. [fn::This is the inline definition of this footnote]
+
+This is another footnote, but defined inline with a label. [fn:2:This is the inline definition of this footnote]
+
+[fn:1] this is a footnote with a [[https://chaseadams.io][link]] and *bold /italic =code=/* text.

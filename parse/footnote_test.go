@@ -16,8 +16,7 @@ func TestIsFootnoteDefinition(t *testing.T) {
 		{"[fn::This is the inline definition of this footnote]", 0, true},
 		{"foo\n[fn::This is the inline definition of this footnote]", 2, true},
 		{"[fn:name:a definition]", 0, true},
-		{"foo[fn::This is the inline definition of this footnote]", 1, true},
-		{"foo[fn::This is the inline definition of this footnote]", 0, false},
+		{"foo[fn::This is the inline definition of this footnote]", 1, false},
 	}
 	for _, tc := range testCases {
 		var items []lex.Item

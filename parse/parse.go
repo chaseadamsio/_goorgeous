@@ -29,7 +29,7 @@ func newParser(input string) *parser {
 
 	p.elementMatchers = []foundMatchers{
 		{p.matchesLink, p.newLink},
-		{p.matchesFootnoteDefinition, p.makeFootnoteDefinition},
+		{p.matchesFootnoteReference, p.makeFootnoteReference},
 		{p.matchesBold, p.newBold},
 		{p.matchesItalic, p.newItalic},
 		{p.matchesVerbatim, p.newVerbatim},
@@ -170,7 +170,10 @@ func (p *parser) walk(parent ast.Node, current, stop int) {
 			p.makeUnorderedList(parent, current, end)
 			current = end
 			start = current
-
+		} else if found, end := p.matchesFootnoteDefinition(current); found {
+			p.makeFootnoteDefinition(parent, current, end)
+			current = end
+			start = current
 		} else if found, end := p.matchesHorizontalRule(current); found {
 			if parent.Type() != "Section" {
 				parent = findClosestSectionNode(parent, p.items[current:])

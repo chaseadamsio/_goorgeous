@@ -118,3 +118,31 @@ func (p *parser) matchesCode(current int) (found bool, end int) {
 		return currToken.IsTilde()
 	})
 }
+
+func (p *parser) newEnDash(parent ast.Node, start, end int) {
+	node := ast.NewEnDashNode(parent, p.items[start:end])
+	parent.Append(node)
+}
+
+func (p *parser) matchesEnDash(current int) (found bool, end int) {
+	if p.items[current].IsDash() &&
+		(current < len(p.items) && p.items[current+1].IsDash()) &&
+		!(current+1 < len(p.items) && p.items[current+2].IsDash()) {
+		return true, current + 2
+	}
+	return false, -1
+}
+
+func (p *parser) newMDash(parent ast.Node, start, end int) {
+	node := ast.NewMDashNode(parent, p.items[start:end])
+	parent.Append(node)
+}
+
+func (p *parser) matchesMDash(current int) (found bool, end int) {
+	if p.items[current].IsDash() &&
+		(current < len(p.items) && p.items[current+1].IsDash()) &&
+		(current+1 < len(p.items) && p.items[current+2].IsDash()) {
+		return true, current + 3
+	}
+	return false, -1
+}

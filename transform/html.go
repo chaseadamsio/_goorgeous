@@ -63,6 +63,11 @@ func walk(inAST []ast.Node) string {
 				out = append(out, processVerbatimNode(node))
 			case "Underline":
 				out = append(out, processUnderlineNode(node))
+			case "EnDash":
+				out = append(out, processEnDashNode(node))
+			case "MDash":
+				out = append(out, processMDashNode(node))
+
 			default:
 				out = append(out, node.Val)
 			}
@@ -184,4 +189,12 @@ func processStrikeThroughNode(node *ast.TextNode) string {
 func processUnderlineNode(node *ast.TextNode) string {
 	children := walk(node.ChildrenNodes)
 	return fmt.Sprintf("<span style=\"text-decoration:underline\">%s</span>", children)
+}
+
+func processMDashNode(node *ast.TextNode) string {
+	return fmt.Sprintf("&mdash;")
+}
+
+func processEnDashNode(node *ast.TextNode) string {
+	return fmt.Sprintf("&ndash;")
 }

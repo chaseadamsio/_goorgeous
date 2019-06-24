@@ -36,6 +36,8 @@ func newParser(input string) *parser {
 		{p.matchesStrikeThrough, p.newStrikeThrough},
 		{p.matchesUnderline, p.newUnderline},
 		{p.matchesCode, p.newCode},
+		{p.matchesEnDash, p.newEnDash},
+		{p.matchesMDash, p.newMDash},
 	}
 
 	return p

@@ -17,12 +17,96 @@
               "End": 19
             }
           ]
+        },
+        {
+          "NodeType": "Paragraph",
+          "Start": 21,
+          "End": 49,
+          "ChildrenNodes": [
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": "This has a ",
+              "Start": 21,
+              "End": 31
+            },
+            {
+              "NodeType": "EnDash",
+              "ChildrenNodes": null,
+              "Val": "--",
+              "Start": 32,
+              "End": 33
+            },
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": " few",
+              "Start": 34,
+              "End": 38
+            },
+            {
+              "NodeType": "EnDash",
+              "ChildrenNodes": null,
+              "Val": "--",
+              "Start": 38,
+              "End": 39
+            },
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": "endashes.",
+              "Start": 40,
+              "End": 49
+            }
+          ]
+        },
+        {
+          "NodeType": "Paragraph",
+          "Start": 51,
+          "End": 84,
+          "ChildrenNodes": [
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": "It also has a ",
+              "Start": 51,
+              "End": 64
+            },
+            {
+              "NodeType": "MDash",
+              "ChildrenNodes": null,
+              "Val": "---",
+              "Start": 65,
+              "End": 67
+            },
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": " few mdash",
+              "Start": 68,
+              "End": 78
+            },
+            {
+              "NodeType": "MDash",
+              "ChildrenNodes": null,
+              "Val": "---",
+              "Start": 78,
+              "End": 80
+            },
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": "es.",
+              "Start": 81,
+              "End": 84
+            }
+          ]
         }
       ],
       "Start": 19,
-      "End": 20
+      "End": 85
     }
   ],
   "Start": 0,
-  "End": 20
+  "End": 85
 }

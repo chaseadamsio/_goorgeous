@@ -41,6 +41,16 @@ func NewCodeNode(parent Node, items []lex.Item) *TextNode {
 	return node
 }
 
+func NewEnDashNode(parent Node, items []lex.Item) *TextNode {
+	node := newTextNode("EnDash", parent, items)
+	return node
+}
+
+func NewMDashNode(parent Node, items []lex.Item) *TextNode {
+	node := newTextNode("MDash", parent, items)
+	return node
+}
+
 func newTextNode(typ NodeType, parent Node, items []lex.Item) *TextNode {
 	var values []string
 	for _, item := range items {

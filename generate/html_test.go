@@ -30,7 +30,7 @@ func TestTransform(t *testing.T) {
 
 			snapshotPath := snapshotPath(filename)
 
-			out := TransformToHTML(ast)
+			out := GenerateHTML(ast)
 			fmt.Println(out)
 
 			if *update {

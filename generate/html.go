@@ -7,7 +7,7 @@ import (
 	"github.com/chaseadamsio/goorgeous/ast"
 )
 
-func TransformToHTML(root *ast.RootNode) string {
+func GenerateHTML(root *ast.RootNode) string {
 	return walk(root.Children())
 }
 

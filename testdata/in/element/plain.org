@@ -7,3 +7,7 @@ It also has a --- few mdash---es.
 this should be a code element followed by dashes: =code=---
 
 a dot in a code element such as =.git=, =.hg= or =.bash_profile= should still let it be a code element.
+
+this should be two separate code blocks with
+ either ~this~
+ or  ~that~ foo.

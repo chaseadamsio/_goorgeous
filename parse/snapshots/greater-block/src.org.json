@@ -65,12 +65,20 @@
           "Language": "bash",
           "Start": 413,
           "End": 464
+        },
+        {
+          "NodeType": "GreaterBlock",
+          "Name": "EXAMPLE",
+          "Value": "# this shouldn't crash ;_;\n# Create custom menu entries by defining a label and a link for\n# them. Since you can also link posts, you've the option the\n# place the links before or after them.\n#\n# E.g.: \"Home\" appears before all linked posts in the menu\n# and \"Tags\" / \"Categories\" after them.\n",
+          "Language": "",
+          "Start": 467,
+          "End": 789
         }
       ],
       "Start": 0,
-      "End": 465
+      "End": 790
     }
   ],
   "Start": 0,
-  "End": 465
+  "End": 790
 }

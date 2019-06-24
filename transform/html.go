@@ -40,12 +40,25 @@ func walk(inAST []ast.Node) string {
 			}
 		case *ast.TableCellNode:
 			out = append(out, processTableCellNode(node))
+		case *ast.GreaterBlockNode:
+			switch node.Name {
+			case "SRC":
+				out = append(out, processGreaterBlockNode(node))
+			case "QUOTE":
+				out = append(out, processQuoteBlockNode(node))
+			case "VERSE":
+				out = append(out, processVerseBlockNode(node))
+			default:
+				out = append(out, processSpecialGreaterBlockNode(node))
+			}
 		case *ast.TextNode:
 			switch node.NodeType {
 			case "Bold":
 				out = append(out, processBoldNode(node))
 			case "Italic":
 				out = append(out, processItalicNode(node))
+			case "Code":
+				fallthrough
 			case "Verbatim":
 				out = append(out, processVerbatimNode(node))
 			case "Underline":
@@ -115,6 +128,29 @@ func processTableRowNode(node *ast.TableRowNode) string {
 func processTableCellNode(node *ast.TableCellNode) string {
 	children := walk(node.ChildrenNodes)
 	return fmt.Sprintf("<td>%s</td>", children)
+}
+
+func processGreaterBlockNode(node *ast.GreaterBlockNode) string {
+	className := "src"
+	if node.Language != "" {
+		className = className + " " + node.Language
+	}
+
+	return fmt.Sprintf("<pre class=\"%s\">%s</pre>", className, node.Value)
+}
+
+func processQuoteBlockNode(node *ast.GreaterBlockNode) string {
+	return fmt.Sprintf("<blockquote><p>%s</p></blockquote", node.Value)
+}
+
+func processVerseBlockNode(node *ast.GreaterBlockNode) string {
+	children := strings.Split(node.Value, "\n")
+	inner := strings.Join(children, "<br />\n")
+	return fmt.Sprintf("<div class=\"verse\">%s</div>", inner)
+}
+
+func processSpecialGreaterBlockNode(node *ast.GreaterBlockNode) string {
+	return fmt.Sprintf("<div class=\"%s\">%s</div>", node.Name, node.Value)
 }
 
 func processLinkNode(node *ast.LinkNode) string {

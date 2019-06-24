@@ -43,6 +43,8 @@ const (
 
 	HeadersBasic = "header/basic.org"
 
+	GreaterBlockSrc = "greater-block/src.org"
+
 	LinkSelfDescriptive = "link/self-descriptive.org"
 	LinkStandard        = "link/standard.org"
 	LinkBoth            = "link/both-links.org"
@@ -89,6 +91,7 @@ var Tests = []string{
 	Headline1WithContent,
 	HeadlineAllTheOptions,
 	HeadersBasic,
+	GreaterBlockSrc,
 	LinkStandard,
 	LinkSelfDescriptive,
 	LinkBoth,

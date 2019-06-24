@@ -6,11 +6,12 @@ import (
 
 type GreaterBlockNode struct {
 	NodeType
-	parent Node
-	Key    string
-	Value  string
-	Start  int
-	End    int
+	parent   Node
+	Name     string
+	Value    string
+	Language string
+	Start    int
+	End      int
 }
 
 func NewGreaterBlockNode(parent Node, items []lex.Item) *GreaterBlockNode {
@@ -30,7 +31,7 @@ func (n *GreaterBlockNode) Type() NodeType {
 
 // Type returns the type of node this is
 func (n *GreaterBlockNode) String() string {
-	return n.Key + ":" + n.Value
+	return n.Value
 }
 
 func (n GreaterBlockNode) Children() []Node {

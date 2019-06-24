@@ -1,0 +1,60 @@
+{
+  "NodeType": "Root",
+  "ChildrenNodes": [
+    {
+      "NodeType": "Section",
+      "ChildrenNodes": [
+        {
+          "NodeType": "GreaterBlock",
+          "Name": "SRC",
+          "Value": "console.log(\"hello world!\")\n",
+          "Language": "javascript",
+          "Start": 0,
+          "End": 60
+        },
+        {
+          "NodeType": "Paragraph",
+          "Start": 62,
+          "End": 75,
+          "ChildrenNodes": [
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": "test new line",
+              "Start": 62,
+              "End": 75
+            }
+          ]
+        },
+        {
+          "NodeType": "GreaterBlock",
+          "Name": "QUOTE",
+          "Value": "console.log(\"hello world!\")\n",
+          "Language": "",
+          "Start": 77,
+          "End": 141
+        },
+        {
+          "NodeType": "GreaterBlock",
+          "Name": "NOTDEFINED",
+          "Value": "console.log(\"hello world!\")\n",
+          "Language": "",
+          "Start": 143,
+          "End": 217
+        },
+        {
+          "NodeType": "GreaterBlock",
+          "Name": "VERSE",
+          "Value": "Earth’s cry ascends,\nBut before it touches Heaven’s Eye,\n It returns.\n",
+          "Language": "",
+          "Start": 219,
+          "End": 320
+        }
+      ],
+      "Start": 0,
+      "End": 321
+    }
+  ],
+  "Start": 0,
+  "End": 321
+}

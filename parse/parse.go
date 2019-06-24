@@ -210,11 +210,14 @@ func (p *parser) walk(parent ast.Node, current, stop int) {
 			start = current
 
 		} else if token.IsNewline() {
-			if start == current {
-				current++
-				start = current
-			}
+
 			if current+1 < stop && (p.items[current+1].IsNewline() || p.items[current+1].IsEOF()) {
+				if start == current {
+					current++
+					start = current
+					continue
+				}
+
 				if p.items[start].IsNewline() && p.items[start+1].IsEOF() {
 					break
 				}

@@ -1,1 +1,5 @@
 */=this is bold, italic and verbatim=/*
+
+This has =a verbatim element=.
+
+This has a ~code element~.

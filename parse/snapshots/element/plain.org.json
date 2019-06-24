@@ -137,12 +137,92 @@
               "End": 144
             }
           ]
+        },
+        {
+          "NodeType": "Paragraph",
+          "Start": 147,
+          "End": 250,
+          "ChildrenNodes": [
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": "a dot in a code element such as ",
+              "Start": 147,
+              "End": 178
+            },
+            {
+              "NodeType": "Verbatim",
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": ".git",
+                  "Start": 180,
+                  "End": 184
+                }
+              ],
+              "Val": "=.git=",
+              "Start": 179,
+              "End": 184
+            },
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": ", ",
+              "Start": 185,
+              "End": 186
+            },
+            {
+              "NodeType": "Verbatim",
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": ".hg",
+                  "Start": 188,
+                  "End": 191
+                }
+              ],
+              "Val": "=.hg=",
+              "Start": 187,
+              "End": 191
+            },
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": " or ",
+              "Start": 192,
+              "End": 195
+            },
+            {
+              "NodeType": "Verbatim",
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": ".bash_profile",
+                  "Start": 197,
+                  "End": 210
+                }
+              ],
+              "Val": "=.bash_profile=",
+              "Start": 196,
+              "End": 210
+            },
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": " should still let it be a code element.",
+              "Start": 211,
+              "End": 250
+            }
+          ]
         }
       ],
       "Start": 19,
-      "End": 146
+      "End": 251
     }
   ],
   "Start": 0,
-  "End": 146
+  "End": 251
 }

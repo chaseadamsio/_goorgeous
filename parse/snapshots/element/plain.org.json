@@ -101,12 +101,48 @@
               "End": 84
             }
           ]
+        },
+        {
+          "NodeType": "Paragraph",
+          "Start": 86,
+          "End": 144,
+          "ChildrenNodes": [
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": "this should be a code element followed by dashes: ",
+              "Start": 86,
+              "End": 135
+            },
+            {
+              "NodeType": "Verbatim",
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "code",
+                  "Start": 137,
+                  "End": 141
+                }
+              ],
+              "Val": "=code=",
+              "Start": 136,
+              "End": 141
+            },
+            {
+              "NodeType": "MDash",
+              "ChildrenNodes": null,
+              "Val": "---",
+              "Start": 142,
+              "End": 144
+            }
+          ]
         }
       ],
       "Start": 19,
-      "End": 85
+      "End": 146
     }
   ],
   "Start": 0,
-  "End": 85
+  "End": 146
 }

@@ -3,3 +3,5 @@ This is plain text.
 This has a -- few--endashes.
 
 It also has a --- few mdash---es.
+
+this should be a code element followed by dashes: =code=---

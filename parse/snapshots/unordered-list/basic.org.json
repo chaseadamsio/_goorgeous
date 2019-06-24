@@ -73,8 +73,64 @@
           ]
         }
       ]
+    },
+    {
+      "NodeType": "List",
+      "ListType": "UNORDERED",
+      "Value": "",
+      "Start": 39,
+      "End": 130,
+      "ChildrenNodes": [
+        {
+          "NodeType": "ListItem",
+          "Bullet": "-",
+          "Value": "- this should be the same\n    list item",
+          "Start": 39,
+          "End": 78,
+          "ChildrenNodes": [
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": "this should be the same\n    list item",
+              "Start": 41,
+              "End": 78
+            }
+          ]
+        },
+        {
+          "NodeType": "ListItem",
+          "Bullet": "-",
+          "Value": "- and this list item should\n    =preserve-verbatim=",
+          "Start": 79,
+          "End": 129,
+          "ChildrenNodes": [
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": "and this list item should\n    ",
+              "Start": 81,
+              "End": 110
+            },
+            {
+              "NodeType": "Verbatim",
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "preserve-verbatim",
+                  "Start": 112,
+                  "End": 129
+                }
+              ],
+              "Val": "=preserve-verbatim=",
+              "Start": 111,
+              "End": 129
+            }
+          ]
+        }
+      ]
     }
   ],
   "Start": 0,
-  "End": 37
+  "End": 131
 }

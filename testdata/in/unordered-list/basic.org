@@ -2,3 +2,9 @@
 - bananas
 - oranges
 - pears
+
+
+- this should be the same
+    list item
+- and this list item should
+    =preserve-verbatim=

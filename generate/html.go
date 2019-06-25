@@ -90,6 +90,8 @@ func (doc *HTMLDocument) walk(inAST []ast.Node) string {
 			default:
 				out = append(out, doc.processSpecialGreaterBlockNode(node))
 			}
+		case *ast.FixedWidthNode:
+			out = append(out, doc.processFixedWidthNode(node))
 		case *ast.FootnoteReferenceNode:
 			out = append(out, doc.processFootnoteReferenceNode(node))
 		case *ast.TextNode:
@@ -206,6 +208,11 @@ func (doc *HTMLDocument) processVerseBlockNode(node *ast.GreaterBlockNode) strin
 
 func (doc *HTMLDocument) processSpecialGreaterBlockNode(node *ast.GreaterBlockNode) string {
 	return fmt.Sprintf("<div class=\"%s\">%s</div>\n", node.Name, node.Value)
+}
+
+func (doc *HTMLDocument) processFixedWidthNode(node *ast.FixedWidthNode) string {
+
+	return fmt.Sprintf("<pre class=\"example\">\n%s\n</pre>\n", node.Value)
 }
 
 func (doc *HTMLDocument) processLinkNode(node *ast.LinkNode) string {

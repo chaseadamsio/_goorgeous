@@ -51,3 +51,20 @@ echo "bar"
   #+BEGIN_SRC sh
     echo "foo"
   #+END_SRC
+
+: Fixed width area
+
+: Line 1
+:    Line 2
+
+
+Here is an example
+    : Some example from a text file.
+
+Here is another example
+    :             Some example from a text file.
+
+
+#+RESULTS[26164fcdb01a7c6a9329d20d4754e15f7739ad20]:
+: Hello, World!
+: The output of this code can be seen in the post.

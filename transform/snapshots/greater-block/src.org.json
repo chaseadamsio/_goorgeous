@@ -95,13 +95,78 @@
             "Language": "sh",
             "Start": 843,
             "End": 884
+          },
+          {
+            "NodeType": "FixedWidth",
+            "Value": " Fixed width area",
+            "Start": 886,
+            "End": 904
+          },
+          {
+            "NodeType": "FixedWidth",
+            "Value": " Line 1\n    Line 2",
+            "Start": 906,
+            "End": 926
+          },
+          {
+            "NodeType": "Paragraph",
+            "Start": 929,
+            "End": 951,
+            "ChildrenNodes": [
+              {
+                "NodeType": "Text",
+                "ChildrenNodes": null,
+                "Val": "Here is an example\n    ",
+                "Start": 929,
+                "End": 951
+              }
+            ]
+          },
+          {
+            "NodeType": "FixedWidth",
+            "Value": " Some example from a text file.",
+            "Start": 952,
+            "End": 984
+          },
+          {
+            "NodeType": "Paragraph",
+            "Start": 986,
+            "End": 1013,
+            "ChildrenNodes": [
+              {
+                "NodeType": "Text",
+                "ChildrenNodes": null,
+                "Val": "Here is another example\n    ",
+                "Start": 986,
+                "End": 1013
+              }
+            ]
+          },
+          {
+            "NodeType": "FixedWidth",
+            "Value": "             Some example from a text file.",
+            "Start": 1014,
+            "End": 1058
+          },
+          {
+            "NodeType": "Keyword",
+            "Key": "RESULTS",
+            "Value": "",
+            "Start": 1061,
+            "End": 1112
+          },
+          {
+            "NodeType": "FixedWidth",
+            "Value": " Hello, World!\n The output of this code can be seen in the post.",
+            "Start": 1114,
+            "End": 1180
           }
         ],
         "Start": 0,
-        "End": 885
+        "End": 1181
       }
     ],
     "Start": 0,
-    "End": 885
+    "End": 1181
   }
 }

@@ -47,6 +47,7 @@ func newParser(input string) *parser {
 		{p.matchesHorizontalRule, p.makeHorizontalRule},
 		{p.matchesTable, p.makeTable},
 		{p.matchesGreaterBlock, p.makeGreaterBlock},
+		{p.matchesFixedWidth, p.makeFixedWidth},
 		{p.matchesKeyword, p.makeKeyword},
 		{p.matchesFootnoteDefinition, p.makeFootnoteDefinition},
 	}
@@ -260,6 +261,5 @@ WalkLoop:
 		} else {
 			current++
 		}
-
 	}
 }

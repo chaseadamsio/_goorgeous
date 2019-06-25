@@ -1,0 +1,150 @@
+{
+  "TOC": [
+    null
+  ],
+  "FootnoteDefinitions": {},
+  "Root": {
+    "NodeType": "Root",
+    "ChildrenNodes": [
+      {
+        "NodeType": "Section",
+        "ChildrenNodes": [
+          null,
+          {
+            "NodeType": "List",
+            "ListType": "UNORDERED",
+            "Value": "",
+            "Start": 0,
+            "End": 36,
+            "ChildrenNodes": [
+              {
+                "NodeType": "ListItem",
+                "Bullet": "-",
+                "Value": "- apples",
+                "Start": 0,
+                "End": 8,
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "apples",
+                    "Start": 2,
+                    "End": 8
+                  }
+                ]
+              },
+              {
+                "NodeType": "ListItem",
+                "Bullet": "-",
+                "Value": "- bananas",
+                "Start": 9,
+                "End": 18,
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "bananas",
+                    "Start": 11,
+                    "End": 18
+                  }
+                ]
+              },
+              {
+                "NodeType": "ListItem",
+                "Bullet": "-",
+                "Value": "- oranges",
+                "Start": 19,
+                "End": 28,
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "oranges",
+                    "Start": 21,
+                    "End": 28
+                  }
+                ]
+              },
+              {
+                "NodeType": "ListItem",
+                "Bullet": "-",
+                "Value": "- pears",
+                "Start": 29,
+                "End": 36,
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "pears",
+                    "Start": 31,
+                    "End": 36
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "NodeType": "List",
+            "ListType": "UNORDERED",
+            "Value": "",
+            "Start": 39,
+            "End": 130,
+            "ChildrenNodes": [
+              {
+                "NodeType": "ListItem",
+                "Bullet": "-",
+                "Value": "- this should be the same\n    list item",
+                "Start": 39,
+                "End": 78,
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "this should be the same\n    list item",
+                    "Start": 41,
+                    "End": 78
+                  }
+                ]
+              },
+              {
+                "NodeType": "ListItem",
+                "Bullet": "-",
+                "Value": "- and this list item should\n    =preserve-verbatim=",
+                "Start": 79,
+                "End": 129,
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "and this list item should\n    ",
+                    "Start": 81,
+                    "End": 110
+                  },
+                  {
+                    "NodeType": "Verbatim",
+                    "ChildrenNodes": [
+                      {
+                        "NodeType": "Text",
+                        "ChildrenNodes": null,
+                        "Val": "preserve-verbatim",
+                        "Start": 112,
+                        "End": 129
+                      }
+                    ],
+                    "Val": "=preserve-verbatim=",
+                    "Start": 111,
+                    "End": 129
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "Start": 0,
+        "End": 131
+      }
+    ],
+    "Start": 0,
+    "End": 131
+  }
+}

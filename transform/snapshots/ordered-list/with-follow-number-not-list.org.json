@@ -1,0 +1,108 @@
+{
+  "TOC": [
+    null
+  ],
+  "FootnoteDefinitions": {},
+  "Root": {
+    "NodeType": "Root",
+    "ChildrenNodes": [
+      {
+        "NodeType": "Section",
+        "ChildrenNodes": [
+          null,
+          {
+            "NodeType": "List",
+            "ListType": "ORDERED",
+            "Value": "",
+            "Start": 0,
+            "End": 40,
+            "ChildrenNodes": [
+              {
+                "NodeType": "ListItem",
+                "Bullet": "1.",
+                "Value": "1. apples",
+                "Start": 0,
+                "End": 9,
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "apples",
+                    "Start": 3,
+                    "End": 9
+                  }
+                ]
+              },
+              {
+                "NodeType": "ListItem",
+                "Bullet": "2.",
+                "Value": "2. bananas",
+                "Start": 10,
+                "End": 20,
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "bananas",
+                    "Start": 13,
+                    "End": 20
+                  }
+                ]
+              },
+              {
+                "NodeType": "ListItem",
+                "Bullet": "3.",
+                "Value": "3. oranges",
+                "Start": 21,
+                "End": 31,
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "oranges",
+                    "Start": 24,
+                    "End": 31
+                  }
+                ]
+              },
+              {
+                "NodeType": "ListItem",
+                "Bullet": "4.",
+                "Value": "4. pears",
+                "Start": 32,
+                "End": 40,
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "pears",
+                    "Start": 35,
+                    "End": 40
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "NodeType": "Paragraph",
+            "Start": 41,
+            "End": 50,
+            "ChildrenNodes": [
+              {
+                "NodeType": "Text",
+                "ChildrenNodes": null,
+                "Val": "5.peaches",
+                "Start": 41,
+                "End": 50
+              }
+            ]
+          }
+        ],
+        "Start": 0,
+        "End": 51
+      }
+    ],
+    "Start": 0,
+    "End": 51
+  }
+}

@@ -1,0 +1,293 @@
+{
+  "TOC": [
+    null
+  ],
+  "FootnoteDefinitions": {},
+  "Root": {
+    "NodeType": "Root",
+    "ChildrenNodes": [
+      {
+        "NodeType": "Section",
+        "ChildrenNodes": [
+          null,
+          {
+            "NodeType": "Paragraph",
+            "Start": 0,
+            "End": 19,
+            "ChildrenNodes": [
+              {
+                "NodeType": "Text",
+                "ChildrenNodes": null,
+                "Val": "This is plain text.",
+                "Start": 0,
+                "End": 19
+              }
+            ]
+          },
+          {
+            "NodeType": "Paragraph",
+            "Start": 21,
+            "End": 49,
+            "ChildrenNodes": [
+              {
+                "NodeType": "Text",
+                "ChildrenNodes": null,
+                "Val": "This has a ",
+                "Start": 21,
+                "End": 31
+              },
+              {
+                "NodeType": "EnDash",
+                "ChildrenNodes": null,
+                "Val": "--",
+                "Start": 32,
+                "End": 33
+              },
+              {
+                "NodeType": "Text",
+                "ChildrenNodes": null,
+                "Val": " few",
+                "Start": 34,
+                "End": 38
+              },
+              {
+                "NodeType": "EnDash",
+                "ChildrenNodes": null,
+                "Val": "--",
+                "Start": 38,
+                "End": 39
+              },
+              {
+                "NodeType": "Text",
+                "ChildrenNodes": null,
+                "Val": "endashes.",
+                "Start": 40,
+                "End": 49
+              }
+            ]
+          },
+          {
+            "NodeType": "Paragraph",
+            "Start": 51,
+            "End": 84,
+            "ChildrenNodes": [
+              {
+                "NodeType": "Text",
+                "ChildrenNodes": null,
+                "Val": "It also has a ",
+                "Start": 51,
+                "End": 64
+              },
+              {
+                "NodeType": "MDash",
+                "ChildrenNodes": null,
+                "Val": "---",
+                "Start": 65,
+                "End": 67
+              },
+              {
+                "NodeType": "Text",
+                "ChildrenNodes": null,
+                "Val": " few mdash",
+                "Start": 68,
+                "End": 78
+              },
+              {
+                "NodeType": "MDash",
+                "ChildrenNodes": null,
+                "Val": "---",
+                "Start": 78,
+                "End": 80
+              },
+              {
+                "NodeType": "Text",
+                "ChildrenNodes": null,
+                "Val": "es.",
+                "Start": 81,
+                "End": 84
+              }
+            ]
+          },
+          {
+            "NodeType": "Paragraph",
+            "Start": 86,
+            "End": 144,
+            "ChildrenNodes": [
+              {
+                "NodeType": "Text",
+                "ChildrenNodes": null,
+                "Val": "this should be a code element followed by dashes: ",
+                "Start": 86,
+                "End": 135
+              },
+              {
+                "NodeType": "Verbatim",
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "code",
+                    "Start": 137,
+                    "End": 141
+                  }
+                ],
+                "Val": "=code=",
+                "Start": 136,
+                "End": 141
+              },
+              {
+                "NodeType": "MDash",
+                "ChildrenNodes": null,
+                "Val": "---",
+                "Start": 142,
+                "End": 144
+              }
+            ]
+          },
+          {
+            "NodeType": "Paragraph",
+            "Start": 147,
+            "End": 250,
+            "ChildrenNodes": [
+              {
+                "NodeType": "Text",
+                "ChildrenNodes": null,
+                "Val": "a dot in a code element such as ",
+                "Start": 147,
+                "End": 178
+              },
+              {
+                "NodeType": "Verbatim",
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": ".git",
+                    "Start": 180,
+                    "End": 184
+                  }
+                ],
+                "Val": "=.git=",
+                "Start": 179,
+                "End": 184
+              },
+              {
+                "NodeType": "Text",
+                "ChildrenNodes": null,
+                "Val": ", ",
+                "Start": 185,
+                "End": 186
+              },
+              {
+                "NodeType": "Verbatim",
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": ".hg",
+                    "Start": 188,
+                    "End": 191
+                  }
+                ],
+                "Val": "=.hg=",
+                "Start": 187,
+                "End": 191
+              },
+              {
+                "NodeType": "Text",
+                "ChildrenNodes": null,
+                "Val": " or ",
+                "Start": 192,
+                "End": 195
+              },
+              {
+                "NodeType": "Verbatim",
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": ".bash_profile",
+                    "Start": 197,
+                    "End": 210
+                  }
+                ],
+                "Val": "=.bash_profile=",
+                "Start": 196,
+                "End": 210
+              },
+              {
+                "NodeType": "Text",
+                "ChildrenNodes": null,
+                "Val": " should still let it be a code element.",
+                "Start": 211,
+                "End": 250
+              }
+            ]
+          },
+          {
+            "NodeType": "Paragraph",
+            "Start": 252,
+            "End": 328,
+            "ChildrenNodes": [
+              {
+                "NodeType": "Text",
+                "ChildrenNodes": null,
+                "Val": "this should be two separate code blocks with\n either ",
+                "Start": 252,
+                "End": 304
+              },
+              {
+                "NodeType": "Code",
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "this",
+                    "Start": 306,
+                    "End": 310
+                  }
+                ],
+                "Val": "~this~",
+                "Start": 305,
+                "End": 310
+              },
+              {
+                "NodeType": "Text",
+                "ChildrenNodes": null,
+                "Val": "\n or  ",
+                "Start": 311,
+                "End": 316
+              },
+              {
+                "NodeType": "Code",
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "that",
+                    "Start": 318,
+                    "End": 322
+                  }
+                ],
+                "Val": "~that~",
+                "Start": 317,
+                "End": 322
+              },
+              {
+                "NodeType": "Text",
+                "ChildrenNodes": null,
+                "Val": " foo.",
+                "Start": 323,
+                "End": 328
+              }
+            ]
+          }
+        ],
+        "Start": 19,
+        "End": 329
+      }
+    ],
+    "Start": 0,
+    "End": 329
+  }
+}

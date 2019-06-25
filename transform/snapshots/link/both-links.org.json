@@ -1,0 +1,541 @@
+{
+  "TOC": [
+    null
+  ],
+  "FootnoteDefinitions": {
+    "1": {
+      "NodeType": "FootnoteDefinition",
+      "Label": "1",
+      "ID": 1,
+      "Start": 386,
+      "End": 483,
+      "ChildrenNodes": [
+        null,
+        {
+          "NodeType": "Text",
+          "ChildrenNodes": null,
+          "Val": " this is a footnote with a ",
+          "Start": 392,
+          "End": 418
+        },
+        {
+          "NodeType": "Link",
+          "Link": "https://chaseadams.io",
+          "Start": 419,
+          "End": 449,
+          "ChildrenNodes": [
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": "link",
+              "Start": 444,
+              "End": 448
+            }
+          ]
+        },
+        {
+          "NodeType": "Text",
+          "ChildrenNodes": null,
+          "Val": " and ",
+          "Start": 450,
+          "End": 454
+        },
+        {
+          "NodeType": "Bold",
+          "ChildrenNodes": [
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": "bold ",
+              "Start": 456,
+              "End": 460
+            },
+            {
+              "NodeType": "Italic",
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "italic ",
+                  "Start": 462,
+                  "End": 468
+                },
+                {
+                  "NodeType": "Verbatim",
+                  "ChildrenNodes": [
+                    {
+                      "NodeType": "Text",
+                      "ChildrenNodes": null,
+                      "Val": "code",
+                      "Start": 470,
+                      "End": 474
+                    }
+                  ],
+                  "Val": "=code=",
+                  "Start": 469,
+                  "End": 474
+                }
+              ],
+              "Val": "/italic =code=/",
+              "Start": 461,
+              "End": 475
+            }
+          ],
+          "Val": "*bold /italic =code=/*",
+          "Start": 455,
+          "End": 476
+        },
+        {
+          "NodeType": "Text",
+          "ChildrenNodes": null,
+          "Val": " text.",
+          "Start": 477,
+          "End": 483
+        }
+      ]
+    },
+    "2": {
+      "NodeType": "FootnoteDefinition",
+      "Label": "",
+      "ID": 4,
+      "Start": 337,
+      "End": 383,
+      "ChildrenNodes": null
+    },
+    "3": {
+      "NodeType": "FootnoteDefinition",
+      "Label": "",
+      "ID": 3,
+      "Start": 223,
+      "End": 269,
+      "ChildrenNodes": null
+    },
+    "foo_bar": {
+      "NodeType": "FootnoteDefinition",
+      "Label": "foo_bar",
+      "ID": 2,
+      "Start": 484,
+      "End": 587,
+      "ChildrenNodes": [
+        null,
+        {
+          "NodeType": "Text",
+          "ChildrenNodes": null,
+          "Val": " this is a footnote with a ",
+          "Start": 496,
+          "End": 522
+        },
+        {
+          "NodeType": "Link",
+          "Link": "https://chaseadams.io",
+          "Start": 523,
+          "End": 553,
+          "ChildrenNodes": [
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": "link",
+              "Start": 548,
+              "End": 552
+            }
+          ]
+        },
+        {
+          "NodeType": "Text",
+          "ChildrenNodes": null,
+          "Val": " and ",
+          "Start": 554,
+          "End": 558
+        },
+        {
+          "NodeType": "Bold",
+          "ChildrenNodes": [
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": "bold ",
+              "Start": 560,
+              "End": 564
+            },
+            {
+              "NodeType": "Italic",
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "italic ",
+                  "Start": 566,
+                  "End": 572
+                },
+                {
+                  "NodeType": "Verbatim",
+                  "ChildrenNodes": [
+                    {
+                      "NodeType": "Text",
+                      "ChildrenNodes": null,
+                      "Val": "code",
+                      "Start": 574,
+                      "End": 578
+                    }
+                  ],
+                  "Val": "=code=",
+                  "Start": 573,
+                  "End": 578
+                }
+              ],
+              "Val": "/italic =code=/",
+              "Start": 565,
+              "End": 579
+            }
+          ],
+          "Val": "*bold /italic =code=/*",
+          "Start": 559,
+          "End": 580
+        },
+        {
+          "NodeType": "Text",
+          "ChildrenNodes": null,
+          "Val": " text.",
+          "Start": 581,
+          "End": 587
+        }
+      ]
+    }
+  },
+  "Root": {
+    "NodeType": "Root",
+    "ChildrenNodes": [
+      {
+        "NodeType": "Section",
+        "ChildrenNodes": [
+          null,
+          {
+            "NodeType": "Paragraph",
+            "Start": 0,
+            "End": 43,
+            "ChildrenNodes": [
+              {
+                "NodeType": "Link",
+                "Link": "https://chaseadams.io",
+                "Start": 0,
+                "End": 43,
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "hello Chase Adams",
+                    "Start": 25,
+                    "End": 42
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "NodeType": "Paragraph",
+            "Start": 46,
+            "End": 70,
+            "ChildrenNodes": [
+              {
+                "NodeType": "Link",
+                "Link": "https://chaseadams.io",
+                "Start": 46,
+                "End": 70,
+                "ChildrenNodes": null
+              }
+            ]
+          },
+          {
+            "NodeType": "Paragraph",
+            "Start": 73,
+            "End": 153,
+            "ChildrenNodes": [
+              {
+                "NodeType": "Text",
+                "ChildrenNodes": null,
+                "Val": "This is a line with a footnote.",
+                "Start": 73,
+                "End": 104
+              },
+              {
+                "NodeType": "FootnoteReference",
+                "ReferenceType": "STANDARD",
+                "ID": 0,
+                "Label": "1",
+                "Start": 104,
+                "End": 109,
+                "ChildrenNodes": null
+              },
+              {
+                "NodeType": "Text",
+                "ChildrenNodes": null,
+                "Val": "\nThis is a line with a footnote.",
+                "Start": 110,
+                "End": 142
+              },
+              {
+                "NodeType": "FootnoteReference",
+                "ReferenceType": "STANDARD",
+                "ID": 0,
+                "Label": "foo_bar",
+                "Start": 142,
+                "End": 153,
+                "ChildrenNodes": null
+              }
+            ]
+          },
+          {
+            "NodeType": "Paragraph",
+            "Start": 156,
+            "End": 269,
+            "ChildrenNodes": [
+              {
+                "NodeType": "Text",
+                "ChildrenNodes": null,
+                "Val": "This is another footnote, but defined inline without a label. ",
+                "Start": 156,
+                "End": 217
+              },
+              {
+                "NodeType": "FootnoteReference",
+                "ReferenceType": "INLINE",
+                "ID": 3,
+                "Label": "3",
+                "Start": 218,
+                "End": 269,
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "FootnoteDefinition",
+                    "Label": "",
+                    "ID": 3,
+                    "Start": 223,
+                    "End": 269,
+                    "ChildrenNodes": null
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "NodeType": "Paragraph",
+            "Start": 272,
+            "End": 383,
+            "ChildrenNodes": [
+              {
+                "NodeType": "Text",
+                "ChildrenNodes": null,
+                "Val": "This is another footnote, but defined inline with a label. ",
+                "Start": 272,
+                "End": 330
+              },
+              {
+                "NodeType": "FootnoteReference",
+                "ReferenceType": "INLINE",
+                "ID": 4,
+                "Label": "2",
+                "Start": 331,
+                "End": 383,
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "FootnoteDefinition",
+                    "Label": "",
+                    "ID": 4,
+                    "Start": 337,
+                    "End": 383,
+                    "ChildrenNodes": null
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "Start": 44,
+        "End": 588
+      },
+      {
+        "NodeType": "FootnoteDefinition",
+        "Label": "1",
+        "ID": 1,
+        "Start": 386,
+        "End": 483,
+        "ChildrenNodes": [
+          null,
+          {
+            "NodeType": "Text",
+            "ChildrenNodes": null,
+            "Val": " this is a footnote with a ",
+            "Start": 392,
+            "End": 418
+          },
+          {
+            "NodeType": "Link",
+            "Link": "https://chaseadams.io",
+            "Start": 419,
+            "End": 449,
+            "ChildrenNodes": [
+              {
+                "NodeType": "Text",
+                "ChildrenNodes": null,
+                "Val": "link",
+                "Start": 444,
+                "End": 448
+              }
+            ]
+          },
+          {
+            "NodeType": "Text",
+            "ChildrenNodes": null,
+            "Val": " and ",
+            "Start": 450,
+            "End": 454
+          },
+          {
+            "NodeType": "Bold",
+            "ChildrenNodes": [
+              {
+                "NodeType": "Text",
+                "ChildrenNodes": null,
+                "Val": "bold ",
+                "Start": 456,
+                "End": 460
+              },
+              {
+                "NodeType": "Italic",
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "italic ",
+                    "Start": 462,
+                    "End": 468
+                  },
+                  {
+                    "NodeType": "Verbatim",
+                    "ChildrenNodes": [
+                      {
+                        "NodeType": "Text",
+                        "ChildrenNodes": null,
+                        "Val": "code",
+                        "Start": 470,
+                        "End": 474
+                      }
+                    ],
+                    "Val": "=code=",
+                    "Start": 469,
+                    "End": 474
+                  }
+                ],
+                "Val": "/italic =code=/",
+                "Start": 461,
+                "End": 475
+              }
+            ],
+            "Val": "*bold /italic =code=/*",
+            "Start": 455,
+            "End": 476
+          },
+          {
+            "NodeType": "Text",
+            "ChildrenNodes": null,
+            "Val": " text.",
+            "Start": 477,
+            "End": 483
+          }
+        ]
+      },
+      {
+        "NodeType": "FootnoteDefinition",
+        "Label": "foo_bar",
+        "ID": 2,
+        "Start": 484,
+        "End": 587,
+        "ChildrenNodes": [
+          null,
+          {
+            "NodeType": "Text",
+            "ChildrenNodes": null,
+            "Val": " this is a footnote with a ",
+            "Start": 496,
+            "End": 522
+          },
+          {
+            "NodeType": "Link",
+            "Link": "https://chaseadams.io",
+            "Start": 523,
+            "End": 553,
+            "ChildrenNodes": [
+              {
+                "NodeType": "Text",
+                "ChildrenNodes": null,
+                "Val": "link",
+                "Start": 548,
+                "End": 552
+              }
+            ]
+          },
+          {
+            "NodeType": "Text",
+            "ChildrenNodes": null,
+            "Val": " and ",
+            "Start": 554,
+            "End": 558
+          },
+          {
+            "NodeType": "Bold",
+            "ChildrenNodes": [
+              {
+                "NodeType": "Text",
+                "ChildrenNodes": null,
+                "Val": "bold ",
+                "Start": 560,
+                "End": 564
+              },
+              {
+                "NodeType": "Italic",
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "italic ",
+                    "Start": 566,
+                    "End": 572
+                  },
+                  {
+                    "NodeType": "Verbatim",
+                    "ChildrenNodes": [
+                      {
+                        "NodeType": "Text",
+                        "ChildrenNodes": null,
+                        "Val": "code",
+                        "Start": 574,
+                        "End": 578
+                      }
+                    ],
+                    "Val": "=code=",
+                    "Start": 573,
+                    "End": 578
+                  }
+                ],
+                "Val": "/italic =code=/",
+                "Start": 565,
+                "End": 579
+              }
+            ],
+            "Val": "*bold /italic =code=/*",
+            "Start": 559,
+            "End": 580
+          },
+          {
+            "NodeType": "Text",
+            "ChildrenNodes": null,
+            "Val": " text.",
+            "Start": 581,
+            "End": 587
+          }
+        ]
+      }
+    ],
+    "Start": 0,
+    "End": 588
+  }
+}

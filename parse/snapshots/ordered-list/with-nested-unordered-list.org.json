@@ -2,154 +2,154 @@
   "NodeType": "Root",
   "ChildrenNodes": [
     {
-      "NodeType": "List",
-      "ListType": "ORDERED",
-      "Value": "",
-      "Start": 0,
-      "End": 113,
+      "NodeType": "Section",
       "ChildrenNodes": [
         {
-          "NodeType": "ListItem",
-          "Bullet": "1.",
-          "Value": "1. apples",
+          "NodeType": "List",
+          "ListType": "ORDERED",
+          "Value": "",
           "Start": 0,
-          "End": 9,
+          "End": 113,
           "ChildrenNodes": [
             {
-              "NodeType": "Text",
-              "ChildrenNodes": null,
-              "Val": "apples",
-              "Start": 3,
-              "End": 9
-            }
-          ]
-        },
-        {
-          "NodeType": "ListItem",
-          "Bullet": "2.",
-          "Value": "2. bananas",
-          "Start": 10,
-          "End": 20,
-          "ChildrenNodes": [
-            {
-              "NodeType": "Text",
-              "ChildrenNodes": null,
-              "Val": "bananas",
-              "Start": 13,
-              "End": 20
-            },
-            {
-              "NodeType": "List",
-              "ListType": "UNORDERED",
-              "Value": "",
-              "Start": 21,
-              "End": 93,
+              "NodeType": "ListItem",
+              "Bullet": "1.",
+              "Value": "1. apples",
+              "Start": 0,
+              "End": 9,
               "ChildrenNodes": [
                 {
-                  "NodeType": "ListItem",
-                  "Bullet": "-",
-                  "Value": "- more apples",
-                  "Start": 25,
-                  "End": 38,
-                  "ChildrenNodes": [
-                    {
-                      "NodeType": "Text",
-                      "ChildrenNodes": null,
-                      "Val": "more apples",
-                      "Start": 27,
-                      "End": 38
-                    }
-                  ]
-                },
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "apples",
+                  "Start": 3,
+                  "End": 9
+                }
+              ]
+            },
+            {
+              "NodeType": "ListItem",
+              "Bullet": "2.",
+              "Value": "2. bananas",
+              "Start": 10,
+              "End": 20,
+              "ChildrenNodes": [
                 {
-                  "NodeType": "ListItem",
-                  "Bullet": "-",
-                  "Value": "- more bananas",
-                  "Start": 43,
-                  "End": 57,
-                  "ChildrenNodes": [
-                    {
-                      "NodeType": "Text",
-                      "ChildrenNodes": null,
-                      "Val": "more bananas",
-                      "Start": 45,
-                      "End": 57
-                    }
-                  ]
-                },
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "bananas",
+                  "Start": 13,
+                  "End": 20
+                }
+              ]
+            },
+            {
+              "NodeType": "ListItem",
+              "Bullet": "3.",
+              "Value": "3. oranges",
+              "Start": 94,
+              "End": 104,
+              "ChildrenNodes": [
                 {
-                  "NodeType": "ListItem",
-                  "Bullet": "-",
-                  "Value": "- more oranges",
-                  "Start": 62,
-                  "End": 76,
-                  "ChildrenNodes": [
-                    {
-                      "NodeType": "Text",
-                      "ChildrenNodes": null,
-                      "Val": "more oranges",
-                      "Start": 64,
-                      "End": 76
-                    }
-                  ]
-                },
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "oranges",
+                  "Start": 97,
+                  "End": 104
+                }
+              ]
+            },
+            {
+              "NodeType": "ListItem",
+              "Bullet": "4.",
+              "Value": "4. pears",
+              "Start": 105,
+              "End": 113,
+              "ChildrenNodes": [
                 {
-                  "NodeType": "ListItem",
-                  "Bullet": "-",
-                  "Value": "- more pears",
-                  "Start": 81,
-                  "End": 93,
-                  "ChildrenNodes": [
-                    {
-                      "NodeType": "Text",
-                      "ChildrenNodes": null,
-                      "Val": "more pears",
-                      "Start": 83,
-                      "End": 93
-                    }
-                  ]
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "pears",
+                  "Start": 108,
+                  "End": 113
                 }
               ]
             }
           ]
         },
         {
-          "NodeType": "ListItem",
-          "Bullet": "3.",
-          "Value": "3. oranges",
-          "Start": 94,
-          "End": 104,
+          "NodeType": "List",
+          "ListType": "UNORDERED",
+          "Value": "",
+          "Start": 21,
+          "End": 93,
           "ChildrenNodes": [
             {
-              "NodeType": "Text",
-              "ChildrenNodes": null,
-              "Val": "oranges",
-              "Start": 97,
-              "End": 104
+              "NodeType": "ListItem",
+              "Bullet": "-",
+              "Value": "- more apples",
+              "Start": 25,
+              "End": 38,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "more apples",
+                  "Start": 27,
+                  "End": 38
+                }
+              ]
+            },
+            {
+              "NodeType": "ListItem",
+              "Bullet": "-",
+              "Value": "- more bananas",
+              "Start": 43,
+              "End": 57,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "more bananas",
+                  "Start": 45,
+                  "End": 57
+                }
+              ]
+            },
+            {
+              "NodeType": "ListItem",
+              "Bullet": "-",
+              "Value": "- more oranges",
+              "Start": 62,
+              "End": 76,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "more oranges",
+                  "Start": 64,
+                  "End": 76
+                }
+              ]
+            },
+            {
+              "NodeType": "ListItem",
+              "Bullet": "-",
+              "Value": "- more pears",
+              "Start": 81,
+              "End": 93,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "more pears",
+                  "Start": 83,
+                  "End": 93
+                }
+              ]
             }
           ]
         },
-        {
-          "NodeType": "ListItem",
-          "Bullet": "4.",
-          "Value": "4. pears",
-          "Start": 105,
-          "End": 113,
-          "ChildrenNodes": [
-            {
-              "NodeType": "Text",
-              "ChildrenNodes": null,
-              "Val": "pears",
-              "Start": 108,
-              "End": 113
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "NodeType": "Section",
-      "ChildrenNodes": [
         {
           "NodeType": "Paragraph",
           "Start": 114,
@@ -165,7 +165,7 @@
           ]
         }
       ],
-      "Start": 137,
+      "Start": 0,
       "End": 138
     }
   ],

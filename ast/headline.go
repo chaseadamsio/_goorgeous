@@ -18,6 +18,23 @@ type HeadlineNode struct {
 	Tags          []string
 }
 
+func (n *HeadlineNode) Copy() *HeadlineNode {
+	if n == nil {
+		return nil
+	}
+	return &HeadlineNode{
+		NodeType:      n.NodeType,
+		Start:         n.Start,
+		End:           n.End,
+		parent:        n.Parent(),
+		Depth:         n.Depth,
+		Priority:      n.Priority,
+		Keyword:       n.Keyword,
+		Tags:          n.Tags,
+		ChildrenNodes: n.ChildrenNodes,
+	}
+}
+
 func NewHeadlineNode(depth int, parent Node, items []lex.Item) *HeadlineNode {
 	node := &HeadlineNode{
 		NodeType: "Headline",

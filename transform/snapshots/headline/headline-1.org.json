@@ -1,0 +1,92 @@
+{
+  "TOC": [
+    null
+  ],
+  "FootnoteDefinitions": {},
+  "Root": {
+    "NodeType": "Root",
+    "ChildrenNodes": [
+      {
+        "NodeType": "Headline",
+        "Start": 0,
+        "End": 20,
+        "Depth": 1,
+        "ChildrenNodes": [
+          null,
+          {
+            "NodeType": "Text",
+            "ChildrenNodes": null,
+            "Val": "This is a headline",
+            "Start": 2,
+            "End": 20
+          }
+        ],
+        "Keyword": "",
+        "Priority": "",
+        "Tags": null
+      },
+      {
+        "NodeType": "Headline",
+        "Start": 21,
+        "End": 47,
+        "Depth": 1,
+        "ChildrenNodes": [
+          null,
+          {
+            "NodeType": "Text",
+            "ChildrenNodes": null,
+            "Val": "This is another headline",
+            "Start": 23,
+            "End": 47
+          }
+        ],
+        "Keyword": "",
+        "Priority": "",
+        "Tags": null
+      },
+      {
+        "NodeType": "Section",
+        "ChildrenNodes": [
+          null,
+          {
+            "NodeType": "Paragraph",
+            "Start": 48,
+            "End": 89,
+            "ChildrenNodes": [
+              {
+                "NodeType": "Text",
+                "ChildrenNodes": null,
+                "Val": "this text belongs to the another headline",
+                "Start": 48,
+                "End": 89
+              }
+            ]
+          }
+        ],
+        "Start": 89,
+        "End": 121
+      },
+      {
+        "NodeType": "Headline",
+        "Start": 90,
+        "End": 120,
+        "Depth": 1,
+        "ChildrenNodes": [
+          null,
+          {
+            "NodeType": "Text",
+            "ChildrenNodes": null,
+            "Val": "This is yet another headline",
+            "Start": 92,
+            "End": 120
+          }
+        ],
+        "Keyword": "",
+        "Priority": "",
+        "Tags": null
+      }
+    ],
+    "Start": 0,
+    "End": 121
+  }
+}

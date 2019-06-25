@@ -2,15 +2,13 @@ package ast
 
 import (
 	"encoding/json"
-
-	"github.com/chaseadamsio/goorgeous/lex"
 )
 
-func NewRootNode(items []lex.Item) *RootNode {
+func NewRootNode(start, end int) *RootNode {
 	node := &RootNode{
 		NodeType: "Root",
-		Start:    items[0].Offset(),
-		End:      items[len(items)-1].End(),
+		Start:    start,
+		End:      end,
 	}
 
 	return node
@@ -20,6 +18,18 @@ type RootNode struct {
 	NodeType
 	ChildrenNodes []Node
 	Start, End    int
+}
+
+func (n *RootNode) Copy() *RootNode {
+	if n == nil {
+		return nil
+	}
+	return &RootNode{
+		NodeType:      n.NodeType,
+		Start:         n.Start,
+		End:           n.End,
+		ChildrenNodes: n.ChildrenNodes,
+	}
 }
 
 func (n *RootNode) String() string {

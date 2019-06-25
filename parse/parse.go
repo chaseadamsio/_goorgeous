@@ -54,7 +54,7 @@ func Parse(input string) *ast.RootNode {
 		p.items = append(p.items, item)
 	}
 
-	root := ast.NewRootNode(p.items)
+	root := ast.NewRootNode(0, p.items[len(p.items)-1].End())
 
 	p.walk(root, 0, len(p.items))
 
@@ -162,15 +162,24 @@ func (p *parser) walk(parent ast.Node, current, stop int) {
 			start = current
 
 		} else if found, end := p.matchesOrderedList(current); found {
+			if parent.Type() != "Section" {
+				parent = findClosestSectionNode(parent, p.items[current:])
+			}
 			p.makeOrderedList(parent, current, end)
 			current = end
 			start = current
 
 		} else if found, end := p.matchesUnorderedList(current); found {
+			if parent.Type() != "Section" {
+				parent = findClosestSectionNode(parent, p.items[current:])
+			}
 			p.makeUnorderedList(parent, current, end)
 			current = end
 			start = current
 		} else if found, end := p.matchesFootnoteDefinition(current); found {
+			if parent.Type() != "Section" {
+				parent = findClosestSectionNode(parent, p.items[current:])
+			}
 			p.makeFootnoteDefinition(parent, current, end)
 			current = end
 			start = current

@@ -15,6 +15,20 @@ type ParagraphNode struct {
 	ChildrenNodes []Node
 }
 
+func (n *ParagraphNode) Copy() *ParagraphNode {
+	if n == nil {
+		return nil
+	}
+	return &ParagraphNode{
+		NodeType:      n.NodeType,
+		parent:        n.Parent(),
+		rawvalue:      n.rawvalue,
+		Start:         n.Start,
+		End:           n.End,
+		ChildrenNodes: n.ChildrenNodes,
+	}
+}
+
 func NewParagraphNode(start, end int, parent Node, items []lex.Item) *ParagraphNode {
 	node := &ParagraphNode{
 		NodeType: "Paragraph",

@@ -2,81 +2,81 @@
   "NodeType": "Root",
   "ChildrenNodes": [
     {
-      "NodeType": "List",
-      "ListType": "ORDERED",
-      "Value": "",
-      "Start": 0,
-      "End": 70,
+      "NodeType": "Section",
       "ChildrenNodes": [
         {
-          "NodeType": "ListItem",
-          "Bullet": "1.",
-          "Value": "1. apples",
+          "NodeType": "List",
+          "ListType": "ORDERED",
+          "Value": "",
           "Start": 0,
-          "End": 9,
-          "ChildrenNodes": [
-            {
-              "NodeType": "Text",
-              "ChildrenNodes": null,
-              "Val": "apples",
-              "Start": 3,
-              "End": 9
-            }
-          ]
-        },
-        {
-          "NodeType": "ListItem",
-          "Bullet": "2.",
-          "Value": "2. bananas\n    this is a nested sentence",
-          "Start": 10,
-          "End": 50,
-          "ChildrenNodes": [
-            {
-              "NodeType": "Text",
-              "ChildrenNodes": null,
-              "Val": "bananas\n    this is a nested sentence",
-              "Start": 13,
-              "End": 50
-            }
-          ]
-        },
-        {
-          "NodeType": "ListItem",
-          "Bullet": "3.",
-          "Value": "3. oranges",
-          "Start": 51,
-          "End": 61,
-          "ChildrenNodes": [
-            {
-              "NodeType": "Text",
-              "ChildrenNodes": null,
-              "Val": "oranges",
-              "Start": 54,
-              "End": 61
-            }
-          ]
-        },
-        {
-          "NodeType": "ListItem",
-          "Bullet": "4.",
-          "Value": "4. pears",
-          "Start": 62,
           "End": 70,
           "ChildrenNodes": [
             {
-              "NodeType": "Text",
-              "ChildrenNodes": null,
-              "Val": "pears",
-              "Start": 65,
-              "End": 70
+              "NodeType": "ListItem",
+              "Bullet": "1.",
+              "Value": "1. apples",
+              "Start": 0,
+              "End": 9,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "apples",
+                  "Start": 3,
+                  "End": 9
+                }
+              ]
+            },
+            {
+              "NodeType": "ListItem",
+              "Bullet": "2.",
+              "Value": "2. bananas\n    this is a nested sentence",
+              "Start": 10,
+              "End": 50,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "bananas\n    this is a nested sentence",
+                  "Start": 13,
+                  "End": 50
+                }
+              ]
+            },
+            {
+              "NodeType": "ListItem",
+              "Bullet": "3.",
+              "Value": "3. oranges",
+              "Start": 51,
+              "End": 61,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "oranges",
+                  "Start": 54,
+                  "End": 61
+                }
+              ]
+            },
+            {
+              "NodeType": "ListItem",
+              "Bullet": "4.",
+              "Value": "4. pears",
+              "Start": 62,
+              "End": 70,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "pears",
+                  "Start": 65,
+                  "End": 70
+                }
+              ]
             }
           ]
-        }
-      ]
-    },
-    {
-      "NodeType": "Section",
-      "ChildrenNodes": [
+        },
         {
           "NodeType": "Paragraph",
           "Start": 71,
@@ -92,7 +92,7 @@
           ]
         }
       ],
-      "Start": 94,
+      "Start": 0,
       "End": 95
     }
   ],

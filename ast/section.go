@@ -13,6 +13,19 @@ func NewSectionNode(parent Node, items []lex.Item) *SectionNode {
 	return node
 }
 
+func (n *SectionNode) Copy() *SectionNode {
+	if n == nil {
+		return nil
+	}
+	return &SectionNode{
+		NodeType:      n.NodeType,
+		parent:        n.Parent(),
+		Start:         n.Start,
+		End:           n.End,
+		ChildrenNodes: n.ChildrenNodes,
+	}
+}
+
 type SectionNode struct {
 	NodeType
 	parent        Node

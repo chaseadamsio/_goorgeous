@@ -16,6 +16,21 @@ type ListItemNode struct {
 	ChildrenNodes []Node
 }
 
+func (n *ListItemNode) Copy() *ListItemNode {
+	if n == nil {
+		return nil
+	}
+	return &ListItemNode{
+		NodeType:      n.NodeType,
+		parent:        n.Parent(),
+		Bullet:        n.Bullet,
+		Value:         n.Value,
+		Start:         n.Start,
+		End:           n.End,
+		ChildrenNodes: n.ChildrenNodes,
+	}
+}
+
 func NewListItemNode(parent Node, items []lex.Item) *ListItemNode {
 	node := &ListItemNode{
 		NodeType: "ListItem",

@@ -2,65 +2,65 @@
   "NodeType": "Root",
   "ChildrenNodes": [
     {
-      "NodeType": "List",
-      "ListType": "UNORDERED",
-      "Value": "",
-      "Start": 0,
-      "End": 28,
+      "NodeType": "Section",
       "ChildrenNodes": [
         {
-          "NodeType": "ListItem",
-          "Bullet": "-",
-          "Value": "- apples",
+          "NodeType": "List",
+          "ListType": "UNORDERED",
+          "Value": "",
           "Start": 0,
-          "End": 8,
-          "ChildrenNodes": [
-            {
-              "NodeType": "Text",
-              "ChildrenNodes": null,
-              "Val": "apples",
-              "Start": 2,
-              "End": 8
-            }
-          ]
-        },
-        {
-          "NodeType": "ListItem",
-          "Bullet": "-",
-          "Value": "- bananas",
-          "Start": 9,
-          "End": 18,
-          "ChildrenNodes": [
-            {
-              "NodeType": "Text",
-              "ChildrenNodes": null,
-              "Val": "bananas",
-              "Start": 11,
-              "End": 18
-            }
-          ]
-        },
-        {
-          "NodeType": "ListItem",
-          "Bullet": "-",
-          "Value": "- oranges",
-          "Start": 19,
           "End": 28,
           "ChildrenNodes": [
             {
-              "NodeType": "Text",
-              "ChildrenNodes": null,
-              "Val": "oranges",
-              "Start": 21,
-              "End": 28
+              "NodeType": "ListItem",
+              "Bullet": "-",
+              "Value": "- apples",
+              "Start": 0,
+              "End": 8,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "apples",
+                  "Start": 2,
+                  "End": 8
+                }
+              ]
+            },
+            {
+              "NodeType": "ListItem",
+              "Bullet": "-",
+              "Value": "- bananas",
+              "Start": 9,
+              "End": 18,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "bananas",
+                  "Start": 11,
+                  "End": 18
+                }
+              ]
+            },
+            {
+              "NodeType": "ListItem",
+              "Bullet": "-",
+              "Value": "- oranges",
+              "Start": 19,
+              "End": 28,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "oranges",
+                  "Start": 21,
+                  "End": 28
+                }
+              ]
             }
           ]
-        }
-      ]
-    },
-    {
-      "NodeType": "Section",
-      "ChildrenNodes": [
+        },
         {
           "NodeType": "Paragraph",
           "Start": 29,
@@ -76,7 +76,7 @@
           ]
         }
       ],
-      "Start": 35,
+      "Start": 0,
       "End": 36
     }
   ],

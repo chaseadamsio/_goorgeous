@@ -1,0 +1,131 @@
+{
+  "TOC": [
+    null
+  ],
+  "FootnoteDefinitions": {},
+  "Root": {
+    "NodeType": "Root",
+    "ChildrenNodes": [
+      {
+        "NodeType": "Section",
+        "ChildrenNodes": [
+          null,
+          {
+            "NodeType": "Paragraph",
+            "Start": 0,
+            "End": 38,
+            "ChildrenNodes": [
+              {
+                "NodeType": "Bold",
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Italic",
+                    "ChildrenNodes": [
+                      {
+                        "NodeType": "Verbatim",
+                        "ChildrenNodes": [
+                          {
+                            "NodeType": "Text",
+                            "ChildrenNodes": null,
+                            "Val": "this is bold, italic and verbatim",
+                            "Start": 3,
+                            "End": 36
+                          }
+                        ],
+                        "Val": "=this is bold, italic and verbatim=",
+                        "Start": 2,
+                        "End": 36
+                      }
+                    ],
+                    "Val": "/=this is bold, italic and verbatim=/",
+                    "Start": 1,
+                    "End": 37
+                  }
+                ],
+                "Val": "*/=this is bold, italic and verbatim=/*",
+                "Start": 0,
+                "End": 38
+              }
+            ]
+          },
+          {
+            "NodeType": "Paragraph",
+            "Start": 41,
+            "End": 71,
+            "ChildrenNodes": [
+              {
+                "NodeType": "Text",
+                "ChildrenNodes": null,
+                "Val": "This has ",
+                "Start": 41,
+                "End": 49
+              },
+              {
+                "NodeType": "Verbatim",
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "a verbatim element",
+                    "Start": 51,
+                    "End": 69
+                  }
+                ],
+                "Val": "=a verbatim element=",
+                "Start": 50,
+                "End": 69
+              },
+              {
+                "NodeType": "Text",
+                "ChildrenNodes": null,
+                "Val": ".",
+                "Start": 70,
+                "End": 71
+              }
+            ]
+          },
+          {
+            "NodeType": "Paragraph",
+            "Start": 73,
+            "End": 99,
+            "ChildrenNodes": [
+              {
+                "NodeType": "Text",
+                "ChildrenNodes": null,
+                "Val": "This has a ",
+                "Start": 73,
+                "End": 83
+              },
+              {
+                "NodeType": "Code",
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "code element",
+                    "Start": 85,
+                    "End": 97
+                  }
+                ],
+                "Val": "~code element~",
+                "Start": 84,
+                "End": 97
+              },
+              {
+                "NodeType": "Text",
+                "ChildrenNodes": null,
+                "Val": ".",
+                "Start": 98,
+                "End": 99
+              }
+            ]
+          }
+        ],
+        "Start": 39,
+        "End": 100
+      }
+    ],
+    "Start": 0,
+    "End": 100
+  }
+}

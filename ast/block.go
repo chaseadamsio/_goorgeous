@@ -44,3 +44,18 @@ func (n *GreaterBlockNode) Parent() Node {
 
 func (n *GreaterBlockNode) Append(child Node) {
 }
+
+func (n *GreaterBlockNode) Copy() *GreaterBlockNode {
+	if n == nil {
+		return nil
+	}
+	return &GreaterBlockNode{
+		NodeType: n.NodeType,
+		Name:     n.Name,
+		parent:   n.Parent(),
+		Value:    n.Value,
+		Language: n.Language,
+		Start:    n.Start,
+		End:      n.End,
+	}
+}

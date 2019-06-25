@@ -7,11 +7,22 @@ import (
 type TableNode struct {
 	NodeType
 	parent        Node
-	Key           string
-	Value         string
 	Start         int
 	End           int
 	ChildrenNodes []Node
+}
+
+func (n *TableNode) Copy() *TableNode {
+	if n == nil {
+		return nil
+	}
+	return &TableNode{
+		NodeType:      n.NodeType,
+		parent:        n.Parent(),
+		Start:         n.Start,
+		End:           n.End,
+		ChildrenNodes: n.ChildrenNodes,
+	}
 }
 
 func NewTableNode(parent Node, items []lex.Item) *TableNode {
@@ -32,7 +43,7 @@ func (n *TableNode) Type() NodeType {
 
 // Type returns the type of node this is
 func (n *TableNode) String() string {
-	return n.Key + ":" + n.Value
+	return ""
 }
 
 func (n TableNode) Children() []Node {
@@ -50,11 +61,22 @@ func (n *TableNode) Append(child Node) {
 type TableRowNode struct {
 	NodeType
 	parent        Node
-	Key           string
-	Value         string
 	Start         int
 	End           int
 	ChildrenNodes []Node
+}
+
+func (n *TableRowNode) Copy() *TableRowNode {
+	if n == nil {
+		return nil
+	}
+	return &TableRowNode{
+		NodeType:      n.NodeType,
+		parent:        n.Parent(),
+		Start:         n.Start,
+		End:           n.End,
+		ChildrenNodes: n.ChildrenNodes,
+	}
 }
 
 func NewTableRowNode(parent Node, items []lex.Item) *TableRowNode {
@@ -75,7 +97,7 @@ func (n *TableRowNode) Type() NodeType {
 
 // Type returns the type of node this is
 func (n *TableRowNode) String() string {
-	return n.Key + ":" + n.Value
+	return ""
 }
 
 func (n TableRowNode) Children() []Node {
@@ -93,11 +115,22 @@ func (n *TableRowNode) Append(child Node) {
 type TableCellNode struct {
 	NodeType
 	parent        Node
-	Key           string
-	Value         string
 	Start         int
 	End           int
 	ChildrenNodes []Node
+}
+
+func (n *TableCellNode) Copy() *TableCellNode {
+	if n == nil {
+		return nil
+	}
+	return &TableCellNode{
+		NodeType:      n.NodeType,
+		parent:        n.Parent(),
+		Start:         n.Start,
+		End:           n.End,
+		ChildrenNodes: n.ChildrenNodes,
+	}
 }
 
 func NewTableCellNode(parent Node, items []lex.Item) *TableCellNode {
@@ -118,7 +151,7 @@ func (n *TableCellNode) Type() NodeType {
 
 // Type returns the type of node this is
 func (n *TableCellNode) String() string {
-	return n.Key + ":" + n.Value
+	return ""
 }
 
 func (n TableCellNode) Children() []Node {

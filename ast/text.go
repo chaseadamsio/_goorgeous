@@ -76,6 +76,20 @@ type TextNode struct {
 	End           int
 }
 
+func (n *TextNode) Copy() *TextNode {
+	if n == nil {
+		return nil
+	}
+	return &TextNode{
+		NodeType:      n.NodeType,
+		parent:        n.Parent(),
+		Start:         n.Start,
+		End:           n.End,
+		Val:           n.Val,
+		ChildrenNodes: n.ChildrenNodes,
+	}
+}
+
 func (n TextNode) Type() NodeType {
 	return n.NodeType
 }

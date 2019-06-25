@@ -1,0 +1,108 @@
+{
+  "TOC": [
+    null
+  ],
+  "FootnoteDefinitions": {},
+  "Root": {
+    "NodeType": "Root",
+    "ChildrenNodes": [
+      {
+        "NodeType": "Section",
+        "ChildrenNodes": [
+          null,
+          {
+            "NodeType": "List",
+            "ListType": "UNORDERED",
+            "Value": "",
+            "Start": 0,
+            "End": 66,
+            "ChildrenNodes": [
+              {
+                "NodeType": "ListItem",
+                "Bullet": "-",
+                "Value": "- apples",
+                "Start": 0,
+                "End": 8,
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "apples",
+                    "Start": 2,
+                    "End": 8
+                  }
+                ]
+              },
+              {
+                "NodeType": "ListItem",
+                "Bullet": "-",
+                "Value": "- bananas\n    this is a nested sentence",
+                "Start": 9,
+                "End": 48,
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "bananas\n    this is a nested sentence",
+                    "Start": 11,
+                    "End": 48
+                  }
+                ]
+              },
+              {
+                "NodeType": "ListItem",
+                "Bullet": "-",
+                "Value": "- oranges",
+                "Start": 49,
+                "End": 58,
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "oranges",
+                    "Start": 51,
+                    "End": 58
+                  }
+                ]
+              },
+              {
+                "NodeType": "ListItem",
+                "Bullet": "-",
+                "Value": "- pears",
+                "Start": 59,
+                "End": 66,
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "pears",
+                    "Start": 61,
+                    "End": 66
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "NodeType": "Paragraph",
+            "Start": 67,
+            "End": 90,
+            "ChildrenNodes": [
+              {
+                "NodeType": "Text",
+                "ChildrenNodes": null,
+                "Val": "with an extra paragraph",
+                "Start": 67,
+                "End": 90
+              }
+            ]
+          }
+        ],
+        "Start": 0,
+        "End": 91
+      }
+    ],
+    "Start": 0,
+    "End": 91
+  }
+}

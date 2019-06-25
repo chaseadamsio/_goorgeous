@@ -1,0 +1,206 @@
+{
+  "TOC": [
+    null
+  ],
+  "FootnoteDefinitions": {},
+  "Root": {
+    "NodeType": "Root",
+    "ChildrenNodes": [
+      {
+        "NodeType": "Section",
+        "ChildrenNodes": [
+          null,
+          {
+            "NodeType": "List",
+            "ListType": "UNORDERED",
+            "Value": "",
+            "Start": 0,
+            "End": 133,
+            "ChildrenNodes": [
+              {
+                "NodeType": "ListItem",
+                "Bullet": "-",
+                "Value": "- apples",
+                "Start": 0,
+                "End": 8,
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "apples",
+                    "Start": 2,
+                    "End": 8
+                  }
+                ]
+              },
+              {
+                "NodeType": "ListItem",
+                "Bullet": "-",
+                "Value": "- oranges",
+                "Start": 114,
+                "End": 123,
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "oranges",
+                    "Start": 116,
+                    "End": 123
+                  }
+                ]
+              },
+              {
+                "NodeType": "ListItem",
+                "Bullet": "-",
+                "Value": "- bananas",
+                "Start": 124,
+                "End": 133,
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "bananas",
+                    "Start": 126,
+                    "End": 133
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "NodeType": "List",
+            "ListType": "ORDERED",
+            "Value": "",
+            "Start": 9,
+            "End": 113,
+            "ChildrenNodes": [
+              {
+                "NodeType": "ListItem",
+                "Bullet": "1.",
+                "Value": "1. in apples 1",
+                "Start": 11,
+                "End": 25,
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "in apples 1",
+                    "Start": 14,
+                    "End": 25
+                  }
+                ]
+              },
+              {
+                "NodeType": "ListItem",
+                "Bullet": "2.",
+                "Value": "2. in apples 2",
+                "Start": 28,
+                "End": 42,
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "in apples 2",
+                    "Start": 31,
+                    "End": 42
+                  }
+                ]
+              },
+              {
+                "NodeType": "ListItem",
+                "Bullet": "3.",
+                "Value": "3. in apples 3",
+                "Start": 99,
+                "End": 113,
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "in apples 3",
+                    "Start": 102,
+                    "End": 113
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "NodeType": "List",
+            "ListType": "UNORDERED",
+            "Value": "",
+            "Start": 43,
+            "End": 96,
+            "ChildrenNodes": [
+              {
+                "NodeType": "ListItem",
+                "Bullet": "-",
+                "Value": "- in apples 1",
+                "Start": 47,
+                "End": 60,
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "in apples 1",
+                    "Start": 49,
+                    "End": 60
+                  }
+                ]
+              },
+              {
+                "NodeType": "ListItem",
+                "Bullet": "-",
+                "Value": "- in apples 2",
+                "Start": 65,
+                "End": 78,
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "in apples 2",
+                    "Start": 67,
+                    "End": 78
+                  }
+                ]
+              },
+              {
+                "NodeType": "ListItem",
+                "Bullet": "-",
+                "Value": "- in apples 3",
+                "Start": 83,
+                "End": 96,
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "in apples 3",
+                    "Start": 85,
+                    "End": 96
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "NodeType": "Paragraph",
+            "Start": 134,
+            "End": 148,
+            "ChildrenNodes": [
+              {
+                "NodeType": "Text",
+                "ChildrenNodes": null,
+                "Val": "something else",
+                "Start": 134,
+                "End": 148
+              }
+            ]
+          }
+        ],
+        "Start": 0,
+        "End": 149
+      }
+    ],
+    "Start": 0,
+    "End": 149
+  }
+}

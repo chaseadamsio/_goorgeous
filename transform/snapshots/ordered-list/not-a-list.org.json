@@ -1,0 +1,35 @@
+{
+  "TOC": [
+    null
+  ],
+  "FootnoteDefinitions": {},
+  "Root": {
+    "NodeType": "Root",
+    "ChildrenNodes": [
+      {
+        "NodeType": "Section",
+        "ChildrenNodes": [
+          null,
+          {
+            "NodeType": "Paragraph",
+            "Start": 0,
+            "End": 52,
+            "ChildrenNodes": [
+              {
+                "NodeType": "Text",
+                "ChildrenNodes": null,
+                "Val": "1.apples\n2.bananas\n3.oranges\nwith an extra paragraph",
+                "Start": 0,
+                "End": 52
+              }
+            ]
+          }
+        ],
+        "Start": 52,
+        "End": 53
+      }
+    ],
+    "Start": 0,
+    "End": 53
+  }
+}

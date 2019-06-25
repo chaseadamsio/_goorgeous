@@ -28,6 +28,21 @@ func NewLinkNode(parent Node, items []lex.Item) *LinkNode {
 	return node
 }
 
+func (n *LinkNode) Copy() *LinkNode {
+	if n == nil {
+		return nil
+	}
+	return &LinkNode{
+		NodeType:      n.NodeType,
+		parent:        n.Parent(),
+		Link:          n.Link,
+		rawvalue:      n.rawvalue,
+		Start:         n.Start,
+		End:           n.End,
+		ChildrenNodes: n.ChildrenNodes,
+	}
+}
+
 func (n *LinkNode) parse(items []lex.Item) {
 	current := 0
 	itemsLength := len(items)

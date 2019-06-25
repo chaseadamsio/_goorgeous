@@ -36,6 +36,7 @@ func (p *parser) parseFootnoteDefinition(node *ast.FootnoteDefinitionNode, start
 		}
 
 		if currItem.IsBracket() && currItem.Value() == "]" {
+			current++
 			break
 		}
 
@@ -133,10 +134,14 @@ func (p *parser) parseFootnoteReference(node *ast.FootnoteReferenceNode, start, 
 	}
 
 	if foundInlineDescription {
-		child := ast.NewTextNode(node, p.items[start:current])
+		node.ReferenceType = "INLINE"
+		child := ast.NewFootnoteDefinitionNode(node, p.items[start:current])
 		node.Append(child)
+		p.walkElements(child, start, current)
 	}
-	p.walkElements(node, current, end)
+	if current != end {
+		p.walkElements(node, current, end-1)
+	}
 }
 
 func (p *parser) matchesFootnoteReference(current int) (found bool, end int) {

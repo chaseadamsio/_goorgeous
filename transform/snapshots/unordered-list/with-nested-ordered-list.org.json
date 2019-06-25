@@ -1,0 +1,181 @@
+{
+  "TOC": [
+    null
+  ],
+  "FootnoteDefinitions": {},
+  "Root": {
+    "NodeType": "Root",
+    "ChildrenNodes": [
+      {
+        "NodeType": "Section",
+        "ChildrenNodes": [
+          null,
+          {
+            "NodeType": "List",
+            "ListType": "UNORDERED",
+            "Value": "",
+            "Start": 0,
+            "End": 113,
+            "ChildrenNodes": [
+              {
+                "NodeType": "ListItem",
+                "Bullet": "-",
+                "Value": "- apples",
+                "Start": 0,
+                "End": 8,
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "apples",
+                    "Start": 2,
+                    "End": 8
+                  }
+                ]
+              },
+              {
+                "NodeType": "ListItem",
+                "Bullet": "-",
+                "Value": "- bananas",
+                "Start": 9,
+                "End": 18,
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "bananas",
+                    "Start": 11,
+                    "End": 18
+                  }
+                ]
+              },
+              {
+                "NodeType": "ListItem",
+                "Bullet": "-",
+                "Value": "- oranges",
+                "Start": 96,
+                "End": 105,
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "oranges",
+                    "Start": 98,
+                    "End": 105
+                  }
+                ]
+              },
+              {
+                "NodeType": "ListItem",
+                "Bullet": "-",
+                "Value": "- pears",
+                "Start": 106,
+                "End": 113,
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "pears",
+                    "Start": 108,
+                    "End": 113
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "NodeType": "List",
+            "ListType": "ORDERED",
+            "Value": "",
+            "Start": 19,
+            "End": 95,
+            "ChildrenNodes": [
+              {
+                "NodeType": "ListItem",
+                "Bullet": "1.",
+                "Value": "1. more apples",
+                "Start": 23,
+                "End": 37,
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "more apples",
+                    "Start": 26,
+                    "End": 37
+                  }
+                ]
+              },
+              {
+                "NodeType": "ListItem",
+                "Bullet": "2.",
+                "Value": "2. more bananas",
+                "Start": 42,
+                "End": 57,
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "more bananas",
+                    "Start": 45,
+                    "End": 57
+                  }
+                ]
+              },
+              {
+                "NodeType": "ListItem",
+                "Bullet": "3.",
+                "Value": "3. more oranges",
+                "Start": 62,
+                "End": 77,
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "more oranges",
+                    "Start": 65,
+                    "End": 77
+                  }
+                ]
+              },
+              {
+                "NodeType": "ListItem",
+                "Bullet": "4.",
+                "Value": "4. more pears",
+                "Start": 82,
+                "End": 95,
+                "ChildrenNodes": [
+                  {
+                    "NodeType": "Text",
+                    "ChildrenNodes": null,
+                    "Val": "more pears",
+                    "Start": 85,
+                    "End": 95
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "NodeType": "Paragraph",
+            "Start": 114,
+            "End": 137,
+            "ChildrenNodes": [
+              {
+                "NodeType": "Text",
+                "ChildrenNodes": null,
+                "Val": "with an extra paragraph",
+                "Start": 114,
+                "End": 137
+              }
+            ]
+          }
+        ],
+        "Start": 0,
+        "End": 138
+      }
+    ],
+    "Start": 0,
+    "End": 138
+  }
+}

@@ -11,6 +11,7 @@ import (
 
 	"github.com/chaseadamsio/goorgeous/parse"
 	"github.com/chaseadamsio/goorgeous/testdata"
+	"github.com/chaseadamsio/goorgeous/transform"
 	"github.com/google/go-cmp/cmp"
 )
 
@@ -20,18 +21,17 @@ func snapshotPath(filename string) string {
 	return fmt.Sprintf("snapshots/%s.html", filename)
 }
 
-func TestTransform(t *testing.T) {
+func TestGenerateHTML(t *testing.T) {
 	for _, filename := range testdata.Tests {
 
 		t.Run(filename, func(t *testing.T) {
-
 			value := testdata.GetOrgStr(filename)
 			ast := parse.Parse(value)
 
-			snapshotPath := snapshotPath(filename)
+			inAST := transform.TransformToHTML(ast)
+			out := GenerateHTML(inAST, &HTMLOptions{Minify: false})
 
-			out := GenerateHTML(ast)
-			fmt.Println(out)
+			snapshotPath := snapshotPath(filename)
 
 			if *update {
 				err := os.MkdirAll(filepath.Dir(snapshotPath), os.ModePerm)

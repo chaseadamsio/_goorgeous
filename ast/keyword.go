@@ -24,6 +24,20 @@ func NewKeywordNode(parent Node, items []lex.Item) *KeywordNode {
 	return node
 }
 
+func (n *KeywordNode) Copy() *KeywordNode {
+	if n == nil {
+		return nil
+	}
+	return &KeywordNode{
+		NodeType: n.NodeType,
+		parent:   n.Parent(),
+		Start:    n.Start,
+		End:      n.End,
+		Key:      n.Key,
+		Value:    n.Value,
+	}
+}
+
 // Type returns the type of node this is
 func (n *KeywordNode) Type() NodeType {
 	return n.NodeType

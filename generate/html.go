@@ -51,7 +51,7 @@ func (doc *HTMLDocument) walk(inAST []ast.Node) string {
 		if 0 < idx {
 			// check if this element has a preceding keyword node
 			if node, ok := inAST[idx-1].(*ast.KeywordNode); ok {
-				if node.Key == "HTML" {
+				if node.Key == "ATTR_HTML" {
 					value := strings.TrimSpace(node.Value)
 					if strings.HasPrefix(value, ":") {
 						value = strings.TrimLeft(value, ":")

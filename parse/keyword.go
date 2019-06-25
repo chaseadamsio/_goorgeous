@@ -25,7 +25,7 @@ func (p *parser) parseKeyword(node *ast.KeywordNode, start, end int) {
 		if !foundKeywordIdentifier && p.items[current].IsHash() && p.items[current+1].IsPlus() {
 			foundKeywordIdentifier = true
 			current = current + 2
-			node.Key = strings.ToUpper(p.items[current].Value())
+			start = current
 			continue
 		}
 
@@ -33,7 +33,15 @@ func (p *parser) parseKeyword(node *ast.KeywordNode, start, end int) {
 			value = append(value, p.items[current].Value())
 		}
 
-		if p.items[current].IsColon() {
+		if p.items[current].IsColon() && !foundColon {
+			keyStr := ""
+			keyCurr := start
+			for keyCurr < current {
+				keyStr = keyStr + p.items[keyCurr].Value()
+				keyCurr++
+			}
+			node.Key = strings.ToUpper(keyStr)
+
 			foundColon = true
 		}
 

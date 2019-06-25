@@ -19,7 +19,7 @@ multiple table rules:
 
 | r |
 
-#+HTML: :border 2 :rules all :frame border :class striped table-striped
+#+ATTR_HTML: :border 2 :rules all :frame border :class striped table-striped
 |this| table | has | html | support|
 |-------+-------+-----|
 | some | new | cells | here | y'all |

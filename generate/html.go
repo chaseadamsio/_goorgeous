@@ -81,6 +81,8 @@ func (doc *HTMLDocument) walk(inAST []ast.Node) string {
 			switch node.Name {
 			case "SRC":
 				out = append(out, doc.processGreaterBlockNode(node))
+			case "EXAMPLE":
+				out = append(out, doc.processGreaterBlockNode(node))
 			case "QUOTE":
 				out = append(out, doc.processQuoteBlockNode(node))
 			case "VERSE":
@@ -174,7 +176,7 @@ func (doc *HTMLDocument) processTableCellNode(node *ast.TableCellNode) string {
 }
 
 func (doc *HTMLDocument) processGreaterBlockNode(node *ast.GreaterBlockNode) string {
-	className := "src"
+	className := strings.ToLower(node.Name)
 	if node.Language != "" {
 		className = className + " " + node.Language
 	}

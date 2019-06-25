@@ -99,7 +99,7 @@ func (doc *HTMLDocument) walk(inAST []ast.Node) string {
 			case "Italic":
 				out = append(out, doc.processItalicNode(node))
 			case "Code":
-				fallthrough
+				fallthrough // code and verbatim are processed the same
 			case "Verbatim":
 				out = append(out, doc.processVerbatimNode(node))
 			case "Underline":

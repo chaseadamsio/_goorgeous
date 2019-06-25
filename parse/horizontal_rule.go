@@ -5,10 +5,9 @@ import (
 	"github.com/chaseadamsio/goorgeous/lex"
 )
 
-func (p *parser) makeHorizontalRule(parent ast.Node, current, end int) (offset int) {
+func (p *parser) makeHorizontalRule(parent ast.Node, current, end int) {
 	node := ast.NewHorizontalRuleNode(parent, p.items[current:end])
 	parent.Append(node)
-	return 5
 }
 
 func onlyFollowsWhitespace(current int, items []lex.Item) bool {
@@ -25,7 +24,7 @@ func onlyFollowsWhitespace(current int, items []lex.Item) bool {
 	return true
 }
 
-func (p parser) matchesHorizontalRule(current int) (found bool, start int) {
+func (p *parser) matchesHorizontalRule(current int) (found bool, start int) {
 	itemsLength := len(p.items)
 	testWidth := 5
 	if !(p.items[current].IsDash() && current+testWidth < itemsLength) {

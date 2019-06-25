@@ -21,7 +21,7 @@ func snapshotPath(filename string) string {
 
 func TestParse(t *testing.T) {
 	for _, filename := range testdata.Tests {
-		// filter := "ordered-list/basic.org"
+		// filter := "element/bold.org"
 		// if !strings.HasPrefix(filename, filter) {
 		// 	continue
 		// }

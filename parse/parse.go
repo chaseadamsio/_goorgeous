@@ -18,7 +18,7 @@ type parser struct {
 	input           string
 	depth           int
 	elementMatchers []foundMatchers
-	listMatchers    []foundMatchers
+	blockMatchers   []foundMatchers
 }
 
 func newParser(input string) *parser {
@@ -38,6 +38,17 @@ func newParser(input string) *parser {
 		{p.matchesCode, p.newCode},
 		{p.matchesEnDash, p.newEnDash},
 		{p.matchesMDash, p.newMDash},
+	}
+
+	p.blockMatchers = []foundMatchers{
+		{p.matchesOrderedList, p.makeOrderedList},
+		{p.matchesUnorderedList, p.makeUnorderedList},
+		{p.matchesFootnoteDefinition, p.makeFootnoteDefinition},
+		{p.matchesHorizontalRule, p.makeHorizontalRule},
+		{p.matchesTable, p.makeTable},
+		{p.matchesGreaterBlock, p.makeGreaterBlock},
+		{p.matchesKeyword, p.makeKeyword},
+		{p.matchesFootnoteDefinition, p.makeFootnoteDefinition},
 	}
 
 	return p
@@ -167,6 +178,7 @@ func (p *parser) walk(parent ast.Node, current, stop int) {
 	// create top-level paragraph nodes by creating nodes
 	// on block level elements
 	start := current
+WalkLoop:
 	for current < stop {
 		token := p.items[current]
 
@@ -175,86 +187,25 @@ func (p *parser) walk(parent ast.Node, current, stop int) {
 			blockEnd := p.makeHeadline(parent, current, end)
 			current = blockEnd
 			start = current
+			continue
 
-		} else if found, end := p.matchesOrderedList(current); found {
-			if parent.Type() != "Section" {
-				parent = findClosestSectionNode(parent, p.items[current:])
+		}
+
+		for _, f := range p.blockMatchers {
+			if found, end := f.matcher(current); found {
+				if parent.Type() != "Section" {
+					parent = findClosestSectionNode(parent, p.items[current:])
+				}
+				p.processPreviousItems(parent, start, current)
+
+				f.createElement(parent, current, end)
+				current = end
+				start = current
+				continue WalkLoop
 			}
-			p.processPreviousItems(parent, start, current)
+		}
 
-			p.makeOrderedList(parent, current, end)
-			current = end
-			start = current
-
-		} else if found, end := p.matchesUnorderedList(current); found {
-			if parent.Type() != "Section" {
-				parent = findClosestSectionNode(parent, p.items[current:])
-			}
-			p.processPreviousItems(parent, start, current)
-
-			p.makeUnorderedList(parent, current, end)
-			current = end
-			start = current
-		} else if found, end := p.matchesFootnoteDefinition(current); found {
-			if parent.Type() != "Section" {
-				parent = findClosestSectionNode(parent, p.items[current:])
-			}
-			p.processPreviousItems(parent, start, current)
-
-			p.makeFootnoteDefinition(parent, current, end)
-			current = end
-			start = current
-		} else if found, end := p.matchesHorizontalRule(current); found {
-			if parent.Type() != "Section" {
-				parent = findClosestSectionNode(parent, p.items[current:])
-			}
-			p.processPreviousItems(parent, start, current)
-
-			p.makeHorizontalRule(parent, current, end)
-			current = end
-			start = current
-
-		} else if found, end := p.matchesTable(current); found {
-			if parent.Type() != "Section" {
-				parent = findClosestSectionNode(parent, p.items[current:])
-			}
-			p.processPreviousItems(parent, start, current)
-
-			p.makeTable(parent, current, end)
-			current = end
-			start = current
-
-		} else if found, end := p.matchesGreaterBlock(current); found {
-			if parent.Type() != "Section" {
-				parent = findClosestSectionNode(parent, p.items[current:])
-			}
-			p.processPreviousItems(parent, start, current)
-
-			p.makeGreaterBlock(parent, current, end)
-			current = end
-			start = current
-
-		} else if found, end := p.matchesKeyword(current); found {
-			if parent.Type() != "Section" {
-				parent = findClosestSectionNode(parent, p.items[current:])
-			}
-			p.processPreviousItems(parent, start, current)
-
-			p.makeKeyword(parent, current, end)
-			current = end
-			start = current
-
-		} else if found, end := p.matchesFootnoteDefinition(current); found {
-			if parent.Type() != "Section" {
-				parent = findClosestSectionNode(parent, p.items[current:])
-			}
-			p.processPreviousItems(parent, start, current)
-
-			p.makeFootnoteDefinition(parent, current, end)
-			current = end
-			start = current
-
-		} else if token.IsNewline() {
+		if token.IsNewline() {
 
 			if current+1 < stop && (p.items[current+1].IsNewline() || p.items[current+1].IsEOF()) {
 				if start == current {

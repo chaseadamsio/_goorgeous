@@ -54,13 +54,22 @@ func (p *parser) matchesKeyword(current int) (found bool, end int) {
 	if current < itemsLength && p.items[current+1].Type() != lex.ItemPlus {
 		return false, -1
 	}
-	if current == 0 || p.items[current-1].IsNewline() {
-		for current < itemsLength {
-			if p.items[current].IsNewline() {
-				return true, current
-			}
-			current++
+
+	for reverseSearch := current - 1; 0 <= reverseSearch; {
+		if p.items[reverseSearch].IsSpace() || p.items[reverseSearch].IsTab() {
+			reverseSearch--
+			continue
+		} else if p.items[reverseSearch].IsNewline() {
+			break
 		}
+		return false, -1
+	}
+
+	for current < itemsLength {
+		if p.items[current].IsNewline() {
+			return true, current
+		}
+		current++
 	}
 	return false, -1
 }

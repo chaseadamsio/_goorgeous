@@ -18,7 +18,7 @@ func (p *parser) parseTableRows(node ast.Node, start, end int) {
 	inRuleRow := false
 
 	for current <= end {
-		if p.items[current].IsPipe() && p.items[current+1].IsDash() {
+		if p.items[current].IsPipe() && (current+1 < end && p.items[current+1].IsDash()) {
 			inRuleRow = true
 		}
 
@@ -73,10 +73,6 @@ func (p *parser) matchesTable(current int) (found bool, end int) {
 			token := p.items[current]
 			if token.IsNewline() {
 				if current < itemsLength && (p.items[current+1].Type() != lex.ItemPipe) {
-					if p.items[current+1].IsEOF() {
-						current++
-						continue
-					}
 					break
 				}
 			}

@@ -389,12 +389,177 @@
               "End": 221
             }
           ]
+        },
+        {
+          "NodeType": "Paragraph",
+          "Start": 223,
+          "End": 244,
+          "ChildrenNodes": [
+            {
+              "NodeType": "Text",
+              "ChildrenNodes": null,
+              "Val": "multiple table rules:\n",
+              "Start": 223,
+              "End": 244
+            }
+          ]
+        },
+        {
+          "NodeType": "Table",
+          "Start": 245,
+          "End": 313,
+          "ChildrenNodes": [
+            {
+              "NodeType": "TableRule",
+              "Start": 245,
+              "End": 257,
+              "ChildrenNodes": null
+            },
+            {
+              "NodeType": "TableRow",
+              "Start": 259,
+              "End": 271,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "TableCell",
+                  "Start": 260,
+                  "End": 262,
+                  "ChildrenNodes": [
+                    {
+                      "NodeType": "Text",
+                      "ChildrenNodes": null,
+                      "Val": " d ",
+                      "Start": 260,
+                      "End": 262
+                    }
+                  ]
+                },
+                {
+                  "NodeType": "TableCell",
+                  "Start": 264,
+                  "End": 266,
+                  "ChildrenNodes": [
+                    {
+                      "NodeType": "Text",
+                      "ChildrenNodes": null,
+                      "Val": " e ",
+                      "Start": 264,
+                      "End": 266
+                    }
+                  ]
+                },
+                {
+                  "NodeType": "TableCell",
+                  "Start": 268,
+                  "End": 270,
+                  "ChildrenNodes": [
+                    {
+                      "NodeType": "Text",
+                      "ChildrenNodes": null,
+                      "Val": " f ",
+                      "Start": 268,
+                      "End": 270
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "NodeType": "TableRule",
+              "Start": 273,
+              "End": 285,
+              "ChildrenNodes": null
+            },
+            {
+              "NodeType": "TableRow",
+              "Start": 287,
+              "End": 299,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "TableCell",
+                  "Start": 288,
+                  "End": 290,
+                  "ChildrenNodes": [
+                    {
+                      "NodeType": "Text",
+                      "ChildrenNodes": null,
+                      "Val": " g ",
+                      "Start": 288,
+                      "End": 290
+                    }
+                  ]
+                },
+                {
+                  "NodeType": "TableCell",
+                  "Start": 292,
+                  "End": 294,
+                  "ChildrenNodes": [
+                    {
+                      "NodeType": "Text",
+                      "ChildrenNodes": null,
+                      "Val": " h ",
+                      "Start": 292,
+                      "End": 294
+                    }
+                  ]
+                },
+                {
+                  "NodeType": "TableCell",
+                  "Start": 296,
+                  "End": 298,
+                  "ChildrenNodes": [
+                    {
+                      "NodeType": "Text",
+                      "ChildrenNodes": null,
+                      "Val": " i ",
+                      "Start": 296,
+                      "End": 298
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "NodeType": "TableRule",
+              "Start": 301,
+              "End": 313,
+              "ChildrenNodes": null
+            }
+          ]
+        },
+        {
+          "NodeType": "Table",
+          "Start": 316,
+          "End": 320,
+          "ChildrenNodes": [
+            {
+              "NodeType": "TableRow",
+              "Start": 316,
+              "End": 320,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "TableCell",
+                  "Start": 317,
+                  "End": 319,
+                  "ChildrenNodes": [
+                    {
+                      "NodeType": "Text",
+                      "ChildrenNodes": null,
+                      "Val": " r ",
+                      "Start": 317,
+                      "End": 319
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }
       ],
       "Start": 0,
-      "End": 222
+      "End": 322
     }
   ],
   "Start": 0,
-  "End": 222
+  "End": 322
 }

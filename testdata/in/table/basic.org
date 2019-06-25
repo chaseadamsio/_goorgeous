@@ -9,3 +9,12 @@ followed by a paragraph
 | Peter |  1234 |  17 |
 | Anna  |  *4321* |  25 |
 followed by a paragraph
+
+multiple table rules:
+|---+---+---|
+| d | e | f |
+|---+---+---|
+| g | h | i |
+|---+---+---|
+
+| r |

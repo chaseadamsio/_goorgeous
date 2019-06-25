@@ -147,6 +147,21 @@ func (p *parser) walkElements(parent ast.Node, current, end int) {
 	p.appendCurrentItemsToParent(parent, start, current)
 }
 
+func (p *parser) processPreviousItems(parent ast.Node, start, current int) {
+	// get rid of any whitespace / newline items
+	for _, item := range p.items[start:current] {
+		if !(item.IsNewline() || item.IsSpace() || item.IsTab()) {
+			break
+		}
+		start++
+	}
+	if start < current {
+		node := ast.NewParagraphNode(start, current, parent, p.items[start:current])
+		p.walkElements(node, start, current)
+		parent.Append(node)
+	}
+}
+
 // recursively walk through each token
 func (p *parser) walk(parent ast.Node, current, stop int) {
 	// create top-level paragraph nodes by creating nodes
@@ -165,6 +180,8 @@ func (p *parser) walk(parent ast.Node, current, stop int) {
 			if parent.Type() != "Section" {
 				parent = findClosestSectionNode(parent, p.items[current:])
 			}
+			p.processPreviousItems(parent, start, current)
+
 			p.makeOrderedList(parent, current, end)
 			current = end
 			start = current
@@ -173,6 +190,8 @@ func (p *parser) walk(parent ast.Node, current, stop int) {
 			if parent.Type() != "Section" {
 				parent = findClosestSectionNode(parent, p.items[current:])
 			}
+			p.processPreviousItems(parent, start, current)
+
 			p.makeUnorderedList(parent, current, end)
 			current = end
 			start = current
@@ -180,6 +199,8 @@ func (p *parser) walk(parent ast.Node, current, stop int) {
 			if parent.Type() != "Section" {
 				parent = findClosestSectionNode(parent, p.items[current:])
 			}
+			p.processPreviousItems(parent, start, current)
+
 			p.makeFootnoteDefinition(parent, current, end)
 			current = end
 			start = current
@@ -187,6 +208,8 @@ func (p *parser) walk(parent ast.Node, current, stop int) {
 			if parent.Type() != "Section" {
 				parent = findClosestSectionNode(parent, p.items[current:])
 			}
+			p.processPreviousItems(parent, start, current)
+
 			p.makeHorizontalRule(parent, current, end)
 			current = end
 			start = current
@@ -195,6 +218,8 @@ func (p *parser) walk(parent ast.Node, current, stop int) {
 			if parent.Type() != "Section" {
 				parent = findClosestSectionNode(parent, p.items[current:])
 			}
+			p.processPreviousItems(parent, start, current)
+
 			p.makeTable(parent, current, end)
 			current = end
 			start = current
@@ -203,6 +228,8 @@ func (p *parser) walk(parent ast.Node, current, stop int) {
 			if parent.Type() != "Section" {
 				parent = findClosestSectionNode(parent, p.items[current:])
 			}
+			p.processPreviousItems(parent, start, current)
+
 			p.makeGreaterBlock(parent, current, end)
 			current = end
 			start = current
@@ -211,6 +238,8 @@ func (p *parser) walk(parent ast.Node, current, stop int) {
 			if parent.Type() != "Section" {
 				parent = findClosestSectionNode(parent, p.items[current:])
 			}
+			p.processPreviousItems(parent, start, current)
+
 			p.makeKeyword(parent, current, end)
 			current = end
 			start = current
@@ -219,6 +248,8 @@ func (p *parser) walk(parent ast.Node, current, stop int) {
 			if parent.Type() != "Section" {
 				parent = findClosestSectionNode(parent, p.items[current:])
 			}
+			p.processPreviousItems(parent, start, current)
+
 			p.makeFootnoteDefinition(parent, current, end)
 			current = end
 			start = current

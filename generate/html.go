@@ -43,6 +43,7 @@ func GenerateHTML(htmlTree *transform.HTMLTree, options *HTMLOptions) string {
 
 func (doc *HTMLDocument) walk(inAST []ast.Node) string {
 	var out []string
+	foundTableHeader := false
 
 	for idx, child := range inAST {
 		switch node := child.(type) {
@@ -63,8 +64,14 @@ func (doc *HTMLDocument) walk(inAST []ast.Node) string {
 		case *ast.TableNode:
 			out = append(out, doc.processTableNode(node))
 		case *ast.TableRowNode:
-			if idx+1 < len(inAST) && inAST[idx+1].Type() == "TableRule" {
+			// foundTableHeader is to account for the test case that can be found
+			// in testdata/in/table/basic.org under "multiple table rules:"
+			// there are cases where a table can have multiple table rules and
+			// this is the best way to account for that so that only one thead
+			// is generated
+			if !foundTableHeader && idx+1 < len(inAST) && inAST[idx+1].Type() == "TableRule" {
 				out = append(out, doc.processTableHeaderNode(node))
+				foundTableHeader = true
 			} else if node.NodeType != "TableRule" {
 				out = append(out, doc.processTableRowNode(node))
 			}

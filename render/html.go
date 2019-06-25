@@ -1,4 +1,4 @@
-package transform
+package render
 
 import (
 	"fmt"
@@ -18,7 +18,7 @@ type HTMLDocument struct {
 	FootnoteDefinitions map[int]ast.Node
 }
 
-func GenerateHTML(htmlTree *transform.HTMLTree, options *HTMLOptions) string {
+func RenderHTML(htmlTree *transform.HTMLTree, options *HTMLOptions) string {
 	doc := &HTMLDocument{
 		TOC:                 htmlTree.TOC,
 		FootnoteDefinitions: htmlTree.FootnoteDefinitions,

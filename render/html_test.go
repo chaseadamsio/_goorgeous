@@ -1,4 +1,4 @@
-package transform
+package render
 
 import (
 	"encoding/json"
@@ -21,7 +21,7 @@ func snapshotPath(filename string) string {
 	return fmt.Sprintf("snapshots/%s.html", filename)
 }
 
-func TestGenerateHTML(t *testing.T) {
+func TestRenderHTML(t *testing.T) {
 	for _, filename := range testdata.Tests {
 
 		t.Run(filename, func(t *testing.T) {
@@ -29,7 +29,7 @@ func TestGenerateHTML(t *testing.T) {
 			ast := parse.Parse(value)
 
 			inAST := transform.TransformToHTML(ast)
-			out := GenerateHTML(inAST, &HTMLOptions{Minify: false})
+			out := RenderHTML(inAST, &HTMLOptions{Minify: false})
 
 			snapshotPath := snapshotPath(filename)
 

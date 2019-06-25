@@ -2,7 +2,6 @@ package parse
 
 import (
 	"github.com/chaseadamsio/goorgeous/ast"
-	"github.com/chaseadamsio/goorgeous/lex"
 )
 
 func (p *parser) makeHorizontalRule(parent ast.Node, current, end int) {
@@ -10,13 +9,13 @@ func (p *parser) makeHorizontalRule(parent ast.Node, current, end int) {
 	parent.Append(node)
 }
 
-func onlyFollowsWhitespace(current int, items []lex.Item) bool {
+func (p *parser) onlyFollowsWhitespace(current int) bool {
 	current--
-	for 0 < current {
-		if items[current].IsNewline() {
+	for 0 <= current {
+		if p.items[current].IsNewline() {
 			return true
 		}
-		if !(items[current].IsSpace() || items[current].IsTab()) {
+		if !(p.items[current].IsSpace() || p.items[current].IsTab()) {
 			return false
 		}
 		current--
@@ -31,7 +30,7 @@ func (p *parser) matchesHorizontalRule(current int) (found bool, start int) {
 		return false, -1
 	}
 
-	if !onlyFollowsWhitespace(current, p.items) {
+	if !p.onlyFollowsWhitespace(current) {
 		return false, -1
 	}
 

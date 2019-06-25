@@ -41,7 +41,7 @@ func (p *parser) matchesElementMarkup(current int, expectedTypeFunc func(lex.Ite
 	return false, -1
 }
 
-func (p *parser) newBold(parent ast.Node, start, end int) {
+func (p *parser) makeBold(parent ast.Node, start, end int) {
 	node := ast.NewBoldNode(parent, p.items[start:end])
 	parent.Append(node)
 	p.walkElements(node, start+1, end-1)
@@ -54,7 +54,7 @@ func (p *parser) matchesBold(current int) (found bool, end int) {
 	})
 }
 
-func (p *parser) newItalic(parent ast.Node, start, end int) {
+func (p *parser) makeItalic(parent ast.Node, start, end int) {
 	node := ast.NewItalicNode(parent, p.items[start:end])
 	parent.Append(node)
 	p.walkElements(node, start+1, end-1)
@@ -67,7 +67,7 @@ func (p *parser) matchesItalic(current int) (found bool, end int) {
 	})
 }
 
-func (p *parser) newVerbatim(parent ast.Node, start, end int) {
+func (p *parser) makeVerbatim(parent ast.Node, start, end int) {
 	node := ast.NewVerbatimNode(parent, p.items[start:end])
 	parent.Append(node)
 	p.walkElements(node, start+1, end-1)
@@ -80,7 +80,7 @@ func (p *parser) matchesVerbatim(current int) (found bool, end int) {
 	})
 }
 
-func (p *parser) newStrikeThrough(parent ast.Node, start, end int) {
+func (p *parser) makeStrikeThrough(parent ast.Node, start, end int) {
 	node := ast.NewStrikeThroughNode(parent, p.items[start:end])
 	parent.Append(node)
 	p.walkElements(node, start+1, end-1)
@@ -93,7 +93,7 @@ func (p *parser) matchesStrikeThrough(current int) (found bool, end int) {
 	})
 }
 
-func (p *parser) newUnderline(parent ast.Node, start, end int) {
+func (p *parser) makeUnderline(parent ast.Node, start, end int) {
 	node := ast.NewUnderlineNode(parent, p.items[start:end])
 	parent.Append(node)
 	p.walkElements(node, start+1, end-1)
@@ -106,7 +106,7 @@ func (p *parser) matchesUnderline(current int) (found bool, end int) {
 	})
 }
 
-func (p *parser) newCode(parent ast.Node, start, end int) {
+func (p *parser) makeCode(parent ast.Node, start, end int) {
 	node := ast.NewCodeNode(parent, p.items[start:end])
 	parent.Append(node)
 	p.walkElements(node, start+1, end-1)
@@ -119,7 +119,7 @@ func (p *parser) matchesCode(current int) (found bool, end int) {
 	})
 }
 
-func (p *parser) newEnDash(parent ast.Node, start, end int) {
+func (p *parser) makeEnDash(parent ast.Node, start, end int) {
 	node := ast.NewEnDashNode(parent, p.items[start:end])
 	parent.Append(node)
 }
@@ -133,7 +133,7 @@ func (p *parser) matchesEnDash(current int) (found bool, end int) {
 	return false, -1
 }
 
-func (p *parser) newMDash(parent ast.Node, start, end int) {
+func (p *parser) makeMDash(parent ast.Node, start, end int) {
 	node := ast.NewMDashNode(parent, p.items[start:end])
 	parent.Append(node)
 }

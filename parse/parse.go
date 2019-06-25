@@ -30,14 +30,14 @@ func newParser(input string) *parser {
 	p.elementMatchers = []foundMatchers{
 		{p.matchesLink, p.newLink},
 		{p.matchesFootnoteReference, p.makeFootnoteReference},
-		{p.matchesBold, p.newBold},
-		{p.matchesItalic, p.newItalic},
-		{p.matchesVerbatim, p.newVerbatim},
-		{p.matchesStrikeThrough, p.newStrikeThrough},
-		{p.matchesUnderline, p.newUnderline},
-		{p.matchesCode, p.newCode},
-		{p.matchesEnDash, p.newEnDash},
-		{p.matchesMDash, p.newMDash},
+		{p.matchesBold, p.makeBold},
+		{p.matchesItalic, p.makeItalic},
+		{p.matchesVerbatim, p.makeVerbatim},
+		{p.matchesStrikeThrough, p.makeStrikeThrough},
+		{p.matchesUnderline, p.makeUnderline},
+		{p.matchesCode, p.makeCode},
+		{p.matchesEnDash, p.makeEnDash},
+		{p.matchesMDash, p.makeMDash},
 	}
 
 	p.blockMatchers = []foundMatchers{

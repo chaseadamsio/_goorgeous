@@ -130,9 +130,36 @@
         "Keyword": "",
         "Priority": "A",
         "Tags": null
+      },
+      {
+        "NodeType": "Headline",
+        "Start": 387,
+        "End": 446,
+        "Depth": 3,
+        "ChildrenNodes": [
+          null,
+          {
+            "NodeType": "Link",
+            "Link": "https://github.com/chaseadamsio/goorgeous",
+            "Start": 391,
+            "End": 446,
+            "ChildrenNodes": [
+              {
+                "NodeType": "Text",
+                "ChildrenNodes": null,
+                "Val": "a heading",
+                "Start": 436,
+                "End": 445
+              }
+            ]
+          }
+        ],
+        "Keyword": "",
+        "Priority": "",
+        "Tags": null
       }
     ],
     "Start": 0,
-    "End": 386
+    "End": 448
   }
 }

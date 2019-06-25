@@ -114,6 +114,32 @@
           "Val": "This Headline has a priority but not an action status",
           "Start": 332,
           "End": 385
+        },
+        {
+          "NodeType": "Headline",
+          "Start": 387,
+          "End": 446,
+          "Depth": 3,
+          "ChildrenNodes": [
+            {
+              "NodeType": "Link",
+              "Link": "https://github.com/chaseadamsio/goorgeous",
+              "Start": 391,
+              "End": 446,
+              "ChildrenNodes": [
+                {
+                  "NodeType": "Text",
+                  "ChildrenNodes": null,
+                  "Val": "a heading",
+                  "Start": 436,
+                  "End": 445
+                }
+              ]
+            }
+          ],
+          "Keyword": "",
+          "Priority": "",
+          "Tags": null
         }
       ],
       "Keyword": "",
@@ -122,5 +148,5 @@
     }
   ],
   "Start": 0,
-  "End": 386
+  "End": 448
 }

@@ -40,3 +40,9 @@ But before it touches Heaven’s Eye,
 # E.g.: "Home" appears before all linked posts in the menu
 # and "Tags" / "Categories" after them.
 #+END_EXAMPLE
+
+#+BEGIN_SRC sh
+echo "foo"
+
+echo "bar"
+#+END_SRC

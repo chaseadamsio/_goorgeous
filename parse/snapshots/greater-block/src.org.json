@@ -73,12 +73,20 @@
           "Language": "",
           "Start": 467,
           "End": 789
+        },
+        {
+          "NodeType": "GreaterBlock",
+          "Name": "SRC",
+          "Value": "echo \"foo\"\n\necho \"bar\"\n",
+          "Language": "sh",
+          "Start": 791,
+          "End": 838
         }
       ],
       "Start": 0,
-      "End": 790
+      "End": 839
     }
   ],
   "Start": 0,
-  "End": 790
+  "End": 839
 }

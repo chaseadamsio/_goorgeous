@@ -1,1 +1,1 @@
-This project is deprecated in favor of [/niklasfasching/go-org](https://github.com/niklasfasching/go-org). 
+This project is deprecated in favor of [[https://github.com/niklasfasching/go-org][niklasfasching/go-org]]. The primary use case was [[https://github.com/gohugoio/hugo][Hugo]] and go-org was merged as a replacement for Goorgeous.
